@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { TrendingUp, Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, Terminal } from "lucide-react";
 import { MAIN_NAV_LINKS } from "@/data/nav-links";
 import { cn } from "@/lib/utils";
 
@@ -13,35 +13,42 @@ export default function Navbar() {
 
   const isLinkActive = (href: string) => {
     if (href === "/") {
-      return pathname === "/" || pathname === "/trading-desk";
+      return pathname === "/";
     }
     return pathname.startsWith(href);
   };
 
   return (
-    <header className="fixed top-[33px] w-full z-40 bg-[#0B1220]/95 backdrop-blur-md border-b border-slate-800 transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-20 flex items-center justify-between">
+    <header className="fixed top-9 left-0 right-0 z-40 bg-[#080b11]/85 backdrop-blur-xl border-b border-white/[0.08] transition-all">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex items-center justify-between gap-4">
         {/* Brand Logo */}
         <Link
           href="/"
-          className="flex items-center gap-3 group focus:outline-none"
+          className="flex items-center gap-3 group focus:outline-none flex-shrink-0"
           onClick={() => setIsOpen(false)}
         >
-          <div className="w-10 h-10 rounded-lg bg-brand-royal text-white flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:bg-blue-600 transition-all">
-            <TrendingUp className="w-5 h-5 text-white" />
+          <div className="relative p-0.5 rounded-full bg-gradient-to-br from-[#6366f1] via-indigo-600 to-[#10b981]">
+            <img
+              alt="Institute of Trading Tricks Logo"
+              className="h-10 w-10 rounded-full object-cover bg-[#080b11]"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmQ-DH0OQoZDOf3sJn2jKkIE6YwIPfGJCV1eGiFaU4rRE3gg9OFNolkCFU2SGCb1AnwsMYE56ibilb185ZSqDm83TojCSrtgjWXD4IS8VO09gs7oCy55ewehIL2W7bsOww8O0DQ2_qyhTV2jcAlOxS0FNjHF7BYvX3349Q8FdZ7gdVkNxMbXKSPjEaA30oUxxc8NMMUbL60-mgQfIGi0I0srHuQ4f1P_AGpXCuA0V48iPMz7ZjJfN8paL2LNRCL-pnKw"
+            />
           </div>
           <div className="flex flex-col">
-            <span className="text-white font-extrabold text-sm tracking-tight leading-none group-hover:text-blue-400 transition-colors">
-              INSTITUTE OF
+            <span className="text-base sm:text-lg font-extrabold tracking-tight text-white leading-tight group-hover:text-emerald-400 transition-colors">
+              Institute of{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-indigo-400">
+                Trading Tricks
+              </span>
             </span>
-            <span className="text-[10px] uppercase font-mono tracking-widest text-emerald-400 font-semibold mt-0.5">
-              Trading Tricks
+            <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">
+              Institutional Floor &amp; LMS
             </span>
           </div>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-8 text-sm font-medium">
+        <nav className="hidden lg:flex items-center gap-1">
           {MAIN_NAV_LINKS.map((link) => {
             const active = isLinkActive(link.href);
             return (
@@ -49,10 +56,10 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "transition-colors",
+                  "px-3.5 py-1.5 rounded-lg text-sm transition-colors",
                   active
-                    ? "text-emerald-400 font-bold border-b-2 border-emerald-400 pb-0.5"
-                    : "text-slate-300 hover:text-emerald-400"
+                    ? "text-emerald-400 font-semibold bg-white/[0.06] border border-emerald-500/25"
+                    : "text-slate-300 hover:text-white hover:bg-white/[0.04]"
                 )}
               >
                 {link.label}
@@ -62,28 +69,28 @@ export default function Navbar() {
         </nav>
 
         {/* Desktop Action Buttons */}
-        <div className="hidden sm:flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-shrink-0">
           <Link
-            href="/contact?subject=student-portal"
-            className="text-xs font-semibold text-slate-300 hover:text-white px-3.5 py-2 rounded-lg border border-slate-700 hover:border-slate-500 transition-all"
+            href="/#lms-portal"
+            className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-white/[0.08] bg-[#121722]/80 hover:bg-[#182030] hover:border-emerald-400/40 text-white text-xs font-semibold backdrop-blur-md transition-all group"
           >
-            Student Portal
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <Terminal className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Student LMS</span>
           </Link>
           <Link
-            href="/courses/price-action-mastery#pricing"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-xs sm:text-sm font-bold bg-brand-emerald hover:bg-brand-emerald-hover text-white transition-all shadow-sm shadow-emerald-500/25"
+            href="/#pricing"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-[#0d6938] hover:bg-[#09522b] text-white text-xs font-bold shadow-[0_0_20px_rgba(13,105,56,0.4)] border border-emerald-400/40 transition-all hover:scale-[1.02]"
           >
-            <span>Enroll Now</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>Enroll Now — $499</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
-        </div>
 
-        {/* Mobile Hamburger Button */}
-        <div className="flex items-center gap-2 lg:hidden">
+          {/* Mobile Hamburger Button */}
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-[#182030] transition-colors lg:hidden"
             aria-label="Toggle navigation menu"
             aria-expanded={isOpen}
           >
@@ -94,8 +101,8 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {isOpen && (
-        <div className="lg:hidden bg-[#070B14] border-b border-slate-800 px-6 py-6 flex flex-col gap-4 animate-in slide-in-from-top-2 duration-200">
-          <nav className="flex flex-col gap-3">
+        <div className="lg:hidden bg-[#080b11] border-b border-white/[0.08] px-6 py-6 flex flex-col gap-4 animate-in slide-in-from-top-2 duration-200 shadow-2xl">
+          <nav className="flex flex-col gap-2">
             {MAIN_NAV_LINKS.map((link) => {
               const active = isLinkActive(link.href);
               return (
@@ -104,10 +111,10 @@ export default function Navbar() {
                   href={link.href}
                   onClick={() => setIsOpen(false)}
                   className={cn(
-                    "text-base py-2 font-medium transition-colors border-l-2 pl-3",
+                    "text-sm py-2.5 font-medium transition-colors rounded-lg px-3",
                     active
-                      ? "text-emerald-400 font-bold border-emerald-400 bg-emerald-950/20"
-                      : "text-slate-300 border-transparent hover:text-white"
+                      ? "text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20"
+                      : "text-slate-300 hover:bg-white/[0.04] hover:text-white"
                   )}
                 >
                   {link.label}
@@ -116,20 +123,21 @@ export default function Navbar() {
             })}
           </nav>
 
-          <div className="flex flex-col gap-2.5 pt-4 border-t border-slate-800">
+          <div className="flex flex-col gap-2.5 pt-4 border-t border-white/[0.08]">
             <Link
-              href="/contact?subject=student-portal"
+              href="/#lms-portal"
               onClick={() => setIsOpen(false)}
-              className="text-center text-xs font-semibold text-slate-300 hover:text-white py-3 rounded-lg border border-slate-700 bg-slate-900/60"
+              className="flex items-center justify-center gap-2 text-center text-xs font-semibold text-slate-200 hover:text-white py-3 rounded-xl bg-[#121722] border border-white/[0.08]"
             >
-              Student Portal
+              <Terminal className="w-4 h-4 text-emerald-400" />
+              <span>Student LMS Portal</span>
             </Link>
             <Link
-              href="/courses/price-action-mastery#pricing"
+              href="/#pricing"
               onClick={() => setIsOpen(false)}
-              className="flex items-center justify-center gap-2 text-center text-sm font-bold bg-brand-emerald hover:bg-brand-emerald-hover text-white py-3 rounded-lg shadow-md shadow-emerald-500/25"
+              className="flex items-center justify-center gap-2 text-center text-xs font-bold bg-[#0d6938] hover:bg-[#09522b] text-white py-3 rounded-xl border border-emerald-400/40 shadow-[0_0_20px_rgba(13,105,56,0.4)]"
             >
-              <span>Enroll Now</span>
+              <span>Enroll Now — $499</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -138,4 +146,3 @@ export default function Navbar() {
     </header>
   );
 }
-

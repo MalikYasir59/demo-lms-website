@@ -1,164 +1,128 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Play, Shield, Terminal } from "lucide-react";
+import { ArrowRight, Play, Star, CheckCircle2, Zap } from "lucide-react";
 
 export default function HomeHero() {
   return (
-    <section
-      className="relative bg-[#070b14] text-white pt-16 pb-24 overflow-hidden terminal-grid border-b border-slate-800"
-      id="hero"
-    >
-      {/* Ambient Radial Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-emerald-500/10 blur-[130px] rounded-full pointer-events-none" />
-      <div className="absolute top-10 left-10 w-72 h-72 bg-blue-600/10 blur-[100px] rounded-full pointer-events-none" />
+    <section className="relative w-full overflow-hidden bg-[#04160c] pt-20 pb-24 lg:pt-28 lg:pb-32 border-b border-emerald-500/20">
+      {/* Dynamic Visual Atmospherics */}
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#020d07] via-[#051a0e] to-[#04160c]" />
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.22] mix-blend-luminosity bg-cover bg-center"
+        style={{
+          backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuCYS5JgcqaPD6KkpQ9NELOHFly5KECqkH_CvBeEbWe08VRrmVcoNuNEAU4VOAoc4A4ICt-2N5uvDydO-tcKBrX_EE-LievLCoh0gRb-AmOHrPn6G5k2bGBmDwE59yYj8zEGeSO-kgurDrIxG-iEuRrloE75Vl69gO5cYT080S_Fxe-majuA3goAvGoOLJ4uRNDXs-TSL8XmfS8DLKM1cb6sM_mDH_ssnjT-P_zwiONBUK4LeLnjvOXuxKpZoEe8Z9NPgw')`,
+        }}
+      />
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#04160c] via-transparent to-[#020d07]/90" />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.08] bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:24px_24px]" />
+      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[380px] bg-emerald-500/20 blur-[140px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/3 left-1/4 -translate-x-1/2 w-[480px] h-[320px] bg-[#0d6938]/30 blur-[130px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 right-1/4 translate-x-1/4 w-[520px] h-[340px] bg-emerald-500/15 blur-[150px] rounded-full pointer-events-none" />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 flex flex-col items-center">
-        {/* Free Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/90 border border-slate-700 text-slate-300 text-xs font-mono font-medium mb-6 shadow-inner">
-          <span className="w-2 h-2 rounded-full bg-brand-emerald animate-ping" />
-          <span className="text-brand-emerald font-bold uppercase tracking-wider text-[11px]">
-            Free Series
+      <div className="max-w-5xl mx-auto px-4 sm:px-8 relative z-10 flex flex-col items-center text-center">
+        {/* Urgent Live Enrollment Pill */}
+        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/60 border border-emerald-400/50 shadow-[0_0_25px_rgba(16,185,129,0.28)] backdrop-blur-xl">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
           </span>
-          <span className="text-slate-500">|</span>
-          <span>Institutional Order Flow Playbook</span>
+          <span className="font-mono text-xs text-emerald-400 font-bold tracking-wider uppercase">
+            BATCH 12 LIVE ENROLLMENT • ISLAMABAD CAMPUS &amp; LMS • 8 SEATS REMAINING
+          </span>
         </div>
 
         {/* Main Headline */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.12]">
-          Learn Price Action &amp; Market Structure{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-200">
-            — Free
+        <h1 className="mt-7 text-4xl sm:text-6xl lg:text-7xl font-black text-white max-w-4xl tracking-tight leading-[1.08]">
+          Master Institutional Trading.
+          <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-300 drop-shadow-[0_0_35px_rgba(16,185,129,0.45)]">
+            Zero Fluff, Pure Execution.
           </span>
         </h1>
 
-        <p className="mt-6 text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
-          Institutional-grade order flow, quantitative liquidity engineering, and algorithmic market structure. Engineered by Canary Wharf prop desk traders to pass evaluations.
+        {/* Subtitle */}
+        <p className="mt-5 max-w-2xl text-base sm:text-lg text-slate-300 font-medium leading-relaxed">
+          Proprietary institutional order flow tape, daily London &amp; New York live execution, in-person mentorship at our physical Islamabad campus, and 24/7 student LMS access.
         </p>
 
-        {/* Hero CTAs */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+        {/* CTAs */}
+        <div className="mt-8 flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
           <Link
-            href="/courses/price-action-mastery"
-            className="px-7 py-3.5 rounded-xl bg-brand-emerald hover:bg-brand-emerald-hover text-white font-bold text-sm shadow-xl shadow-emerald-500/25 transition-all flex items-center gap-2 group"
+            href="/#pricing"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-gradient-to-r from-[#0d6938] via-[#10b981] to-[#0d6938] hover:from-[#10b981] hover:to-[#0d6938] text-white text-sm font-extrabold shadow-[0_0_35px_rgba(16,185,129,0.5)] border border-emerald-300/60 hover:scale-[1.02] transition-all group"
           >
-            <span>Access Free Playbook</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            <span>Enroll &amp; Instant LMS Access — $499</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
 
           <Link
-            href="/courses/price-action-mastery#pricing"
-            className="px-6 py-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold text-sm transition-colors flex items-center gap-2"
+            href="/#founder-masterclass"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full bg-black/50 hover:bg-black/80 text-white text-sm font-semibold border border-emerald-500/40 backdrop-blur-xl hover:border-emerald-400 shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all group"
           >
-            <span>View Masterclass Cohort</span>
+            <Play className="w-4 h-4 text-emerald-400 fill-emerald-400 group-hover:scale-110 transition-transform" />
+            <span>Watch Founder Masterclass (12:40)</span>
           </Link>
         </div>
 
-        {/* Trust Chips */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-6 text-xs font-mono text-slate-400">
-          <span className="flex items-center gap-1.5">
-            <Shield className="w-4 h-4 text-brand-emerald" />
-            Zero Lagging Retail Indicators
-          </span>
-          <span className="text-slate-600 hidden sm:inline">•</span>
-          <span className="flex items-center gap-1.5">
-            <Terminal className="w-4 h-4 text-blue-400" />
-            Prop Firm Challenge Ready
-          </span>
-          <span className="text-slate-600 hidden sm:inline">•</span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-brand-emerald animate-pulse" />
-            Live London/NY Floor Active
-          </span>
-        </div>
-
-        {/* Terminal Chrome Interactive Live Chart Simulation */}
-        <div className="mt-14 w-full max-w-4xl bg-brand-navy-card rounded-2xl border border-slate-700/80 shadow-2xl p-4 sm:p-6 overflow-hidden">
-          {/* Chrome Top Bar */}
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-4 text-xs font-mono">
-            <div className="flex items-center space-x-2">
-              <span className="w-3 h-3 rounded-full bg-rose-500" />
-              <span className="w-3 h-3 rounded-full bg-amber-500" />
-              <span className="w-3 h-3 rounded-full bg-brand-emerald" />
-              <span className="text-slate-400 text-[11px] ml-2 hidden sm:inline">
-                TERMINAL // EURUSD.PRO // LONDON_KILLZONE
-              </span>
+        {/* Trust Badges */}
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-slate-300 font-mono">
+          <div className="flex items-center gap-1.5">
+            <div className="flex text-amber-400">
+              <Star className="w-3.5 h-3.5 fill-amber-400" />
+              <Star className="w-3.5 h-3.5 fill-amber-400" />
+              <Star className="w-3.5 h-3.5 fill-amber-400" />
+              <Star className="w-3.5 h-3.5 fill-amber-400" />
+              <Star className="w-3.5 h-3.5 fill-amber-400" />
             </div>
-
-            <div className="flex items-center gap-3">
-              <span className="px-2.5 py-1 rounded bg-emerald-950/80 border border-emerald-800 text-emerald-400 text-[11px] font-bold">
-                ORDER FLOW DEPTH: ACTIVE
-              </span>
-              <span className="text-slate-400 hidden sm:inline">SPREAD: 0.1 PIP</span>
-            </div>
+            <span className="font-bold text-white">4.9/5</span>
+            <span className="text-slate-400">(640+ Reviews)</span>
           </div>
+          <span className="text-emerald-500/50 hidden sm:inline">•</span>
+          <div className="flex items-center gap-1.5 text-slate-300">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>Verified by 2,800+ Funded Traders</span>
+          </div>
+          <span className="text-emerald-500/50 hidden sm:inline">•</span>
+          <div className="flex items-center gap-1.5 text-emerald-400">
+            <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400" />
+            <span className="font-bold">Instant LMS Dashboard Setup</span>
+          </div>
+        </div>
 
-          {/* SVG Candlestick Chart with Order Flow Lines */}
-          <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full rounded-xl bg-[#05080f] overflow-hidden border border-slate-800/80 flex items-center justify-center">
-            <svg
-              className="w-full h-full p-4"
-              viewBox="0 0 800 300"
-              preserveAspectRatio="none"
-            >
-              {/* Grid Lines */}
-              <line stroke="#1e293b" strokeDasharray="3" strokeWidth="1" x1="0" x2="800" y1="60" y2="60" />
-              <line stroke="#1e293b" strokeDasharray="3" strokeWidth="1" x1="0" x2="800" y1="120" y2="120" />
-              <line stroke="#1e293b" strokeDasharray="3" strokeWidth="1" x1="0" x2="800" y1="180" y2="180" />
-              <line stroke="#1e293b" strokeDasharray="3" strokeWidth="1" x1="0" x2="800" y1="240" y2="240" />
-
-              {/* Liquidity Sweep Zone */}
-              <rect x="360" y="30" width="120" height="40" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" strokeDasharray="4" strokeWidth="1" />
-              <text x="370" y="55" fill="#10b981" fontSize="10" fontFamily="monospace">
-                LIQUIDITY SWEEP // 1.08950
-              </text>
-
-              {/* Bearish & Bullish Candles */}
-              <line stroke="#ef4444" strokeWidth="2" x1="60" x2="60" y1="90" y2="200" />
-              <rect fill="#ef4444" height="60" width="14" x="53" y="110" />
-
-              <line stroke="#ef4444" strokeWidth="2" x1="120" x2="120" y1="110" y2="220" />
-              <rect fill="#ef4444" height="70" width="14" x="113" y="130" />
-
-              <line stroke="#10b981" strokeWidth="2" x1="180" x2="180" y1="100" y2="210" />
-              <rect fill="#10b981" height="50" width="14" x="173" y="120" />
-
-              <line stroke="#ef4444" strokeWidth="2" x1="240" x2="240" y1="80" y2="230" />
-              <rect fill="#ef4444" height="80" width="14" x="233" y="110" />
-
-              {/* Stop Hunt Wick Downward */}
-              <line stroke="#ef4444" strokeWidth="2" x1="300" x2="300" y1="130" y2="270" />
-              <rect fill="#ef4444" height="30" width="14" x="293" y="140" />
-
-              {/* Massive Institutional Surge Candle */}
-              <line stroke="#10b981" strokeWidth="2" x1="360" x2="360" y1="40" y2="200" />
-              <rect fill="#10b981" height="110" width="14" x="353" y="60" className="candlestick-glow" />
-
-              {/* Continuation Candles */}
-              <line stroke="#10b981" strokeWidth="2" x1="420" x2="420" y1="30" y2="150" />
-              <rect fill="#10b981" height="70" width="14" x="413" y="45" />
-
-              <line stroke="#ef4444" strokeWidth="2" x1="480" x2="480" y1="40" y2="160" />
-              <rect fill="#ef4444" height="40" width="14" x="473" y="60" />
-
-              <line stroke="#10b981" strokeWidth="2" x1="540" x2="540" y1="20" y2="130" />
-              <rect fill="#10b981" height="75" width="14" x="533" y="35" className="candlestick-glow" />
-
-              <line stroke="#10b981" strokeWidth="2" x1="600" x2="600" y1="15" y2="110" />
-              <rect fill="#10b981" height="50" width="14" x="593" y="30" />
-
-              {/* Structure Line */}
-              <path
-                d="M60 140 L180 120 L300 250 L360 60 L480 80 L540 35 L600 30"
-                fill="none"
-                stroke="#38bdf8"
-                strokeWidth="2"
-                strokeDasharray="4"
-              />
-            </svg>
-
-            {/* Live Callout Badge */}
-            <div className="absolute top-4 right-4 bg-slate-900/90 border border-slate-700 px-3 py-1.5 rounded-lg text-[11px] font-mono flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-brand-emerald animate-pulse" />
-              <span className="text-white">BOS CONFIRMED: 1.09240</span>
+        {/* 4-Stat Box */}
+        <div className="mt-12 w-full max-w-4xl rounded-2xl bg-black/60 backdrop-blur-2xl p-5 sm:p-6 border border-emerald-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent" />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 divide-y sm:divide-y-0 sm:divide-x divide-emerald-500/20">
+            <div className="flex flex-col items-center p-2">
+              <span className="font-mono text-3xl sm:text-4xl text-emerald-400 font-black tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                2,800+
+              </span>
+              <span className="font-mono text-[11px] text-slate-300 uppercase tracking-wider mt-1 font-bold">
+                Students Trained
+              </span>
+            </div>
+            <div className="flex flex-col items-center p-2 pt-4 sm:pt-2">
+              <span className="font-mono text-3xl sm:text-4xl text-emerald-400 font-black tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                4.9 / 5.0
+              </span>
+              <span className="font-mono text-[11px] text-slate-300 uppercase tracking-wider mt-1 font-bold">
+                Verified Audit Rating
+              </span>
+            </div>
+            <div className="flex flex-col items-center p-2 pt-4 sm:pt-2">
+              <span className="font-mono text-3xl sm:text-4xl text-white font-black tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                88%
+              </span>
+              <span className="font-mono text-[11px] text-slate-300 uppercase tracking-wider mt-1 font-bold">
+                Prop Pass Rate
+              </span>
+            </div>
+            <div className="flex flex-col items-center p-2 pt-4 sm:pt-2">
+              <span className="font-mono text-3xl sm:text-4xl text-emerald-400 font-black tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                Instant
+              </span>
+              <span className="font-mono text-[11px] text-slate-300 uppercase tracking-wider mt-1 font-bold">
+                LMS Activation (&lt;60s)
+              </span>
             </div>
           </div>
         </div>
@@ -166,4 +130,3 @@ export default function HomeHero() {
     </section>
   );
 }
-

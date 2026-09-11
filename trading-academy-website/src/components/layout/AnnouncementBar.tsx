@@ -1,57 +1,53 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
-import { Phone } from "lucide-react";
 import { ANNOUNCEMENT_INFO } from "@/data/nav-links";
 
 export default function AnnouncementBar() {
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible) return null;
+
   return (
     <aside
-      className="bg-[#070B14] text-slate-300 text-xs border-b border-slate-800/80 py-2 px-4 sm:px-6 lg:px-12 fixed top-0 w-full z-50 transition-all"
+      id="urgency-bar"
+      className="w-full bg-gradient-to-r from-[#06150a] via-[#0d2e18] to-[#081f10] border-b border-emerald-500/30 text-slate-200 fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 shadow-[0_2px_12px_rgba(0,0,0,0.4)]"
       aria-label="Institutional Announcement"
     >
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 text-[11px] sm:text-xs">
-        <div className="flex items-center space-x-4 sm:space-x-6">
-          <span className="flex items-center gap-2 text-emerald-400 font-medium">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            {ANNOUNCEMENT_INFO.statusText}
+      <div className="max-w-7xl mx-auto h-9 flex items-center justify-between gap-3 text-xs">
+        <div className="flex-1 flex items-center justify-center gap-2 text-center overflow-hidden">
+          <span className="material-symbols-outlined text-emerald-400 text-sm flex-shrink-0 animate-pulse">
+            bolt
           </span>
-          <span className="text-slate-600 hidden sm:inline">|</span>
-          <span className="text-slate-400 hidden sm:inline font-mono">
-            {ANNOUNCEMENT_INFO.hours}
-          </span>
-          <span className="text-slate-600 hidden md:inline">|</span>
-          <a
-            href={ANNOUNCEMENT_INFO.phoneTel}
-            className="hover:text-emerald-400 transition-colors hidden md:inline-flex items-center gap-1.5 font-mono text-slate-300"
-          >
-            <Phone className="w-3 h-3 text-emerald-400" />
-            {ANNOUNCEMENT_INFO.phone}
-          </a>
+          <p className="font-medium truncate tracking-wide text-xs">
+            <span className="text-emerald-400 font-bold">
+              {ANNOUNCEMENT_INFO.statusText}
+            </span>
+            <span className="text-slate-500 mx-1.5 hidden sm:inline">|</span>
+            <span className="text-slate-300 hidden sm:inline">
+              {ANNOUNCEMENT_INFO.subtitle}
+            </span>
+          </p>
         </div>
 
-        <div className="flex items-center space-x-3 sm:space-x-4 font-mono text-[11px]">
-          <span className="hidden lg:inline text-slate-400">
-            Institutional Feed:{" "}
-            <span className="text-emerald-400 font-bold">{ANNOUNCEMENT_INFO.feedStatus}</span>
-          </span>
-          <div className="flex items-center space-x-2 sm:pl-3 sm:border-l sm:border-slate-800">
-            <Link
-              href={ANNOUNCEMENT_INFO.terminalPortalHref}
-              className="hover:text-emerald-400 transition-colors text-slate-400"
-            >
-              Terminal Portal
-            </Link>
-            <span className="text-slate-600">•</span>
-            <Link
-              href={ANNOUNCEMENT_INFO.riskDisclosureHref}
-              className="hover:text-emerald-400 transition-colors text-slate-400"
-            >
-              Risk Disclosure
-            </Link>
-          </div>
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <Link
+            href={ANNOUNCEMENT_INFO.pricingHref}
+            className="hidden md:inline-flex items-center gap-1.5 font-bold text-[11px] bg-[#0d6938] hover:bg-[#09522b] text-white px-2.5 py-0.5 rounded-full border border-emerald-400/40 transition-all shadow-[0_0_10px_rgba(13,105,56,0.4)]"
+          >
+            Claim Seat — $499
+          </Link>
+          <button
+            aria-label="Dismiss announcement"
+            className="text-slate-400 hover:text-white transition-colors p-1"
+            onClick={() => setIsVisible(false)}
+            type="button"
+          >
+            <span className="material-symbols-outlined text-sm">close</span>
+          </button>
         </div>
       </div>
     </aside>
   );
 }
-

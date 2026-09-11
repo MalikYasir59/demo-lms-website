@@ -21,9 +21,9 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Institute of Trading Tricks | Price Action & Market Structure Mastery",
+  title: "Institute of Trading Tricks | Quantitative Price Action & Order Flow Mastery",
   description:
-    "Institutional-grade quantitative price action education, order flow telemetry, and prop firm funded trader coaching.",
+    "Institutional-grade quantitative price action education, order flow telemetry, and prop firm funded trader coaching. Built for quantitative execution.",
   keywords: [
     "Forex Trading Academy",
     "Price Action Mastery",
@@ -31,10 +31,11 @@ export const metadata: Metadata = {
     "Prop Firm Passing",
     "Order Flow Analysis",
     "Smart Money Concepts",
+    "Institutional Trading",
   ],
   authors: [{ name: "Institute of Trading Tricks" }],
   openGraph: {
-    title: "Institute of Trading Tricks | Institutional Trading Academy",
+    title: "Institute of Trading Tricks | Institutional Trading Terminal",
     description:
       "Learn institutional order flow, algorithmic market structure, and disciplined risk management.",
     type: "website",
@@ -47,15 +48,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${jakarta.variable} ${jetbrains.variable}`}>
-      <body className="bg-brand-surface font-sans text-slate-900 antialiased selection:bg-brand-emerald selection:text-white flex flex-col min-h-screen">
-        <AnnouncementBar />
-        <Navbar />
-        <main className="pt-[113px] flex-1 flex flex-col">{children}</main>
-        <Footer />
-        <FloatingSupportButton />
+    <html lang="en" className={`${jakarta.variable} ${jetbrains.variable} dark`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="bg-[#080b11] font-sans text-[#e0e2eb] antialiased selection:bg-[#10b981] selection:text-black flex flex-col min-h-screen relative">
+        {/* Global Ambient Floor 0 Lighting */}
+        <div className="fixed inset-0 pointer-events-none z-0 bg-ambient-glow opacity-70" />
+        <div className="relative z-10 flex flex-col min-h-screen">
+          <AnnouncementBar />
+          <Navbar />
+          <main className="pt-[113px] flex-1 flex flex-col">{children}</main>
+          <Footer />
+          <FloatingSupportButton />
+        </div>
       </body>
     </html>
   );
 }
-

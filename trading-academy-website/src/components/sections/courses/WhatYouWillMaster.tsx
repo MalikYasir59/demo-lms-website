@@ -34,16 +34,16 @@ export default function WhatYouWillMaster() {
   ];
 
   return (
-    <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-brand-surface border-b border-slate-200" id="mastery">
+    <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-[#0B0F17] border-b border-white/[0.06]" id="mastery">
       <div className="max-w-7xl mx-auto flex flex-col gap-12">
         <div className="flex flex-col items-center text-center gap-3 max-w-2xl mx-auto">
-          <span className="text-xs uppercase font-mono font-bold tracking-widest text-[#006c49] bg-emerald-50 border border-emerald-200 px-3 py-1 rounded">
+          <span className="label-telemetry text-[#10B981] bg-[#10B981]/10 border border-[#10B981]/30 px-3.5 py-1 rounded-full">
             Learning Outcomes
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             What You Will Master
           </h2>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-[#94A3B8]">
             Engineered directly from institutional prop trading floors to build durable, repeatable edge.
           </p>
         </div>
@@ -54,17 +54,17 @@ export default function WhatYouWillMaster() {
             return (
               <div
                 key={p.tag}
-                className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-brand-emerald hover:shadow-md transition-all flex flex-col gap-4"
+                className="bg-[#121824]/90 backdrop-blur-xl p-6 rounded-lg border border-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.10)] hover:border-[#6366F1]/40 hover:shadow-[0_0_24px_rgba(99,102,241,0.15)] transition-all flex flex-col gap-4 group"
               >
-                <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-brand-emerald">
+                <div className="w-12 h-12 rounded bg-[#182234] border border-white/[0.08] flex items-center justify-center text-[#6366F1] group-hover:scale-105 group-hover:text-[#c0c1ff] transition-all shadow-md">
                   <Icon className="w-6 h-6" />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[11px] font-mono font-bold text-emerald-600 uppercase">
+                  <span className="label-telemetry text-[#6366F1] uppercase">
                     {p.tag}
                   </span>
-                  <h3 className="text-lg font-bold text-slate-900">{p.title}</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                  <h3 className="text-lg font-bold text-white tracking-tight">{p.title}</h3>
+                  <p className="text-xs text-[#94A3B8] leading-relaxed font-normal">
                     {p.description}
                   </p>
                 </div>
@@ -76,4 +76,3 @@ export default function WhatYouWillMaster() {
     </section>
   );
 }
-

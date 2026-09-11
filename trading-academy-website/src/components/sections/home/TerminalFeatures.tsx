@@ -27,16 +27,16 @@ export default function TerminalFeatures() {
   ];
 
   return (
-    <section className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-slate-200">
-      <div className="max-w-7xl mx-auto flex flex-col gap-16">
+    <section className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-[#080B11] border-b border-white/[0.06] relative">
+      <div className="max-w-7xl mx-auto flex flex-col gap-16 relative z-10">
         <div className="flex flex-col items-center text-center gap-3 max-w-2xl mx-auto">
-          <span className="text-xs uppercase font-mono font-bold tracking-widest text-[#006c49] bg-emerald-50 border border-emerald-200 px-3 py-1 rounded">
+          <span className="label-telemetry text-[#10B981] bg-[#10B981]/10 border border-[#10B981]/30 px-3.5 py-1 rounded-full">
             The Institutional Advantage
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Why Traders Switch to Trading Tricks
           </h2>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-[#94A3B8] leading-relaxed">
             Retail technical analysis leaves you vulnerable to algorithmic stop hunts. We teach you to trade alongside the hunt.
           </p>
         </div>
@@ -47,17 +47,17 @@ export default function TerminalFeatures() {
             return (
               <div
                 key={f.tag}
-                className="bg-[#faf8ff] p-8 rounded-2xl border border-slate-200 shadow-sm hover:border-brand-emerald hover:shadow-md transition-all flex flex-col gap-5 group"
+                className="bg-[#121824]/90 backdrop-blur-xl p-8 rounded-lg border border-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.10)] hover:border-[#6366F1]/40 hover:shadow-[0_0_24px_rgba(99,102,241,0.15)] transition-all flex flex-col gap-5 group"
               >
-                <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-brand-emerald group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded bg-[#182234] border border-white/[0.08] flex items-center justify-center text-[#6366F1] group-hover:scale-105 group-hover:text-[#c0c1ff] group-hover:border-[#6366F1]/40 transition-all shadow-md">
                   <Icon className="w-6 h-6" />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <span className="text-[11px] font-mono font-bold text-emerald-600 uppercase">
+                  <span className="label-telemetry text-[#6366F1] uppercase">
                     {f.tag}
                   </span>
-                  <h3 className="text-xl font-bold text-slate-900">{f.title}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                  <h3 className="text-xl font-bold text-white tracking-tight">{f.title}</h3>
+                  <p className="text-sm text-[#94A3B8] leading-relaxed font-normal">
                     {f.description}
                   </p>
                 </div>
@@ -69,4 +69,3 @@ export default function TerminalFeatures() {
     </section>
   );
 }
-

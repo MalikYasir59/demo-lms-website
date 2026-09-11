@@ -33,9 +33,9 @@ export default function ContactDeskInfo() {
   ];
 
   return (
-    <div className="bg-brand-navy-card border border-slate-700/80 p-6 sm:p-8 rounded-2xl flex flex-col gap-6 shadow-2xl relative">
-      <div className="flex flex-col gap-1 border-b border-slate-800 pb-4">
-        <span className="text-[11px] font-mono uppercase tracking-wider text-brand-emerald font-semibold">
+    <div className="bg-[#121824]/95 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-8 rounded-lg flex flex-col gap-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.10),0_20px_48px_-12px_rgba(0,0,0,0.75)] relative">
+      <div className="flex flex-col gap-1 border-b border-white/[0.06] pb-4">
+        <span className="text-[11px] font-mono uppercase tracking-wider text-[#10B981] font-semibold label-telemetry">
           Contact Channels
         </span>
         <h2 className="font-extrabold text-white text-2xl tracking-tight">
@@ -49,20 +49,20 @@ export default function ContactDeskInfo() {
           return (
             <div
               key={item.label}
-              className="flex items-center gap-4 p-4 rounded-xl bg-brand-navy-surface border border-slate-800 shadow-sm transition-all hover:border-slate-700"
+              className="flex items-center gap-4 p-4 rounded bg-[#0B0F17] border border-white/[0.06] shadow-sm transition-all hover:border-[#6366F1]/30"
             >
-              <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center shrink-0 text-brand-emerald">
+              <div className="w-12 h-12 rounded bg-[#182234] border border-white/[0.08] flex items-center justify-center shrink-0 text-[#10B981]">
                 <Icon className="w-5 h-5" />
               </div>
               <div className="flex flex-col gap-0.5">
-                <span className="text-xs text-slate-400 font-mono uppercase">
+                <span className="text-xs text-slate-400 font-mono uppercase label-telemetry">
                   {item.label}
                 </span>
                 {item.href ? (
                   <a
                     href={item.href}
-                    className={`text-sm font-bold text-white hover:text-brand-emerald transition-colors ${
-                      item.isMono ? "font-mono" : ""
+                    className={`text-sm font-bold text-white hover:text-[#c0c1ff] transition-colors ${
+                      item.isMono ? "font-mono tabular-nums" : ""
                     }`}
                   >
                     {item.value}
@@ -78,11 +78,10 @@ export default function ContactDeskInfo() {
         })}
       </div>
 
-      <div className="flex items-center gap-3 pt-2 text-xs text-brand-emerald font-mono">
-        <span className="w-2 h-2 rounded-full bg-brand-emerald animate-pulse" />
+      <div className="flex items-center gap-3 pt-2 text-xs text-[#10B981] font-mono label-telemetry">
+        <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
         <span>Typical response time: under 15 minutes during live market hours</span>
       </div>
     </div>
   );
 }
-

@@ -50,29 +50,29 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="bg-brand-navy-card border border-slate-700/80 p-6 sm:p-8 lg:p-10 rounded-2xl flex flex-col gap-8 shadow-2xl relative">
-      <div className="flex flex-col gap-2 border-b border-slate-800 pb-4">
-        <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-blue-400">
-          <span className="w-2 h-2 rounded-full bg-blue-400" />
+    <div className="bg-[#121824]/95 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-8 lg:p-10 rounded-lg flex flex-col gap-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.10),0_20px_48px_-12px_rgba(0,0,0,0.75)] relative">
+      <div className="flex flex-col gap-2 border-b border-white/[0.06] pb-4">
+        <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#c0c1ff] label-telemetry">
+          <span className="w-2 h-2 rounded-full bg-[#6366F1]" />
           <span>ADMISSIONS INTAKE</span>
         </div>
         <h2 className="font-extrabold text-white text-2xl tracking-tight">
           Send an Inquiry
         </h2>
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-[#94A3B8]">
           Fill out your profile and specific focus areas below.
         </p>
       </div>
 
       {status === "success" ? (
-        <div className="p-6 rounded-xl bg-emerald-950/40 border border-emerald-500/50 flex flex-col items-center text-center gap-3 animate-in fade-in">
-          <CheckCircle2 className="w-12 h-12 text-brand-emerald" />
+        <div className="p-6 rounded bg-[#10B981]/10 border border-[#10B981]/30 flex flex-col items-center text-center gap-3 animate-in fade-in">
+          <CheckCircle2 className="w-12 h-12 text-[#10B981]" />
           <h3 className="text-lg font-bold text-white">Transmission Confirmed</h3>
           <p className="text-sm text-slate-300 leading-relaxed max-w-md">{responseMsg}</p>
           <button
             type="button"
             onClick={() => setStatus("idle")}
-            className="mt-2 text-xs font-mono text-emerald-400 underline hover:text-emerald-300"
+            className="mt-2 text-xs font-mono text-[#10B981] underline hover:text-[#4edea3] cursor-pointer"
           >
             Submit another inquiry
           </button>
@@ -80,18 +80,18 @@ export default function ContactForm() {
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           {status === "error" && (
-            <div className="p-4 rounded-lg bg-rose-950/50 border border-rose-800 flex items-center gap-3 text-rose-300 text-xs">
+            <div className="p-4 rounded bg-rose-950/50 border border-rose-800 flex items-center gap-3 text-rose-300 text-xs">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <span>{responseMsg}</span>
             </div>
           )}
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono uppercase font-bold text-slate-300">
+            <label className="text-xs font-mono uppercase font-bold text-slate-300 label-telemetry">
               Full Name
             </label>
             <input
-              className="bg-brand-navy-surface border border-slate-700 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-emerald focus:ring-1 focus:ring-brand-emerald transition-all shadow-sm"
+              className="bg-[#080B11] border border-white/10 rounded px-4 py-3 text-sm text-white caret-[#6366F1] placeholder-slate-600 focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all font-mono"
               placeholder="Alexander Vance"
               required
               type="text"
@@ -102,11 +102,11 @@ export default function ContactForm() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-mono uppercase font-bold text-slate-300">
+              <label className="text-xs font-mono uppercase font-bold text-slate-300 label-telemetry">
                 Work / Personal Email
               </label>
               <input
-                className="bg-brand-navy-surface border border-slate-700 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-emerald focus:ring-1 focus:ring-brand-emerald transition-all shadow-sm"
+                className="bg-[#080B11] border border-white/10 rounded px-4 py-3 text-sm text-white caret-[#6366F1] placeholder-slate-600 focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all font-mono"
                 placeholder="vance@capital.com"
                 required
                 type="email"
@@ -115,11 +115,11 @@ export default function ContactForm() {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-mono uppercase font-bold text-slate-300">
+              <label className="text-xs font-mono uppercase font-bold text-slate-300 label-telemetry">
                 Phone Number
               </label>
               <input
-                className="bg-brand-navy-surface border border-slate-700 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-emerald focus:ring-1 focus:ring-brand-emerald transition-all shadow-sm"
+                className="bg-[#080B11] border border-white/10 rounded px-4 py-3 text-sm text-white caret-[#6366F1] placeholder-slate-600 focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all font-mono tabular-nums"
                 placeholder="+1 (555) 019-2834"
                 required
                 type="tel"
@@ -130,11 +130,11 @@ export default function ContactForm() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono uppercase font-bold text-slate-300">
+            <label className="text-xs font-mono uppercase font-bold text-slate-300 label-telemetry">
               Select Course / Track
             </label>
             <select
-              className="bg-brand-navy-surface border border-slate-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-emerald focus:ring-1 focus:ring-brand-emerald transition-all shadow-sm"
+              className="bg-[#080B11] border border-white/10 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all font-mono"
               value={formData.courseTrack}
               onChange={(e) => setFormData({ ...formData, courseTrack: e.target.value })}
             >
@@ -154,11 +154,11 @@ export default function ContactForm() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono uppercase font-bold text-slate-300">
+            <label className="text-xs font-mono uppercase font-bold text-slate-300 label-telemetry">
               Message
             </label>
             <textarea
-              className="bg-brand-navy-surface border border-slate-700 rounded-lg p-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-emerald focus:ring-1 focus:ring-brand-emerald transition-all resize-none shadow-sm"
+              className="bg-[#080B11] border border-white/10 rounded p-4 text-sm text-white caret-[#6366F1] placeholder-slate-600 focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all resize-none font-mono"
               placeholder="Describe your trading experience and goals..."
               required
               rows={4}
@@ -168,7 +168,7 @@ export default function ContactForm() {
           </div>
 
           <button
-            className="w-full py-4 rounded-lg bg-brand-emerald text-white font-bold text-sm uppercase tracking-wider hover:bg-brand-emerald-hover transition-all shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 group disabled:opacity-50"
+            className="w-full py-4 rounded bg-gradient-to-r from-[#6366F1] to-[#4F46E5] text-white font-bold text-sm uppercase tracking-wider border border-white/20 shadow-[0_0_16px_rgba(99,102,241,0.45)] hover:shadow-[0_0_24px_rgba(99,102,241,0.65)] hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 cursor-pointer label-telemetry"
             type="submit"
             disabled={status === "loading"}
           >
@@ -177,7 +177,7 @@ export default function ContactForm() {
           </button>
 
           <div className="flex items-center justify-center gap-2 text-xs text-slate-400 font-mono">
-            <Lock className="w-3.5 h-3.5 text-brand-emerald" />
+            <Lock className="w-3.5 h-3.5 text-[#10B981]" />
             <span>Your information is 100% confidential</span>
           </div>
         </form>
@@ -185,4 +185,3 @@ export default function ContactForm() {
     </div>
   );
 }
-

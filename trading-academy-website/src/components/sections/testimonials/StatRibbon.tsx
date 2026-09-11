@@ -7,18 +7,17 @@ export default function StatRibbon() {
       {STUDENT_STATS.map((stat) => (
         <div
           key={stat.label}
-          className="bg-brand-navy-card p-6 rounded-xl flex flex-col gap-2 border border-slate-800/80 border-l-4 border-l-brand-emerald shadow-xl"
+          className="bg-[#121824]/90 backdrop-blur-xl p-6 rounded-lg flex flex-col gap-2 border border-white/[0.08] border-l-4 border-l-[#10B981] shadow-[inset_0_1px_0_rgba(255,255,255,0.10)]"
         >
-          <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold font-mono">
+          <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold font-mono label-telemetry">
             {stat.label}
           </span>
-          <span className="text-3xl lg:text-4xl font-extrabold text-white font-mono">
+          <span className="text-3xl lg:text-4xl font-extrabold text-white font-mono tabular-nums">
             {stat.value}
           </span>
-          <span className="text-xs text-slate-500 font-sans">{stat.subtext}</span>
+          <span className="text-xs text-[#94A3B8] font-sans">{stat.subtext}</span>
         </div>
       ))}
     </div>
   );
 }
-

@@ -39,7 +39,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
   }
 
   return (
-    <div className="w-full bg-brand-navy">
+    <div className="w-full bg-[#080B11]">
       <CourseSubNav />
       <CourseHero course={course} />
       <WhatYouWillMaster />
@@ -50,4 +50,3 @@ export default async function CourseDetailPage({ params }: PageProps) {
     </div>
   );
 }
-

@@ -9,44 +9,74 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        obsidian: {
+          canvas: "#080b11",
+          surface: "#0b0f17",
+          "container-low": "#121824",
+          container: "#1d2026",
+          "container-high": "#182234",
+          "container-highest": "#272a31",
+        },
+        execution: {
+          DEFAULT: "#6366f1",
+          hover: "#4f46e5",
+          light: "#c0c1ff",
+        },
+        alpha: {
+          DEFAULT: "#10b981",
+          hover: "#059669",
+          mint: "#4edea3",
+        },
+        sovereign: {
+          DEFAULT: "#f59e0b",
+          gold: "#ffb95f",
+          dark: "#d97706",
+        },
+        // Backward-compatibility aliases re-pointed to Obsidian Apex
         brand: {
           emerald: "#10b981",
           "emerald-hover": "#059669",
-          "emerald-dark": "#00422b",
-          "emerald-soft": "#ecfdf5",
-          navy: "#070b14",
-          "navy-light": "#0b1220",
-          "navy-surface": "#11192a",
-          "navy-card": "#0c1220",
-          slate: "#334155",
+          "emerald-dark": "#003824",
+          "emerald-soft": "rgba(16, 185, 129, 0.10)",
+          navy: "#080b11",
+          "navy-light": "#0b0f17",
+          "navy-surface": "#121824",
+          "navy-card": "#121824",
+          slate: "#182234",
           "slate-muted": "#64748b",
-          "slate-border": "#e2e8f0",
-          royal: "#1e40af",
-          "royal-accent": "#3755c3",
-          surface: "#faf8ff",
-          mist: "#f8fafc",
+          "slate-border": "rgba(255, 255, 255, 0.08)",
+          royal: "#6366f1",
+          "royal-accent": "#4f46e5",
+          surface: "#080b11",
+          mist: "#0b0f17",
         },
         primary: {
-          DEFAULT: "#10b981",
-          hover: "#059669",
-          dark: "#00422b",
-          light: "#9df4c8",
+          DEFAULT: "#6366f1",
+          hover: "#4f46e5",
+          light: "#c0c1ff",
         },
         secondary: {
-          DEFAULT: "#3755c3",
-          hover: "#2943a3",
+          DEFAULT: "#10b981",
+          hover: "#059669",
         },
+      },
+      borderRadius: {
+        DEFAULT: "0.25rem", // 4px for buttons, inputs
+        sm: "0.125rem",
+        md: "0.375rem",
+        lg: "0.5rem", // 8px for cards, panels
+        xl: "0.75rem",
+        full: "9999px", // for status pills, category chips
+      },
+      boxShadow: {
+        "execution-glow": "0 0 16px rgba(99, 102, 241, 0.45)",
+        "execution-glow-lg": "0 0 24px rgba(99, 102, 241, 0.65)",
+        "alpha-glow": "0 0 16px rgba(16, 185, 129, 0.35)",
+        "sovereign-glow": "0 0 16px rgba(245, 158, 11, 0.35)",
       },
       fontFamily: {
         sans: ["var(--font-jakarta)", "sans-serif"],
         mono: ["var(--font-jetbrains)", "monospace"],
-      },
-      backgroundImage: {
-        "terminal-grid":
-          "linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)",
-      },
-      backgroundSize: {
-        "grid-32": "32px 32px",
       },
     },
   },
@@ -54,4 +84,3 @@ const config: Config = {
 };
 
 export default config;
-

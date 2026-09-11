@@ -1,30 +1,47 @@
 @import "tailwindcss";
 
 @theme {
+  /* Obsidian Apex Core Palette */
+  --color-obsidian-canvas: #080b11;
+  --color-obsidian-surface: #0b0f17;
+  --color-obsidian-container-low: #121824;
+  --color-obsidian-container: #1d2026;
+  --color-obsidian-container-high: #182234;
+  --color-obsidian-container-highest: #272a31;
+
+  /* Backward compatible brand aliasing pointing to Obsidian Apex */
+  --color-brand-navy: #080b11;
+  --color-brand-navy-light: #0b0f17;
+  --color-brand-navy-surface: #121824;
+  --color-brand-navy-card: #121824;
+  --color-brand-surface: #080b11;
+  --color-brand-mist: #0b0f17;
+
+  /* Functional Accents */
+  --color-execution: #6366f1;
+  --color-execution-hover: #4f46e5;
+  --color-execution-glow: rgba(99, 102, 241, 0.25);
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+
+  --color-alpha: #10b981;
+  --color-alpha-hover: #059669;
+  --color-alpha-mint: #4edea3;
   --color-brand-emerald: #10b981;
   --color-brand-emerald-hover: #059669;
-  --color-brand-emerald-dark: #00422b;
-  --color-brand-emerald-soft: #ecfdf5;
-  --color-brand-navy: #070b14;
-  --color-brand-navy-light: #0b1220;
-  --color-brand-navy-surface: #11192a;
-  --color-brand-navy-card: #0c1220;
-  --color-brand-slate: #334155;
-  --color-brand-slate-muted: #64748b;
-  --color-brand-slate-border: #e2e8f0;
-  --color-brand-royal: #1e40af;
-  --color-brand-royal-accent: #3755c3;
-  --color-brand-surface: #faf8ff;
-  --color-brand-mist: #f8fafc;
+  --color-secondary: #10b981;
 
-  --color-primary: #10b981;
-  --color-primary-hover: #059669;
-  --color-primary-dark: #00422b;
-  --color-primary-light: #9df4c8;
+  --color-sovereign: #f59e0b;
+  --color-sovereign-gold: #ffb95f;
+  --color-tertiary: #f59e0b;
 
-  --color-secondary: #3755c3;
-  --color-secondary-hover: #2943a3;
+  /* Typography Colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #e2e8f0;
+  --color-text-body: #94a3b8;
+  --color-text-muted: #64748b;
 
+  /* Fonts */
   --font-sans: var(--font-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
@@ -32,35 +49,112 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    color-scheme: dark;
   }
   
   body {
-    background-color: var(--color-brand-surface, #faf8ff);
-    color: #1e293b;
+    background-color: #080b11;
+    color: #e0e2eb;
     font-family: var(--font-sans);
+    overflow-x: hidden;
   }
 
   ::selection {
-    background-color: #10b981;
+    background-color: #6366f1;
     color: #ffffff;
   }
 }
 
+/* Tabular figures for numbers & telemetry to prevent layout jitter */
+.tabular-nums, .font-numeric {
+  font-feature-settings: "tnum" on, "cv05" on, "zero" on;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Obsidian Apex Telemetry Eyebrow */
+.label-telemetry {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Floor 0 Atmospheric Ambient Lighting */
+.bg-ambient-glow {
+  background-image:
+    radial-gradient(ellipse at 80% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 65%),
+    radial-gradient(circle at 10% 100%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+}
+
+/* Subtle Technical Terminal Grid */
 .terminal-grid {
   background-size: 32px 32px;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
 }
 
-.terminal-grid-light {
-  background-size: 24px 24px;
-  background-image:
-    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+.terminal-grid-dense {
+  background-size: 16px 16px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
 
+/* Glassmorphism Floors */
+.glass-floor1 {
+  background: rgba(11, 15, 23, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-floor2 {
+  background: rgba(18, 24, 36, 0.92);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+.glass-floor3 {
+  background: #182234;
+  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.75), 0 0 24px 0 rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+/* Obsidian Apex Button Styles */
+.btn-apex-primary {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.45);
+  border-radius: 0.25rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-apex-primary:hover {
+  box-shadow: 0 0 24px rgba(99, 102, 241, 0.65);
+  transform: translateY(-1px);
+}
+
+.btn-apex-secondary {
+  background: #182234;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.25rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-apex-secondary:hover {
+  border-color: rgba(99, 102, 241, 0.40);
+  color: #ffffff;
+}
+
+/* Luminous Glows */
 .candlestick-glow {
-  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.35));
+  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.4));
 }
 
+.execution-glow {
+  filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.5));
+}
