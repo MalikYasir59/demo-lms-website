@@ -35,7 +35,7 @@ export default function FounderMasterclass() {
               playsInline
               preload="metadata"
               className="w-full h-full object-contain bg-black opacity-95"
-              poster="https://lh3.googleusercontent.com/aida/AEtjO1WO1ZWpQZEvHpdscrUYnizozn3ncEOPADpD_xGXv7YvwfdwDK23IQFGxzZP7Hlz6pxOs8rJlAXpwSjxlNBZXQx4sBlCtJqoU4EhGKEByulwKH1v4Fg96fHi8AI_PppcuVp98qN6f-gL1SJoDYRjIL7IweOdInATL_-VP3V0wYm4HQ0oQ6GG4V8tkvzePsdMvu2vcTT7QLkywxXduPDS0eb_SHsIKGI5K5c25iE1H_OWeYidHAZeTR0vhSQ"
+              poster="/images/Final%20(88).JPG"
             >
               <source src="/videos/1%20Mints%20Short.mp4" type="video/mp4" />
             </video>
@@ -45,4 +45,3 @@ export default function FounderMasterclass() {
     </section>
   );
 }
-

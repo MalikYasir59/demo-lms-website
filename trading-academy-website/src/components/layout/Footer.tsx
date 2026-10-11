@@ -97,8 +97,8 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 rounded-xl border border-white/[0.06] bg-[#0d1420] px-5 py-4 text-center">
-          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate-400 leading-relaxed">
-            Disclaimer: financial trading contains substantial risk of loss and is not suitable for all investors. Institute of Trading Tricks provides financial educational training and software simulator access. Past performance and simulated test results are not necessarily indicative of future results.
+          <p className="text-xs sm:text-sm tracking-normal text-slate-400 leading-relaxed text-left">
+            <span className="font-semibold text-slate-300">Disclaimer:</span> Financial trading contains substantial risk of loss and is not suitable for all investors. Institute of Trading Tricks provides financial educational training and software simulator access. Past performance and simulated test results are not necessarily indicative of future results.
           </p>
         </div>
 

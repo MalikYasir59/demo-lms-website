@@ -87,11 +87,11 @@ export default function ContactForm() {
           )}
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono uppercase font-bold text-slate-300 label-telemetry">
+            <label className="form-field-label">
               Full Name
             </label>
             <input
-              className="bg-[#080B11] border border-white/10 rounded px-4 py-3 text-sm text-white caret-[#6366F1] placeholder-slate-600 focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all font-mono"
+              className="form-field-control bg-[#080B11] border border-white/10 rounded px-4 py-3 text-white caret-[#6366F1] focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all"
               placeholder="Alexander Vance"
               required
               type="text"
@@ -102,11 +102,11 @@ export default function ContactForm() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-mono uppercase font-bold text-slate-300 label-telemetry">
+              <label className="form-field-label">
                 Work / Personal Email
               </label>
               <input
-                className="bg-[#080B11] border border-white/10 rounded px-4 py-3 text-sm text-white caret-[#6366F1] placeholder-slate-600 focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all font-mono"
+                className="form-field-control bg-[#080B11] border border-white/10 rounded px-4 py-3 text-white caret-[#6366F1] focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all"
                 placeholder="vance@capital.com"
                 required
                 type="email"
@@ -115,11 +115,11 @@ export default function ContactForm() {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-mono uppercase font-bold text-slate-300 label-telemetry">
+              <label className="form-field-label">
                 Phone Number
               </label>
               <input
-                className="bg-[#080B11] border border-white/10 rounded px-4 py-3 text-sm text-white caret-[#6366F1] placeholder-slate-600 focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all font-mono tabular-nums"
+                className="form-field-control bg-[#080B11] border border-white/10 rounded px-4 py-3 text-white caret-[#6366F1] focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all tabular-nums"
                 placeholder="+1 (555) 019-2834"
                 required
                 type="tel"
@@ -130,11 +130,11 @@ export default function ContactForm() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono uppercase font-bold text-slate-300 label-telemetry">
+            <label className="form-field-label">
               Select Course / Track
             </label>
             <select
-              className="bg-[#080B11] border border-white/10 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all font-mono"
+              className="form-field-control bg-[#080B11] border border-white/10 rounded px-4 py-3 text-white focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all"
               value={formData.courseTrack}
               onChange={(e) => setFormData({ ...formData, courseTrack: e.target.value })}
             >
@@ -154,11 +154,11 @@ export default function ContactForm() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono uppercase font-bold text-slate-300 label-telemetry">
+            <label className="form-field-label">
               Message
             </label>
             <textarea
-              className="bg-[#080B11] border border-white/10 rounded p-4 text-sm text-white caret-[#6366F1] placeholder-slate-600 focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all resize-none font-mono"
+              className="form-field-control bg-[#080B11] border border-white/10 rounded p-4 text-white caret-[#6366F1] focus:outline-none focus:border-[#6366F1] focus:shadow-[0_0_8px_rgba(99,102,241,0.30)] transition-all resize-none"
               placeholder="Describe your trading experience and goals..."
               required
               rows={4}

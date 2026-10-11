@@ -83,12 +83,12 @@ export default function ContactPage() {
                   <div className="bg-[#191c22]/95 backdrop-blur-md rounded-xl p-6 shadow-2xl relative overflow-hidden border border-[#1d2026] hover:border-[#10b981]/40 transition-all">
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0d6938] via-[#10b981] to-[#8083ff]" />
                     <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#1d2026]">
-                      <span className="font-mono text-[10px] text-slate-300 uppercase font-bold tracking-wider">
-                        DIRECT CHANNELS
+                      <span className="text-sm font-medium text-slate-300">
+                        Direct channels
                       </span>
-                      <span className="font-mono text-[10px] text-[#4edea3] flex items-center gap-1 font-bold">
+                      <span className="text-xs font-medium text-[#4edea3] flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                        RESPONSE SLA &lt; 2H
+                        Response within 2 hours
                       </span>
                     </div>
 
@@ -98,11 +98,11 @@ export default function ContactPage() {
                           <Mail className="w-4 h-4" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="font-mono text-[10px] text-[#4edea3] uppercase tracking-wider font-semibold">
+                          <p className="contact-detail-label">
                             Email
                           </p>
                           <a
-                            className="text-sm text-white hover:text-[#10b981] truncate block transition-colors font-medium"
+                            className="text-base text-white hover:text-[#10b981] truncate block transition-colors"
                             href="mailto:support@tradingtricks.institute"
                           >
                             support@tradingtricks.institute
@@ -115,10 +115,10 @@ export default function ContactPage() {
                           <Send className="w-4 h-4" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="font-mono text-[10px] text-[#4edea3] uppercase tracking-wider font-semibold">
+                          <p className="contact-detail-label">
                             Telegram
                           </p>
-                          <p className="text-sm text-white font-medium">@TradingTricksInstitutional</p>
+                          <p className="text-base text-white">@TradingTricksInstitutional</p>
                         </div>
                       </div>
 
@@ -127,10 +127,10 @@ export default function ContactPage() {
                           <MessageSquare className="w-4 h-4" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="font-mono text-[10px] text-[#4edea3] uppercase tracking-wider font-semibold">
+                          <p className="contact-detail-label">
                             Discord
                           </p>
-                          <p className="text-sm text-white font-medium">discord.gg/trading-tricks-desk</p>
+                          <p className="text-base text-white">discord.gg/trading-tricks-desk</p>
                         </div>
                       </div>
 
@@ -139,10 +139,10 @@ export default function ContactPage() {
                           <MapPin className="w-4 h-4" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="font-mono text-[10px] text-[#4edea3] uppercase tracking-wider font-semibold">
+                          <p className="contact-detail-label">
                             Physical Campus
                           </p>
-                          <p className="text-sm text-white font-medium leading-relaxed">
+                          <p className="text-base text-white leading-relaxed">
                             Institute of Trading Tricks Campus, 3rd Floor Gul Arcade Plaza, Opposite London Bakery Main PWD Road, Islamabad
                           </p>
                         </div>
@@ -151,20 +151,20 @@ export default function ContactPage() {
 
                     {/* Operational Desk Hours */}
                     <div className="mt-4 pt-4 border-t border-[#1d2026]">
-                      <h3 className="font-mono text-[10px] text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5 font-bold">
+                      <h3 className="text-sm text-slate-300 font-medium mb-2 flex items-center gap-1.5">
                         <Clock className="w-3.5 h-3.5 text-[#10b981]" />
                         Operational Desk Hours
                       </h3>
                       <div className="grid grid-cols-2 gap-2">
                         <div className="bg-[#10131a] border border-[#1d2026] p-3 rounded-lg">
-                          <p className="font-mono text-[10px] text-[#4edea3] uppercase font-bold">London</p>
-                          <p className="font-mono text-base text-white mt-0.5 font-bold">07:00 – 16:00</p>
-                          <span className="text-[11px] text-slate-400">UTC</span>
+                          <p className="text-sm text-[#4edea3] font-medium">London</p>
+                          <p className="text-base text-white mt-0.5 font-medium">07:00 – 16:00</p>
+                          <span className="text-xs text-slate-400">UTC</span>
                         </div>
                         <div className="bg-[#10131a] border border-[#1d2026] p-3 rounded-lg">
-                          <p className="font-mono text-[10px] text-[#4edea3] uppercase font-bold">New York</p>
-                          <p className="font-mono text-base text-white mt-0.5 font-bold">12:00 – 21:00</p>
-                          <span className="text-[11px] text-slate-400">UTC</span>
+                          <p className="text-sm text-[#4edea3] font-medium">New York</p>
+                          <p className="text-base text-white mt-0.5 font-medium">12:00 – 21:00</p>
+                          <span className="text-xs text-slate-400">UTC</span>
                         </div>
                       </div>
                     </div>
@@ -252,13 +252,13 @@ export default function ContactPage() {
                     <form className="space-y-4 relative z-10" onSubmit={handleSubmit}>
                       <div>
                         <label
-                          className="block font-mono text-[11px] text-slate-300 uppercase mb-1.5 tracking-wider font-semibold"
+                          className="form-field-label mb-1.5"
                           htmlFor="fullName"
                         >
                           Full Name <span className="text-[#10b981]">*</span>
                         </label>
                         <input
-                          className="w-full bg-[#10131a] text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:bg-[#191c22] focus:ring-1 focus:ring-[#10b981] focus:border-[#10b981] shadow-inner border border-[#1d2026] transition-all"
+                          className="form-field-control w-full bg-[#10131a] text-white rounded-lg px-4 py-3 focus:outline-none focus:bg-[#191c22] focus:ring-1 focus:ring-[#10b981] focus:border-[#10b981] shadow-inner border border-[#1d2026] transition-all"
                           id="fullName"
                           placeholder="Alexander Vance"
                           required
@@ -270,13 +270,13 @@ export default function ContactPage() {
 
                       <div>
                         <label
-                          className="block font-mono text-[11px] text-slate-300 uppercase mb-1.5 tracking-wider font-semibold"
+                          className="form-field-label mb-1.5"
                           htmlFor="email"
                         >
                           Email Address <span className="text-[#10b981]">*</span>
                         </label>
                         <input
-                          className="w-full bg-[#10131a] text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:bg-[#191c22] focus:ring-1 focus:ring-[#10b981] focus:border-[#10b981] shadow-inner border border-[#1d2026] transition-all"
+                          className="form-field-control w-full bg-[#10131a] text-white rounded-lg px-4 py-3 focus:outline-none focus:bg-[#191c22] focus:ring-1 focus:ring-[#10b981] focus:border-[#10b981] shadow-inner border border-[#1d2026] transition-all"
                           id="email"
                           placeholder="alex@trader.com"
                           required
@@ -288,13 +288,13 @@ export default function ContactPage() {
 
                       <div>
                         <label
-                          className="block font-mono text-[11px] text-slate-300 uppercase mb-1.5 tracking-wider font-semibold"
+                          className="form-field-label mb-1.5"
                           htmlFor="experience"
                         >
                           Trading Experience <span className="text-[#10b981]">*</span>
                         </label>
                         <select
-                          className="w-full bg-[#10131a] text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:bg-[#191c22] focus:ring-1 focus:ring-[#10b981] focus:border-[#10b981] shadow-inner border border-[#1d2026] transition-all"
+                          className="form-field-control w-full bg-[#10131a] text-white rounded-lg px-4 py-3 focus:outline-none focus:bg-[#191c22] focus:ring-1 focus:ring-[#10b981] focus:border-[#10b981] shadow-inner border border-[#1d2026] transition-all"
                           id="experience"
                           required
                           value={formData.experience}
@@ -312,13 +312,13 @@ export default function ContactPage() {
 
                       <div>
                         <label
-                          className="block font-mono text-[11px] text-slate-300 uppercase mb-1.5 tracking-wider font-semibold"
+                          className="form-field-label mb-1.5"
                           htmlFor="targetGoal"
                         >
                           Target Goal <span className="text-[#10b981]">*</span>
                         </label>
                         <select
-                          className="w-full bg-[#10131a] text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:bg-[#191c22] focus:ring-1 focus:ring-[#10b981] focus:border-[#10b981] shadow-inner border border-[#1d2026] transition-all"
+                          className="form-field-control w-full bg-[#10131a] text-white rounded-lg px-4 py-3 focus:outline-none focus:bg-[#191c22] focus:ring-1 focus:ring-[#10b981] focus:border-[#10b981] shadow-inner border border-[#1d2026] transition-all"
                           id="targetGoal"
                           required
                           value={formData.targetGoal}
@@ -336,13 +336,13 @@ export default function ContactPage() {
 
                       <div>
                         <label
-                          className="block font-mono text-[11px] text-slate-300 uppercase mb-1.5 tracking-wider font-semibold"
+                          className="form-field-label mb-1.5"
                           htmlFor="message"
                         >
                           Message <span className="text-[#10b981]">*</span>
                         </label>
                         <textarea
-                          className="w-full bg-[#10131a] text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:bg-[#191c22] focus:ring-1 focus:ring-[#10b981] focus:border-[#10b981] shadow-inner border border-[#1d2026] resize-none transition-all"
+                          className="form-field-control w-full bg-[#10131a] text-white rounded-lg px-4 py-3 focus:outline-none focus:bg-[#191c22] focus:ring-1 focus:ring-[#10b981] focus:border-[#10b981] shadow-inner border border-[#1d2026] resize-none transition-all"
                           id="message"
                           placeholder="How can our desk help you?"
                           required
@@ -382,26 +382,26 @@ export default function ContactPage() {
               {/* Bottom 3 SLA metric boxes */}
               <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-[#191c22]/95 backdrop-blur-md border border-[#1d2026] p-6 rounded-xl text-center shadow-xl hover:border-[#10b981]/40 transition-all">
-                  <p className="font-mono text-[11px] text-slate-300 uppercase tracking-wider font-semibold">
+                  <p className="text-xs font-medium text-slate-400 tracking-wide">
                     Desk Response SLA
                   </p>
-                  <p className="text-3xl font-extrabold text-[#10b981] mt-2 drop-shadow-[0_0_12px_rgba(16,185,129,0.3)]">
+                  <p className="text-2xl font-semibold text-[#10b981] mt-2">
                     2h Avg SLA
                   </p>
                 </div>
                 <div className="bg-[#191c22]/95 backdrop-blur-md border border-[#1d2026] p-6 rounded-xl text-center shadow-xl hover:border-[#10b981]/40 transition-all">
-                  <p className="font-mono text-[11px] text-slate-300 uppercase tracking-wider font-semibold">
+                  <p className="text-xs font-medium text-slate-400 tracking-wide">
                     Verified Track Record
                   </p>
-                  <p className="text-3xl font-extrabold text-[#10b981] mt-2 drop-shadow-[0_0_12px_rgba(16,185,129,0.3)]">
+                  <p className="text-2xl font-semibold text-[#10b981] mt-2">
                     1,840+ Funded Students
                   </p>
                 </div>
                 <div className="bg-[#191c22]/95 backdrop-blur-md border border-[#1d2026] p-6 rounded-xl text-center shadow-xl hover:border-[#10b981]/50 transition-all">
-                  <p className="font-mono text-[11px] text-slate-300 uppercase tracking-wider font-semibold">
+                  <p className="text-xs font-medium text-slate-400 tracking-wide">
                     Current Cohort Allocation
                   </p>
-                  <p className="text-3xl font-extrabold text-[#4edea3] mt-2 drop-shadow-[0_0_12px_rgba(78,222,163,0.3)]">
+                  <p className="text-2xl font-semibold text-[#4edea3] mt-2">
                     Batch 12: 8 Seats Left
                   </p>
                 </div>

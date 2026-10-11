@@ -178,11 +178,11 @@ export default function AboutUsPage() {
             <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
               <div className="md:col-span-5 relative flex justify-center">
-                <div className="w-52 h-52 sm:w-60 sm:h-60 rounded-2xl overflow-hidden ring-2 ring-emerald-500/40 shadow-2xl relative bg-[#05080e]">
+                <div className="w-full max-w-[360px] aspect-[3/2] rounded-2xl overflow-hidden ring-2 ring-emerald-500/40 shadow-2xl relative bg-[#05080e]">
                   <img
                     alt="Marcus Vance, Head Trader and Founder"
-                    className="w-full h-full object-cover"
-                    src="https://lh3.googleusercontent.com/aida/AEtjO1U8dz9IVomwTLVrDzTDgCnBWzQUFBwM8_qW6z5LerFu2OrytfZrvmG3ef2vW49KgkuErdezIiJfqCwnkFUyz08E5B5D2b5A3u4KK9yLPT5YxSB7KRpIBRW0hZAC7e4z0F2HamKR2zvPfAE8y0zetW0m3Q0QvCX-TKbX3xA3NvgFWRYJbsOqtJQ_btOhi4NA6C-RvANuGkWm1UiynAzMgZ8q0haClp_N4pqaN80bw_lKIdE5IO5Nc8MkINg"
+                    className="w-full h-full object-contain"
+                    src="/images/Final (88).JPG"
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#05080e]/95 via-[#05080e]/60 to-transparent p-3 text-center">
                     <span className="font-mono text-xs font-bold text-emerald-400 tracking-wider">

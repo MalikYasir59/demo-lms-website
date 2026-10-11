@@ -44,6 +44,11 @@
   /* Fonts */
   --font-sans: var(--font-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 500;
+  --font-weight-bold: 600;
+  --font-weight-extrabold: 700;
+  --font-weight-black: 700;
 }
 
 @layer base {
@@ -56,7 +61,18 @@
     background-color: #080b11;
     color: #e0e2eb;
     font-family: var(--font-sans);
+    line-height: 1.6;
     overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.2;
+    text-wrap: pretty;
   }
 
   ::selection {
@@ -74,10 +90,40 @@
 /* Obsidian Apex Telemetry Eyebrow */
 .label-telemetry {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 16px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.form-field-label {
+  display: block;
+  color: #cbd5e1;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.contact-detail-label {
+  color: #4edea3;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.form-field-control {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.form-field-control::placeholder {
+  color: #94a3b8;
+  opacity: 1;
 }
 
 /* Floor 0 Atmospheric Ambient Lighting */
@@ -170,11 +216,11 @@
 }
 
 .marquee-left {
-  animation: marquee-left 28s linear infinite;
+  animation: marquee-left 120s linear infinite;
   will-change: transform;
 }
 
 .marquee-right {
-  animation: marquee-right 30s linear infinite;
+  animation: marquee-right 120s linear infinite;
   will-change: transform;
 }

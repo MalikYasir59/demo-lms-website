@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import TestimonialsVideoSlider from "@/components/sections/testimonials/TestimonialsVideoSlider";
 
 export const metadata: Metadata = {
   title: "Client & Testimonials | Institute of Trading Tricks",
@@ -78,7 +79,6 @@ const certificationRowTwo = [
   "/images/Final (70).JPG",
 ];
 
-const repeatedVideoRow = [...videoRow, ...videoRow];
 const repeatedCertificationRowOne = [...certificationRowOne, ...certificationRowOne];
 const repeatedCertificationRowTwo = [...certificationRowTwo, ...certificationRowTwo];
 
@@ -101,29 +101,7 @@ export default function TestimonialsPage() {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0a1320] p-4 sm:p-5">
-          <div className="marquee-left flex w-max min-w-full gap-4">
-            {repeatedVideoRow.map((src, index) => (
-              <div
-                key={`${src}-${index}`}
-                className="w-[280px] shrink-0 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c1420] shadow-[0_0_30px_rgba(0,0,0,0.25)] sm:w-[320px]"
-              >
-                <div className="aspect-video overflow-hidden bg-black">
-                  <video
-                    src={src}
-                    controls
-                    playsInline
-                    preload="metadata"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div className="border-t border-white/[0.08] bg-[#0d1623] px-3 py-2 text-[11px] font-mono uppercase tracking-[0.18em] text-emerald-300">
-                  Review {index % videoRow.length + 1}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <TestimonialsVideoSlider videos={videoRow} />
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-8 lg:px-10">
