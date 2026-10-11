@@ -38,9 +38,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       // Dark / Container Hull
       dark:
         "bg-[#0B0F17] border border-white/[0.08] text-[#E0E2EB] hover:border-white/20 hover:bg-[#121824]",
-      // Alpha / Mint verification CTA
+      // Alpha / Blue verification CTA
       alpha:
-        "bg-[#10B981] hover:bg-[#059669] text-white border border-emerald-400/30 shadow-[0_0_16px_rgba(16,185,129,0.30)] hover:shadow-[0_0_20px_rgba(16,185,129,0.50)] hover:-translate-y-0.5",
+        "bg-gradient-to-r from-[#2563EB] via-[#3B82F6] to-[#1D4ED8] text-white border border-blue-300/30 shadow-[0_0_16px_rgba(59,130,246,0.30)] hover:shadow-[0_0_20px_rgba(59,130,246,0.50)] hover:-translate-y-0.5",
     }[variant];
 
     const combinedClassName = cn(baseStyles, sizeStyles, variantStyles, className);

@@ -3,7 +3,6 @@ import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import FloatingSupportButton from "@/components/layout/FloatingSupportButton";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -61,7 +60,6 @@ export default function RootLayout({
         {/* Global Ambient Floor 0 Lighting */}
         <div className="fixed inset-0 pointer-events-none z-0 bg-ambient-glow opacity-70" />
         <div className="relative z-10 flex flex-col min-h-screen">
-          <AnnouncementBar />
           <Navbar />
           <main className="pt-[113px] flex-1 flex flex-col">{children}</main>
           <Footer />

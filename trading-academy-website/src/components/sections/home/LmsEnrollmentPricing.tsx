@@ -24,9 +24,9 @@ export default function LmsEnrollmentPricing() {
         <div className="relative rounded-3xl p-[1.5px] bg-gradient-to-br from-indigo-500 via-indigo-600 to-emerald-400 shadow-[0_0_60px_rgba(99,102,241,0.25)]">
           <div className="rounded-[23px] bg-[#121722] p-6 sm:p-10 relative overflow-hidden">
             {/* Pill */}
-            <div className="flex justify-center -mt-10 sm:-mt-14 mb-6">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#080B11] border border-emerald-400/50 text-emerald-400 font-mono text-xs uppercase tracking-wider font-bold shadow-xl">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <div className="flex justify-center mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#080B11] border border-blue-400/50 text-blue-300 font-mono text-xs uppercase tracking-wider font-bold shadow-xl">
+                <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />
                 <span>BATCH 12 NOW OPEN — INSTANT LMS ACTIVATION</span>
               </div>
             </div>
@@ -75,7 +75,7 @@ export default function LmsEnrollmentPricing() {
             <div className="mt-8">
               <Link
                 href="/contact?tier=batch12"
-                className="w-full inline-flex items-center justify-center gap-2 py-4 rounded-full bg-[#0d6938] hover:bg-[#09522b] text-white text-sm font-bold shadow-[0_0_30px_rgba(13,105,56,0.5)] border border-emerald-300/40 hover:scale-[1.01] transition-all"
+                className="w-full inline-flex items-center justify-center gap-2 py-4 rounded-full bg-gradient-to-r from-[#2563eb] via-[#3b82f6] to-[#1d4ed8] hover:from-[#3b82f6] hover:to-[#2563eb] text-white text-sm font-bold shadow-[0_0_30px_rgba(59,130,246,0.5)] border border-blue-300/40 hover:scale-[1.01] transition-all"
               >
                 <span>Secure Spot &amp; Get Instant LMS Access — $499</span>
                 <ArrowRight className="w-4 h-4" />

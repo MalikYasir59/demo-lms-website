@@ -9,14 +9,14 @@ export default function StudentLMSPlatform() {
       id="lms-portal"
     >
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.10] mix-blend-luminosity bg-cover bg-center"
+        className="absolute inset-0 pointer-events-none opacity-[0.04] mix-blend-luminosity bg-cover bg-center"
         style={{
-          backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuCVXedfqgKratJ1DU4GsQoup3cZrJg7sbqnulwJrmNoa9gdtlBaSMaCS_cIsf1qEMJGB18OaHfIOvNtVrOrnPm29x2NZFUhWNOUazK0XTsfvg__Z4T4fJywNIu2UQL9jg0gTItbwmEn8P9-31DtLP9CNj1sUE3vbqsHWwSzLoBFtu58hO8YuYF6mniSBdTw-e4-hfFlH9dzwnMweg4FmvAFNnhAkXKPMnFJclDkbwYq2DG-rRoei08ioLKgoB4MzdQJnQ')`,
+          backgroundImage: "url('/images/Mainbg3.JPG')",
         }}
       />
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#080B11] via-transparent to-[#080B11]" />
-      <div className="absolute -top-10 right-10 w-[500px] h-[300px] bg-emerald-500/15 blur-[140px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-10 w-[450px] h-[280px] bg-[#0d6938]/20 blur-[130px] rounded-full pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#080B11]/70 via-transparent to-[#080B11]/80" />
+      <div className="absolute -top-10 right-10 w-[500px] h-[300px] bg-emerald-500/8 blur-[140px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-10 w-[450px] h-[280px] bg-[#0d6938]/10 blur-[130px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-14">

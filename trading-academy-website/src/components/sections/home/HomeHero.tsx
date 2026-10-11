@@ -6,18 +6,18 @@ export default function HomeHero() {
   return (
     <section className="relative w-full overflow-hidden bg-[#04160c] pt-20 pb-24 lg:pt-28 lg:pb-32 border-b border-emerald-500/20">
       {/* Dynamic Visual Atmospherics */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#020d07] via-[#051a0e] to-[#04160c]" />
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#020d07]/80 via-[#031810]/30 to-[#04160c]/90" />
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.22] mix-blend-luminosity bg-cover bg-center"
+        className="absolute inset-0 pointer-events-none opacity-[0.18] bg-cover bg-center"
         style={{
-          backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuCYS5JgcqaPD6KkpQ9NELOHFly5KECqkH_CvBeEbWe08VRrmVcoNuNEAU4VOAoc4A4ICt-2N5uvDydO-tcKBrX_EE-LievLCoh0gRb-AmOHrPn6G5k2bGBmDwE59yYj8zEGeSO-kgurDrIxG-iEuRrloE75Vl69gO5cYT080S_Fxe-majuA3goAvGoOLJ4uRNDXs-TSL8XmfS8DLKM1cb6sM_mDH_ssnjT-P_zwiONBUK4LeLnjvOXuxKpZoEe8Z9NPgw')`,
+          backgroundImage: "url('/images/Mainbg1.JPG')",
         }}
       />
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#04160c] via-transparent to-[#020d07]/90" />
-      <div className="absolute inset-0 pointer-events-none opacity-[0.08] bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:24px_24px]" />
-      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[380px] bg-emerald-500/20 blur-[140px] rounded-full pointer-events-none" />
-      <div className="absolute top-1/3 left-1/4 -translate-x-1/2 w-[480px] h-[320px] bg-[#0d6938]/30 blur-[130px] rounded-full pointer-events-none" />
-      <div className="absolute top-1/2 right-1/4 translate-x-1/4 w-[520px] h-[340px] bg-emerald-500/15 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#04160c]/95 via-[#04160c]/35 to-[#020d07]/10" />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.02] bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:24px_24px]" />
+      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[380px] bg-emerald-500/5 blur-[2px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/3 left-1/4 -translate-x-1/2 w-[480px] h-[320px] bg-[#0d6938]/5 blur-[2px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 right-1/4 translate-x-1/4 w-[520px] h-[340px] bg-emerald-500/4 blur-[2px] rounded-full pointer-events-none" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-8 relative z-10 flex flex-col items-center text-center">
         {/* Urgent Live Enrollment Pill */}
@@ -48,7 +48,7 @@ export default function HomeHero() {
         <div className="mt-8 flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
           <Link
             href="/#pricing"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-gradient-to-r from-[#0d6938] via-[#10b981] to-[#0d6938] hover:from-[#10b981] hover:to-[#0d6938] text-white text-sm font-extrabold shadow-[0_0_35px_rgba(16,185,129,0.5)] border border-emerald-300/60 hover:scale-[1.02] transition-all group"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-gradient-to-r from-[#3980f5] via-[#03346c] to-[#3980f5] hover:from-[#2e72f0] hover:to-[#2e72f0] text-white text-sm font-extrabold shadow-[0_0_35px_rgba(16,185,129,0.5)] border border-emerald-300/60 hover:scale-[1.02] transition-all group"
           >
             <span>Enroll &amp; Instant LMS Access — $499</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

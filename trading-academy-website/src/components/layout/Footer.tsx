@@ -3,140 +3,115 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#080B11] border-t border-white/[0.08] text-slate-400 relative overflow-hidden">
-      {/* Subtle Background Trading Floor Overlay Texture */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.08] mix-blend-luminosity bg-cover bg-center"
-        style={{
-          backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuCBaP-_8G7HwJ7Li8EoBd4ySTdrsxzjKgqTLPOFPwEMDvSuCilizLBY325p7IN1-Ln3BmMfQ6XcOWF3Ps9iwIikBYqLCMSQO6wTQAHzeTP85bBErqxMdok5jpm8_Vpa4UN0ku2FqcQYgzbmE36_COYQGWRyFceyXJXMM8Y14KhgR4ObrxSf5-TeYq-JZ4G_x9eRAWIZP77h8e1LCEX8gyM3tS8ve0yvr43H4uTz8VE3cULIVfo6tVKXjCIULSTdRQ6atg')`,
-        }}
-      />
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#080B11]/90 via-[#080B11] to-[#080B11]" />
+    <footer className="w-full bg-[#070d15] border-t border-white/[0.08] text-slate-300 relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.12),transparent_42%)]" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {/* Brand Column */}
-          <div className="flex flex-col gap-4">
-            <Link href="/" className="flex items-center gap-3 group">
-              <img
-                alt="Institute of Trading Tricks Logo"
-                className="h-10 w-10 rounded-full object-cover border border-emerald-400/40 bg-[#080b11]"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIstu7bUQiSYWSLNEqTuW-jvuhqjD6OdPKpZ1aNFwsznv4SMhi5j8KEUwmuD0HSOV716Rn-JMsdH2aJjBtOpnZMmpjgEdaW85YIiaf9pK1RlcySg0Hp6c59FBOPiOqiTUIv74PgojjXKLkqodECUzGfp51dJx83uHGjSwqucA6smAa_793IaYxnTHdPhQGuS_5LQ5EkrPmDGbk_f8NxMwtClWz9j0Tw_P3mWYGiotRoo216VgZD167HkV6x5avV0coyw"
-              />
-              <span className="text-base font-bold text-white">
-                Institute of <span className="text-emerald-400">Trading Tricks</span>
+      <div className="max-w-[1280px] mx-auto px-5 sm:px-8 py-10 sm:py-12 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-[1.6fr_0.9fr_0.9fr] gap-10 lg:gap-16">
+          <div className="flex flex-col gap-4 md:pr-4">
+            <div className="flex items-center gap-3">
+              <div className="relative p-1 rounded-full bg-gradient-to-br from-[#60a5fa] via-[#2563eb] to-[#1e3a8a] shadow-[0_0_20px_rgba(37,99,235,0.35)]">
+                <img
+                  alt="Institute of Trading Tricks Logo"
+                  className="h-12 w-12 rounded-full object-cover bg-[#080b11]"
+                  src="/images/Logoitt.jpg"
+                />
+              </div>
+              <span className="text-[1.05rem] sm:text-[1.35rem] font-bold text-white tracking-tight">
+                Institute of Trading Tricks
               </span>
-            </Link>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            </div>
+
+            <p className="max-w-md text-[1.05rem] leading-relaxed text-slate-400">
               Institutional execution protocol, proprietary Learning Management System, and physical trading floors engineered for autonomous funded traders.
             </p>
-            <div className="flex items-center gap-2 text-slate-400 font-mono text-xs">
-              <span className="material-symbols-outlined text-emerald-400 text-base flex-shrink-0">
-                location_on
+
+            <div className="flex items-center gap-3 text-[0.95rem] text-slate-400 font-mono tracking-wide">
+              <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-400/20 text-emerald-400 text-[10px]">
+                ✓
               </span>
               <span>3rd Floor Gul Arcade Plaza, PWD Road, Islamabad</span>
             </div>
-            <div className="flex items-center gap-2 font-mono text-xs text-emerald-400">
+
+            <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-emerald-400">
               <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>ISLAMABAD PHYSICAL FLOOR ACTIVE</span>
+              <span>Islamabad Physical Floor Active</span>
             </div>
           </div>
 
-          {/* Quick Links Column */}
-          <div className="flex flex-col gap-2.5">
-            <span className="font-mono text-xs uppercase text-white font-bold tracking-wider mb-1">
+          <div className="flex flex-col gap-3 mt-1">
+            <h3 className="text-xs font-mono uppercase tracking-[0.22em] text-white font-bold text-center md:text-left">
               Quick Links
-            </span>
-            <Link className="text-xs text-slate-400 hover:text-emerald-400 transition-colors" href="/">
-              Home Overview
-            </Link>
-            <Link className="text-xs text-slate-400 hover:text-emerald-400 transition-colors" href="/courses">
-              Courses &amp; Curriculum
-            </Link>
-            <Link className="text-xs text-slate-400 hover:text-emerald-400 transition-colors" href="/#lms-portal">
-              Student LMS Portal
-            </Link>
-            <Link className="text-xs text-slate-400 hover:text-emerald-400 transition-colors" href="/#campus">
-              Campus &amp; Seminars
-            </Link>
-            <Link className="text-xs text-slate-400 hover:text-emerald-400 transition-colors" href="/testimonials">
-              Client &amp; Testimonials
-            </Link>
-            <Link className="text-xs text-slate-400 hover:text-emerald-400 transition-colors" href="/#pricing">
-              Batch 12 Enrollment ($499)
-            </Link>
+            </h3>
+            <div className="flex flex-col gap-2.5 text-sm text-slate-400 text-center md:text-left">
+              <Link href="/" className="hover:text-white transition-colors">Home Overview</Link>
+              <Link href="/courses" className="hover:text-white transition-colors">Courses &amp; Curriculum</Link>
+              <Link href="/#lms-portal" className="hover:text-white transition-colors">Student LMS Portal</Link>
+              <Link href="/#campus" className="hover:text-white transition-colors">Campus &amp; Seminars</Link>
+              <Link href="/testimonials" className="hover:text-white transition-colors">Client &amp; Testimonials</Link>
+              <Link href="/#pricing" className="hover:text-white transition-colors">Batch 12 Enrollment ($499)</Link>
+            </div>
           </div>
 
-          {/* Curriculum Modules Column */}
-          <div className="flex flex-col gap-2">
-            <span className="font-mono text-xs uppercase text-white font-bold tracking-wider mb-1">
-              Curriculum Modules
-            </span>
-            <span className="text-xs text-slate-400">
-              <span className="text-emerald-400 font-mono font-semibold">MOD 01:</span> Market Microstructure &amp; Liquidity
-            </span>
-            <span className="text-xs text-slate-400">
-              <span className="text-emerald-400 font-mono font-semibold">MOD 02:</span> Order Flow &amp; Fair Value Gaps
-            </span>
-            <span className="text-xs text-slate-400">
-              <span className="text-emerald-400 font-mono font-semibold">MOD 03:</span> Risk Geometry &amp; Sizing Matrix
-            </span>
-            <span className="text-xs text-slate-400">
-              <span className="text-emerald-400 font-mono font-semibold">MOD 04:</span> Prop Firm Evaluation Blueprints
-            </span>
-            <span className="text-xs text-slate-400">
-              <span className="text-emerald-400 font-mono font-semibold">MOD 05:</span> Execution Desk Audio Streams
-            </span>
-            <span className="text-xs text-slate-400">
-              <span className="text-emerald-400 font-mono font-semibold">MOD 06:</span> Trader Psychology &amp; Tilt Control
-            </span>
-          </div>
-
-          {/* Compliance & Support Column */}
-          <div className="flex flex-col gap-2.5">
-            <span className="font-mono text-xs uppercase text-white font-bold tracking-wider mb-1">
+          <div className="flex flex-col gap-3 mt-1">
+            <h3 className="text-xs font-mono uppercase tracking-[0.22em] text-white font-bold text-center md:text-left">
               Compliance &amp; Support
-            </span>
-            <Link className="text-xs text-slate-400 hover:text-emerald-400 transition-colors" href="/terms-conditions">
-              Risk Disclosure Notice
-            </Link>
-            <Link className="text-xs text-slate-400 hover:text-emerald-400 transition-colors" href="/terms-conditions">
-              Terms of Participation
-            </Link>
-            <Link className="text-xs text-slate-400 hover:text-emerald-400 transition-colors" href="/privacy-policy">
-              Privacy Protocol
-            </Link>
-            <Link className="text-xs text-slate-400 hover:text-emerald-400 transition-colors" href="/contact">
-              Direct Desk Contact
-            </Link>
-            <div className="mt-2 p-2.5 rounded-lg bg-[#121722] border border-white/[0.06]">
-              <div className="font-mono text-[10px] text-emerald-400 font-bold uppercase mb-0.5">
-                ENCRYPTION PROTOCOL
-              </div>
-              <p className="text-[11px] text-slate-400">
-                256-Bit SSL Checkout &amp; Direct Private Terminal Access.
-              </p>
+            </h3>
+            <div className="flex flex-col gap-2.5 text-sm text-slate-400 text-center md:text-left">
+              <Link href="/terms-conditions" className="hover:text-white transition-colors">Risk Disclosure Notice</Link>
+              <Link href="/terms-conditions" className="hover:text-white transition-colors">Terms of Participation</Link>
+              <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Protocol</Link>
+              <Link href="/contact" className="hover:text-white transition-colors">Direct Desk Contact</Link>
+            </div>
+
+            <div className="mt-3 flex items-center gap-3 justify-center md:justify-start">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/[0.08] bg-[#0f1726]/80 text-[#1877F2] text-xl shadow-[0_0_18px_rgba(24,119,242,0.15)] transition hover:scale-105 hover:border-blue-400/60"
+                aria-label="Facebook"
+              >
+                f
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/[0.08] bg-[#0f1726]/80 text-[#E1306C] text-xl shadow-[0_0_18px_rgba(225,48,108,0.15)] transition hover:scale-105 hover:border-pink-400/60"
+                aria-label="Instagram"
+              >
+                ◌
+              </a>
+              <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/[0.08] bg-[#0f1726]/80 text-[#FF0000] text-xl shadow-[0_0_18px_rgba(255,0,0,0.15)] transition hover:scale-105 hover:border-red-400/60"
+                aria-label="YouTube"
+              >
+                ▶
+              </a>
             </div>
           </div>
         </div>
 
-        {/* Risk Disclaimer Notice */}
-        <div className="p-4 rounded-xl bg-[#121722] mb-8 border border-white/[0.06]">
-          <p className="font-mono text-[11px] text-slate-400 text-center leading-relaxed uppercase">
-            Disclaimer: Financial trading contains substantial risk of loss and is not suitable for all investors. Institute of Trading Tricks provides financial educational training and software simulator access. Past performance and simulated test results are not necessarily indicative of future results.
+        <div className="mt-10 rounded-xl border border-white/[0.06] bg-[#0d1420] px-5 py-4 text-center">
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate-400 leading-relaxed">
+            Disclaimer: financial trading contains substantial risk of loss and is not suitable for all investors. Institute of Trading Tricks provides financial educational training and software simulator access. Past performance and simulated test results are not necessarily indicative of future results.
           </p>
         </div>
 
-        {/* Telemetry Bottom Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left pt-4 border-t border-white/[0.06]">
-          <p className="text-xs text-slate-400 font-mono">
+        <div className="mt-6 pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-sm text-slate-400">
             © 2026 Institute of Trading Tricks. All rights reserved.
           </p>
-          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <p className="font-mono text-xs text-slate-400">
-              LMS PORTAL RELEASE: <span className="text-emerald-400 font-bold">v4.20-SECURE</span>
-            </p>
+
+          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.18em] text-slate-400">
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>
+              LMS Portal Release: <span className="text-emerald-400 font-bold">v4.20-Secure</span>
+            </span>
           </div>
         </div>
       </div>

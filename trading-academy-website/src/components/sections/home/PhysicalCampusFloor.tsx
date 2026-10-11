@@ -46,10 +46,10 @@ export default function PhysicalCampusFloor() {
 
           {/* Card 2: Strategy Room */}
           <div className="group rounded-2xl overflow-hidden bg-[#121722] border border-white/[0.08] hover:border-indigo-400/50 shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-1">
-            <div className="aspect-[4/3] w-full overflow-hidden bg-black relative">
+            <div className="h-[280px] sm:h-[320px] w-full overflow-hidden bg-[#0a0f16] relative">
               <img
                 alt="Executive Strategy Room &amp; Live Audits"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu0prW8rdazS0IKDsf6kDc_gctgqH6xrDR3gAtkIutLBhiLLC2E38fPt7dZMyduLLbbe8Oi8uvHnWMh5jyYnRlzXlaVmby8CTITj3Bl5qMfbRLC89GcU9dx9NPN96cYUzRtBWKyA8lJ53547iJ0rCv5hKctsd5B5JQIJdHoTDRw8OnNCPlA2bSPFWPSjLTtgzQ-fBDY-IfSPyKqYoqZkGVRuRDdLpIYkcEJObuYXS8n6kmQBcBt9-Z9YkYbjZU5oYhIg"
               />
               <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded bg-black/80 backdrop-blur-md border border-indigo-400/40 text-indigo-300 font-mono text-[10px] font-bold uppercase tracking-wider">

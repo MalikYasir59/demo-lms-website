@@ -19,89 +19,87 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-9 left-0 right-0 z-40 bg-[#080b11]/85 backdrop-blur-xl border-b border-white/[0.08] transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex items-center justify-between gap-4">
-        {/* Brand Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-3 group focus:outline-none flex-shrink-0"
-          onClick={() => setIsOpen(false)}
-        >
-          <div className="relative p-0.5 rounded-full bg-gradient-to-br from-[#6366f1] via-indigo-600 to-[#10b981]">
-            <img
-              alt="Institute of Trading Tricks Logo"
-              className="h-10 w-10 rounded-full object-cover bg-[#080b11]"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmQ-DH0OQoZDOf3sJn2jKkIE6YwIPfGJCV1eGiFaU4rRE3gg9OFNolkCFU2SGCb1AnwsMYE56ibilb185ZSqDm83TojCSrtgjWXD4IS8VO09gs7oCy55ewehIL2W7bsOww8O0DQ2_qyhTV2jcAlOxS0FNjHF7BYvX3349Q8FdZ7gdVkNxMbXKSPjEaA30oUxxc8NMMUbL60-mgQfIGi0I0srHuQ4f1P_AGpXCuA0V48iPMz7ZjJfN8paL2LNRCL-pnKw"
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-base sm:text-lg font-extrabold tracking-tight text-white leading-tight group-hover:text-emerald-400 transition-colors">
-              Institute of{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-indigo-400">
-                Trading Tricks
+    <header className="fixed top-7 left-0 right-0 z-40 px-4 sm:px-6">
+      <div className="mx-auto max-w-[1500px] rounded-[28px] border border-[#68b7ff]/50 bg-transparent px-4 py-3 shadow-[0_0_20px_rgba(38,96,255,0.16)] backdrop-blur-[1px]">
+        <div className="flex items-center justify-between gap-4">
+          {/* Brand Logo */}
+          <Link
+            href="/"
+            className="flex items-center gap-3 group focus:outline-none flex-shrink-0"
+            onClick={() => setIsOpen(false)}
+          >
+            <div className="relative p-1 rounded-full bg-gradient-to-br from-[#60a5fa] via-[#2563eb] to-[#1e3a8a] shadow-[0_0_18px_rgba(37,99,235,0.35)]">
+              <img
+                alt="Institute of Trading Tricks Logo"
+                className="h-12 w-12 rounded-full object-cover bg-[#080b11]"
+                src="/images/Logoitt.jpg"
+              />
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="text-base sm:text-lg font-extrabold tracking-tight text-white leading-tight group-hover:text-[#93c5fd] transition-colors">
+                Institute of Trading Tricks
               </span>
-            </span>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">
-              Institutional Floor &amp; LMS
-            </span>
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400 mt-1">
+                Institutional Floor &amp; LMS
+              </span>
+            </div>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center justify-center flex-1 gap-3 xl:gap-4 px-4">
+            {MAIN_NAV_LINKS.map((link) => {
+              const active = isLinkActive(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "relative inline-flex items-center justify-center whitespace-nowrap px-2 py-2 text-sm xl:text-[0.95rem] font-medium tracking-tight leading-none min-w-fit transition-all duration-200 text-slate-300 hover:text-white",
+                    active && "text-white",
+                    active && "after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1 after:h-[2px] after:w-[68%] after:rounded-full after:bg-[#4ea8ff] after:shadow-[0_0_12px_rgba(78,168,255,0.8)]"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Desktop Action Buttons */}
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <Link
+              href="/#lms-portal"
+              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-[#7bb7ff]/60 bg-transparent text-white text-xs font-semibold shadow-[0_0_18px_rgba(13,109,253,0.18)] transition-all group hover:bg-[#0d6dfd]/10"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#60a5fa] animate-ping" />
+              <Terminal className="w-3.5 h-3.5 text-[#93c5fd]" />
+              <span>Student LMS</span>
+            </Link>
+            <Link
+              href="/#pricing"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-[#0d6dfd] text-white text-xs font-bold shadow-[0_0_20px_rgba(13,109,253,0.38)] border border-[#7bb7ff]/60 transition-all hover:brightness-110"
+            >
+              <span>Enroll Now — $499</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              type="button"
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-[#182030] transition-colors lg:hidden"
+              aria-label="Toggle navigation menu"
+              aria-expanded={isOpen}
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-1">
-          {MAIN_NAV_LINKS.map((link) => {
-            const active = isLinkActive(link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "px-3.5 py-1.5 rounded-lg text-sm transition-colors",
-                  active
-                    ? "text-emerald-400 font-semibold bg-white/[0.06] border border-emerald-500/25"
-                    : "text-slate-300 hover:text-white hover:bg-white/[0.04]"
-                )}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Desktop Action Buttons */}
-        <div className="flex items-center gap-3 flex-shrink-0">
-          <Link
-            href="/#lms-portal"
-            className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-white/[0.08] bg-[#121722]/80 hover:bg-[#182030] hover:border-emerald-400/40 text-white text-xs font-semibold backdrop-blur-md transition-all group"
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <Terminal className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Student LMS</span>
-          </Link>
-          <Link
-            href="/#pricing"
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-[#0d6938] hover:bg-[#09522b] text-white text-xs font-bold shadow-[0_0_20px_rgba(13,105,56,0.4)] border border-emerald-400/40 transition-all hover:scale-[1.02]"
-          >
-            <span>Enroll Now — $499</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-
-          {/* Mobile Hamburger Button */}
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-[#182030] transition-colors lg:hidden"
-            aria-label="Toggle navigation menu"
-            aria-expanded={isOpen}
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
         </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {isOpen && (
-        <div className="lg:hidden bg-[#080b11] border-b border-white/[0.08] px-6 py-6 flex flex-col gap-4 animate-in slide-in-from-top-2 duration-200 shadow-2xl">
+        <div className="lg:hidden mt-3 rounded-2xl border border-white/[0.08] bg-[#080b11]/90 px-6 py-6 flex flex-col gap-4 animate-in slide-in-from-top-2 duration-200 shadow-2xl">
           <nav className="flex flex-col gap-2">
             {MAIN_NAV_LINKS.map((link) => {
               const active = isLinkActive(link.href);
@@ -111,10 +109,9 @@ export default function Navbar() {
                   href={link.href}
                   onClick={() => setIsOpen(false)}
                   className={cn(
-                    "text-sm py-2.5 font-medium transition-colors rounded-lg px-3",
-                    active
-                      ? "text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20"
-                      : "text-slate-300 hover:bg-white/[0.04] hover:text-white"
+                    "relative inline-flex items-center justify-center whitespace-nowrap text-sm py-2.5 font-medium transition-all duration-200 px-2 leading-none min-w-fit text-slate-300 hover:text-white",
+                    active && "text-white",
+                    active && "after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1 after:h-[2px] after:w-[60%] after:rounded-full after:bg-[#4ea8ff]"
                   )}
                 >
                   {link.label}
@@ -129,13 +126,13 @@ export default function Navbar() {
               onClick={() => setIsOpen(false)}
               className="flex items-center justify-center gap-2 text-center text-xs font-semibold text-slate-200 hover:text-white py-3 rounded-xl bg-[#121722] border border-white/[0.08]"
             >
-              <Terminal className="w-4 h-4 text-emerald-400" />
+              <Terminal className="w-4 h-4 text-[#93c5fd]" />
               <span>Student LMS Portal</span>
             </Link>
             <Link
               href="/#pricing"
               onClick={() => setIsOpen(false)}
-              className="flex items-center justify-center gap-2 text-center text-xs font-bold bg-[#0d6938] hover:bg-[#09522b] text-white py-3 rounded-xl border border-emerald-400/40 shadow-[0_0_20px_rgba(13,105,56,0.4)]"
+              className="flex items-center justify-center gap-2 text-center text-xs font-bold bg-gradient-to-r from-[#2563eb] via-[#3b82f6] to-[#1d4ed8] text-white py-3 rounded-xl border border-blue-300/40 shadow-[0_0_20px_rgba(59,130,246,0.4)]"
             >
               <span>Enroll Now — $499</span>
               <ArrowRight className="w-4 h-4" />
