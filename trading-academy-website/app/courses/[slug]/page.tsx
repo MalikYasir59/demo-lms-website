@@ -40,8 +40,8 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
   return (
     <div className="w-full bg-[#080B11]">
-      <CourseSubNav />
       <CourseHero course={course} />
+      <CourseSubNav />
       <WhatYouWillMaster />
       <CurriculumAccordion modules={course.modules} />
       <InstructorBio instructor={course.instructor} />

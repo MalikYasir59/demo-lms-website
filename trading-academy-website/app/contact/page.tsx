@@ -46,9 +46,9 @@ export default function ContactPage() {
 
   return (
     <div className="w-full bg-[#0b0e14] text-[#e0e2eb] min-h-screen">
-      <main className="w-full pt-8 sm:pt-12 bg-[#0b0e14]">
+      <div className="w-full bg-[#0b0e14]">
         <div className="flex flex-col w-full">
-          <section className="relative w-full overflow-hidden py-12 lg:py-16">
+          <section className="relative w-full overflow-hidden pt-36 sm:pt-40 lg:pt-44 pb-12 lg:pb-16">
             <div className="absolute inset-0 pointer-events-none">
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(16,185,129,0.18),transparent_70%)]" />
               <div className="absolute inset-0 bg-[radial-gradient(#10b98115_1px,transparent_1px)] [background-size:24px_24px]" />
@@ -409,7 +409,7 @@ export default function ContactPage() {
             </div>
           </section>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

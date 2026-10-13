@@ -62,7 +62,7 @@ export default function AboutUsPage() {
   return (
     <div className="w-full bg-[#080d16] text-slate-200">
       {/* Hero Section */}
-      <section className="relative w-full overflow-hidden bg-[#080d16] py-20 lg:py-28 border-b border-slate-800/80">
+      <section className="relative w-full overflow-hidden bg-[#080d16] pt-36 sm:pt-40 lg:pt-44 pb-20 lg:pb-28 border-b border-slate-800/80">
         <div className="absolute inset-0 pointer-events-none">
           <div
             className="absolute inset-0 bg-cover bg-center opacity-10 filter saturate-0 contrast-125"

@@ -19,8 +19,8 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-7 left-0 right-0 z-40 px-4 sm:px-6">
-      <div className="mx-auto max-w-[1500px] rounded-[28px] border border-[#68b7ff]/50 bg-transparent px-4 py-3 shadow-[0_0_20px_rgba(38,96,255,0.16)] backdrop-blur-[1px]">
+    <header className="fixed top-7 left-0 right-0 z-50 px-4 sm:px-6">
+      <div className="mx-auto max-w-[1500px] rounded-[28px] border border-[#68b7ff]/50 bg-[#080b11]/60 px-4 py-3 shadow-[0_0_20px_rgba(38,96,255,0.16)] backdrop-blur-md">
         <div className="flex items-center justify-between gap-4">
           {/* Brand Logo */}
           <Link

@@ -4,7 +4,7 @@ import { ArrowRight, Play, Star, CheckCircle2, Zap } from "lucide-react";
 
 export default function HomeHero() {
   return (
-    <section className="relative w-full overflow-hidden bg-[#04160c] pt-20 pb-24 lg:pt-28 lg:pb-32 border-b border-emerald-500/20">
+    <section className="relative w-full overflow-hidden bg-[#04160c] pt-36 sm:pt-40 lg:pt-44 pb-24 lg:pb-32 border-b border-emerald-500/20">
       {/* Dynamic Visual Atmospherics */}
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#020d07]/80 via-[#031810]/30 to-[#04160c]/90" />
       <div

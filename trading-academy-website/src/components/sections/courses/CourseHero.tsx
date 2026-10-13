@@ -9,7 +9,7 @@ interface CourseHeroProps {
 
 export default function CourseHero({ course }: CourseHeroProps) {
   return (
-    <section className="relative bg-[#080B11] text-white py-16 lg:py-24 overflow-hidden terminal-grid border-b border-white/[0.06]" id="overview">
+    <section className="relative bg-[#080B11] text-white pt-36 sm:pt-40 lg:pt-44 pb-16 lg:pb-24 overflow-hidden terminal-grid border-b border-white/[0.06]" id="overview">
       {/* Ambient Glows */}
       <div className="absolute top-0 right-0 w-[650px] h-[450px] bg-[radial-gradient(ellipse_at_top_right,rgba(99,102,241,0.12)_0%,transparent_65%)] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[350px] bg-[radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.08)_0%,transparent_55%)] pointer-events-none" />

@@ -65,7 +65,7 @@ export default function CoursesPage() {
   return (
     <div className="w-full bg-[#080B11] flex flex-col">
       {/* Hero Section */}
-      <section className="relative w-full overflow-hidden pt-16 pb-20 border-b border-white/[0.06]">
+      <section className="relative w-full overflow-hidden pt-36 sm:pt-40 lg:pt-44 pb-20 border-b border-white/[0.06]">
         <div className="absolute inset-0 pointer-events-none">
           <img
             alt="Trading Floor Ambience"

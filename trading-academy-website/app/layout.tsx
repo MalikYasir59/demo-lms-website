@@ -61,7 +61,7 @@ export default function RootLayout({
         <div className="fixed inset-0 pointer-events-none z-0 bg-ambient-glow opacity-70" />
         <div className="relative z-10 flex flex-col min-h-screen">
           <Navbar />
-          <main className="pt-[113px] flex-1 flex flex-col">{children}</main>
+          <main className="flex-1 flex flex-col">{children}</main>
           <Footer />
           <FloatingSupportButton />
         </div>

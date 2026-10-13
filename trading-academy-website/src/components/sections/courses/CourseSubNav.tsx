@@ -12,7 +12,7 @@ export default function CourseSubNav() {
   ];
 
   return (
-    <div className="sticky top-[113px] z-30 w-full bg-[#0B0F17]/95 backdrop-blur-md border-b border-white/[0.06] px-4 sm:px-6 lg:px-8">
+    <div className="sticky top-[100px] z-30 w-full bg-[#0B0F17]/95 backdrop-blur-md border-b border-white/[0.06] px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto">
         <div className="flex items-center gap-6 sm:gap-8 py-3.5 text-xs font-mono uppercase tracking-wider shrink-0 label-telemetry">
           {tabs.map((tab, idx) => (

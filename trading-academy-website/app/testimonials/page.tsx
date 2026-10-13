@@ -84,8 +84,8 @@ const repeatedCertificationRowTwo = [...certificationRowTwo, ...certificationRow
 
 export default function TestimonialsPage() {
   return (
-    <main className="w-full bg-[#070d15] text-slate-100">
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-8 lg:px-10">
+    <div className="w-full bg-[#070d15] text-slate-100">
+      <section className="mx-auto max-w-7xl px-4 pt-36 sm:pt-40 lg:pt-44 pb-16 sm:px-8 lg:px-10">
         <div className="mb-8 flex items-center justify-between gap-3">
           <div>
             <p className="mb-2 text-xs font-mono uppercase tracking-[0.28em] text-emerald-400">
@@ -158,6 +158,6 @@ export default function TestimonialsPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
