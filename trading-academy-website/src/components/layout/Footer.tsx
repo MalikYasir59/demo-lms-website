@@ -64,33 +64,79 @@ export default function Footer() {
               <Link href="/contact" className="hover:text-white transition-colors">Direct Desk Contact</Link>
             </div>
 
-            <div className="mt-3 flex items-center gap-3 justify-center md:justify-start">
+            <div className="mt-4 flex items-center gap-4 justify-center md:justify-start">
               <a
                 href="https://facebook.com"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/[0.08] bg-[#0f1726]/80 text-[#1877F2] text-xl shadow-[0_0_18px_rgba(24,119,242,0.15)] transition hover:scale-105 hover:border-blue-400/60"
+                className="transition-transform duration-200 hover:scale-115 focus:outline-none"
                 aria-label="Facebook"
               >
-                f
+                <svg
+                  className="h-7 w-7"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"
+                    fill="#1877F2"
+                  />
+                  <path
+                    d="M16.67 15.563l.532-3.49h-3.328v-2.25c0-.949.465-1.874 1.956-1.874h1.514V4.996s-1.374-.235-2.686-.235c-2.741 0-4.533 1.662-4.533 4.669v2.643H7.078v3.49h3.047V24c.618.097 1.25.147 1.875.147.625 0 1.257-.05 1.875-.147v-8.437h2.796z"
+                    fill="#FFFFFF"
+                  />
+                </svg>
               </a>
+
               <a
                 href="https://instagram.com"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/[0.08] bg-[#0f1726]/80 text-[#E1306C] text-xl shadow-[0_0_18px_rgba(225,48,108,0.15)] transition hover:scale-105 hover:border-pink-400/60"
+                className="transition-transform duration-200 hover:scale-115 focus:outline-none"
                 aria-label="Instagram"
               >
-                ◌
+                <svg
+                  className="h-7 w-7"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <defs>
+                    <linearGradient id="ig-gradient-footer" x1="0%" y1="100%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#f09433" />
+                      <stop offset="25%" stopColor="#e6683c" />
+                      <stop offset="50%" stopColor="#dc2743" />
+                      <stop offset="75%" stopColor="#cc2366" />
+                      <stop offset="100%" stopColor="#bc1888" />
+                    </linearGradient>
+                  </defs>
+                  <rect width="24" height="24" rx="6.5" fill="url(#ig-gradient-footer)" />
+                  <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" stroke="#FFFFFF" strokeWidth="1.75" fill="none" />
+                  <circle cx="12" cy="12" r="3.75" stroke="#FFFFFF" strokeWidth="1.75" fill="none" />
+                  <circle cx="16.5" cy="7.5" r="1.15" fill="#FFFFFF" />
+                </svg>
               </a>
+
               <a
                 href="https://youtube.com"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/[0.08] bg-[#0f1726]/80 text-[#FF0000] text-xl shadow-[0_0_18px_rgba(255,0,0,0.15)] transition hover:scale-105 hover:border-red-400/60"
+                className="transition-transform duration-200 hover:scale-115 focus:outline-none"
                 aria-label="YouTube"
               >
-                ▶
+                <svg
+                  className="h-7 w-7"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"
+                    fill="#FF0000"
+                  />
+                  <path d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="#FFFFFF" />
+                </svg>
               </a>
             </div>
           </div>
