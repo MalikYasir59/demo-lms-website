@@ -1,0 +1,16 @@
+{
+  "extends": "./trading-academy-website/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./trading-academy-website",
+    "paths": {
+      "@/*": ["./trading-academy-website/src/*", "./trading-academy-website/*"]
+    }
+  },
+  "include": [
+    "trading-academy-website/**/*"
+  ],
+  "exclude": [
+    "trading-academy-website/node_modules",
+    "trading-academy-website/.next"
+  ]
+}

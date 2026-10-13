@@ -1,0 +1,7 @@
+{
+  "typescript.tsdk": "trading-academy-website/node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "eslint.workingDirectories": [
+    { "pattern": "trading-academy-website" }
+  ]
+}

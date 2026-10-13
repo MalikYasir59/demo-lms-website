@@ -10,7 +10,7 @@
 				"dev"
 			],
 			"options": {
-				"cwd": "D:\\Forex website code\\trading-academy-website",
+				"cwd": "${workspaceFolder}/trading-academy-website",
 				"env": {
 					"PATH": "C:\\PROGRA~1\\nodejs;${env:PATH}"
 				}
