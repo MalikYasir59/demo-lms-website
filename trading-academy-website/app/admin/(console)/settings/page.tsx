@@ -14,10 +14,12 @@ import {
   RefreshCw,
   Search,
   Lock,
+  Sun,
 } from "lucide-react";
 import { toast } from "sonner";
+import { ThemeSelector } from "@/components/shared/ThemeSelector";
 
-type SettingsTab = "profile" | "security" | "platform" | "audit";
+type SettingsTab = "profile" | "appearance" | "security" | "platform" | "audit";
 
 export default function AdminSettingsPage() {
   const [activeTab, setActiveTab] = useState<SettingsTab>("profile");
@@ -239,6 +241,7 @@ export default function AdminSettingsPage() {
         {(
           [
             { id: "profile", label: "My Profile", icon: User },
+            { id: "appearance", label: "Appearance", icon: Sun },
             { id: "security", label: "Security & Sessions", icon: Shield },
             { id: "platform", label: "Platform Policy", icon: Sliders },
             { id: "audit", label: "Audit Log Trail", icon: FileText },
@@ -322,7 +325,20 @@ export default function AdminSettingsPage() {
         </div>
       )}
 
-      {/* TAB 2: SECURITY & SESSIONS */}
+      {/* TAB 2: APPEARANCE */}
+      {activeTab === "appearance" && (
+        <div className="p-6 rounded-2xl bg-[#0b0f17] border border-[#1e293b] max-w-3xl shadow-xl space-y-5">
+          <div>
+            <h3 className="text-base font-semibold text-white mb-1">Visual Theme & Display Mode</h3>
+            <p className="text-xs text-[#64748b]">
+              Switch the administrative console between Light Mode, Dark Mode, or synchronize automatically with your operating system.
+            </p>
+          </div>
+          <ThemeSelector />
+        </div>
+      )}
+
+      {/* TAB 3: SECURITY & SESSIONS */}
       {activeTab === "security" && (
         <div className="space-y-6 max-w-3xl">
           {/* Password Change Form */}

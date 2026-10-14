@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Shield,
 } from "lucide-react";
+import { ThemeQuickToggle } from "@/components/shared/ThemeQuickToggle";
 
 export default function StudentLayout({
   children,
@@ -119,6 +120,8 @@ export default function StudentLayout({
                 </div>
               </div>
             </div>
+
+            <ThemeQuickToggle />
 
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}

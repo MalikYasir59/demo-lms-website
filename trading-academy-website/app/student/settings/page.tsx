@@ -15,9 +15,11 @@ import {
   Phone,
   Briefcase,
   GraduationCap,
+  Sun,
 } from "lucide-react";
 import { toast } from "sonner";
 import { IUser } from "@/types/lms";
+import { ThemeSelector } from "@/components/shared/ThemeSelector";
 
 export default function StudentSettingsPage() {
   const queryClient = useQueryClient();
@@ -190,6 +192,20 @@ export default function StudentSettingsPage() {
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Appearance & Visual Theme Selection */}
+      <div className="p-6 rounded-3xl bg-[#0b0f17] border border-[#1e293b] space-y-4 shadow-xl">
+        <div>
+          <h2 className="text-sm font-bold text-white flex items-center gap-2">
+            <Sun className="w-4 h-4 text-[#f59e0b]" />
+            <span>Appearance & Theme Mode</span>
+          </h2>
+          <p className="text-xs text-[#94a3b8] mt-1">
+            Choose your preferred learning environment appearance (Light Mode, Dark Mode, or System Sync).
+          </p>
+        </div>
+        <ThemeSelector />
       </div>
 
       {/* Editable Student Profile Form */}

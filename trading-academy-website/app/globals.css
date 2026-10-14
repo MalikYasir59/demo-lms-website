@@ -224,3 +224,89 @@
   animation: marquee-right 120s linear infinite;
   will-change: transform;
 }
+
+/* ==============================================================================
+   LIGHT THEME OVERRIDES FOR LMS CONSOLE & STUDENT PORTAL
+   ============================================================================== */
+html.light,
+html.light body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  color-scheme: light;
+}
+
+html.light .bg-\[\#080b11\] {
+  background-color: #f8fafc !important;
+}
+
+html.light .bg-\[\#0b0f17\] {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+}
+
+html.light .bg-\[\#121824\] {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .bg-\[\#1e293b\] {
+  background-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+html.light .border-\[\#1e293b\] {
+  border-color: #e2e8f0 !important;
+}
+
+html.light .border-\[\#334155\] {
+  border-color: #cbd5e1 !important;
+}
+
+html.light .text-white {
+  color: #0f172a !important;
+}
+
+html.light .text-\[\#e0e2eb\] {
+  color: #334155 !important;
+}
+
+html.light .text-\[\#94a3b8\] {
+  color: #64748b !important;
+}
+
+html.light .text-\[\#64748b\] {
+  color: #64748b !important;
+}
+
+html.light input,
+html.light select,
+html.light textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.light tr:hover {
+  background-color: #f8fafc !important;
+}
+
+html.light table thead tr {
+  background-color: #f8fafc !important;
+}
+
+html.light aside {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light header {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
