@@ -20,9 +20,16 @@ import {
   Lock,
   Edit2,
   Save,
+  Plus,
+  Calendar,
+  Clock,
+  Ban,
+  RefreshCw,
+  CheckCircle2,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
-import { IUser, IAuthSession } from "@/types/lms";
+import { IUser, IAuthSession, ICourse } from "@/types/lms";
 
 export default function StudentDetailPage() {
   const params = useParams();
@@ -38,6 +45,20 @@ export default function StudentDetailPage() {
   // Editable Admin Notes state
   const [isEditingNotes, setIsEditingNotes] = useState(false);
   const [adminNotesText, setAdminNotesText] = useState("");
+
+  // Enrollment modals state
+  const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+  const [enrollForm, setEnrollForm] = useState({
+    courseId: "",
+    startsAt: new Date().toISOString().split("T")[0],
+    expiresAt: "",
+    isLifetime: true,
+    note: "",
+  });
+  const [editingEnrollment, setEditingEnrollment] = useState<any | null>(null);
+  const [editExpiresAt, setEditExpiresAt] = useState("");
+  const [editStatus, setEditStatus] = useState("active");
+
 
   // Fetch Student Data
   const { data: student, isLoading } = useQuery<IUser>({
@@ -61,6 +82,105 @@ export default function StudentDetailPage() {
       return json.data;
     },
     enabled: activeTab === "sessions",
+  });
+
+  // Fetch Student Enrollments
+  const { data: enrollments, isLoading: enrollmentsLoading } = useQuery<any[]>({
+    queryKey: ["admin_student_enrollments", studentId],
+    queryFn: async () => {
+      const res = await fetch(`/api/admin/students/${studentId}/enrollments`);
+      if (!res.ok) throw new Error("Failed to load enrollments");
+      const json = await res.json();
+      return json.data || [];
+    },
+    enabled: activeTab === "enrollments",
+  });
+
+  // Fetch Courses for Enrollment Dropdown
+  const { data: coursesData } = useQuery<{ courses: ICourse[] }>({
+    queryKey: ["admin_courses_select"],
+    queryFn: async () => {
+      const res = await fetch(`/api/admin/courses?limit=100`);
+      if (!res.ok) throw new Error("Failed to load courses");
+      const json = await res.json();
+      return json.data;
+    },
+    enabled: isEnrollModalOpen,
+  });
+
+  // Enroll Mutation
+  const enrollMutation = useMutation({
+    mutationFn: async (data: { courseId: string; startsAt?: string; expiresAt?: string | null; note?: string }) => {
+      const res = await fetch(`/api/admin/students/${studentId}/enrollments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error?.message || "Failed to enroll student");
+      return json.data;
+    },
+    onSuccess: () => {
+      toast.success("Student Enrolled Successfully");
+      setIsEnrollModalOpen(false);
+      setEnrollForm({
+        courseId: "",
+        startsAt: new Date().toISOString().split("T")[0],
+        expiresAt: "",
+        isLifetime: true,
+        note: "",
+      });
+      queryClient.invalidateQueries({ queryKey: ["admin_student_enrollments", studentId] });
+      queryClient.invalidateQueries({ queryKey: ["admin_student_detail", studentId] });
+    },
+    onError: (err: Error) => toast.error(err.message),
+  });
+
+  // Revoke Enrollment Mutation
+  const revokeEnrollmentMutation = useMutation({
+    mutationFn: async ({ enrollmentId, reason }: { enrollmentId: string; reason: string }) => {
+      const res = await fetch(`/api/admin/enrollments/${enrollmentId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error?.message || "Failed to revoke enrollment");
+      return json.data;
+    },
+    onSuccess: () => {
+      toast.success("Enrollment Revoked");
+      queryClient.invalidateQueries({ queryKey: ["admin_student_enrollments", studentId] });
+    },
+    onError: (err: Error) => toast.error(err.message),
+  });
+
+  // Update Enrollment Mutation
+  const updateEnrollmentMutation = useMutation({
+    mutationFn: async ({
+      enrollmentId,
+      expiresAt,
+      status,
+    }: {
+      enrollmentId: string;
+      expiresAt?: string | null;
+      status?: string;
+    }) => {
+      const res = await fetch(`/api/admin/enrollments/${enrollmentId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ expiresAt, status }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error?.message || "Failed to update enrollment");
+      return json.data;
+    },
+    onSuccess: () => {
+      toast.success("Enrollment Access Updated");
+      setEditingEnrollment(null);
+      queryClient.invalidateQueries({ queryKey: ["admin_student_enrollments", studentId] });
+    },
+    onError: (err: Error) => toast.error(err.message),
   });
 
   // Status Mutation
@@ -477,14 +597,136 @@ export default function StudentDetailPage() {
 
       {/* TAB CONTENT: Enrollments */}
       {activeTab === "enrollments" && (
-        <div className="p-8 rounded-2xl bg-[#0b0f17] border border-[#1e293b] text-center">
-          <BookOpen className="w-8 h-8 text-[#334155] mx-auto mb-2" />
-          <h3 className="text-base font-bold text-white">Course Enrollment Matrix</h3>
-          <p className="text-xs text-[#64748b] max-w-md mx-auto mt-1 mb-5">
-            Student course grants, completion thresholds, and expiry limits are managed in Work Package P4 (Enrollment Engine).
-          </p>
-          <div className="inline-block p-4 rounded-xl bg-[#121824] border border-[#1e293b] text-xs text-[#94a3b8] font-mono">
-            Status: Ready for Phase P4 integration
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-bold text-white">Course Enrollments & Access Grants</h3>
+              <p className="text-xs text-[#64748b]">
+                Active licenses, content progress, and expiry controls for this student
+              </p>
+            </div>
+            <button
+              onClick={() => setIsEnrollModalOpen(true)}
+              className="px-3.5 py-1.5 rounded-xl bg-[#6366f1] text-white text-xs font-semibold hover:bg-[#4f46e5] flex items-center gap-1.5 transition-colors shadow-md shadow-[#6366f1]/20 cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Enroll In Course</span>
+            </button>
+          </div>
+
+          <div className="rounded-2xl bg-[#0b0f17] border border-[#1e293b] overflow-hidden">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="border-b border-[#1e293b] bg-[#121824]/60 text-[#64748b] font-mono">
+                  <th className="p-3.5">Course</th>
+                  <th className="p-3.5">Status</th>
+                  <th className="p-3.5">Access Window</th>
+                  <th className="p-3.5">Progress</th>
+                  <th className="p-3.5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#1e293b]/60">
+                {enrollmentsLoading ? (
+                  <tr>
+                    <td colSpan={5} className="p-8 text-center text-[#94a3b8]">
+                      <Loader2 className="w-5 h-5 animate-spin mx-auto text-[#6366f1] mb-2" />
+                      Loading enrollments...
+                    </td>
+                  </tr>
+                ) : !enrollments || enrollments.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="p-8 text-center text-[#64748b]">
+                      This student is not currently enrolled in any courses. Click &quot;Enroll In Course&quot; to grant access.
+                    </td>
+                  </tr>
+                ) : (
+                  enrollments.map((en: any) => {
+                    const isExpired = en.expiresAt && new Date(en.expiresAt) <= new Date();
+                    const statusText = isExpired && en.status === "active" ? "expired" : en.status;
+
+                    return (
+                      <tr key={en._id} className="hover:bg-[#121824]/40 transition-colors">
+                        <td className="p-3.5">
+                          <div className="font-semibold text-white">{en.courseId?.title || "Unknown Course"}</div>
+                          <div className="text-[11px] font-mono text-[#64748b]">
+                            {en.courseId?.difficulty && <span className="capitalize">{en.courseId.difficulty} &bull; </span>}
+                            <span>Source: {en.source}</span>
+                          </div>
+                        </td>
+                        <td className="p-3.5">
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border capitalize ${
+                              statusText === "active"
+                                ? "bg-[#10b981]/10 text-[#10b981] border-[#10b981]/30"
+                                : statusText === "expired"
+                                ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
+                                : "bg-red-500/10 text-red-400 border-red-500/30"
+                            }`}
+                          >
+                            {statusText}
+                          </span>
+                        </td>
+                        <td className="p-3.5 text-[#94a3b8]">
+                          <div className="flex items-center gap-1.5">
+                            <Calendar className="w-3.5 h-3.5 text-[#64748b]" />
+                            <span>Started: {new Date(en.startsAt).toLocaleDateString()}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 mt-0.5 text-[11px]">
+                            <Clock className="w-3.5 h-3.5 text-[#64748b]" />
+                            <span>
+                              {en.expiresAt ? `Expires: ${new Date(en.expiresAt).toLocaleDateString()}` : "Lifetime Access"}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="p-3.5">
+                          <div className="w-36">
+                            <div className="flex items-center justify-between text-[11px] mb-1">
+                              <span className="font-semibold text-white">{en.progress?.percent || 0}%</span>
+                              <span className="text-[#64748b]">
+                                {en.progress?.completedLectures || 0}/{en.progress?.totalLectures || 0}
+                              </span>
+                            </div>
+                            <div className="w-full bg-[#121824] rounded-full h-1.5 overflow-hidden">
+                              <div
+                                className="bg-[#10b981] h-1.5 rounded-full transition-all"
+                                style={{ width: `${Math.min(100, en.progress?.percent || 0)}%` }}
+                              />
+                            </div>
+                          </div>
+                        </td>
+                        <td className="p-3.5 text-right space-x-2">
+                          <button
+                            onClick={() => {
+                              setEditingEnrollment(en);
+                              setEditExpiresAt(
+                                en.expiresAt ? new Date(en.expiresAt).toISOString().split("T")[0] : ""
+                              );
+                              setEditStatus(en.status);
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-[#121824] border border-[#1e293b] text-[#94a3b8] hover:text-white hover:border-[#6366f1] text-[11px] font-medium transition-colors"
+                          >
+                            Edit Access
+                          </button>
+                          {en.status !== "revoked" && (
+                            <button
+                              onClick={() => {
+                                const reason = prompt("Enter revocation reason (shown in audit log):", "Admin discretion");
+                                if (reason) {
+                                  revokeEnrollmentMutation.mutate({ enrollmentId: en._id, reason });
+                                }
+                              }}
+                              className="px-2.5 py-1 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 text-[11px] font-medium transition-colors"
+                            >
+                              Revoke
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
@@ -660,6 +902,202 @@ export default function StudentDetailPage() {
                 Done
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ENROLL IN COURSE MODAL */}
+      {isEnrollModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#0b0f17] border border-[#1e293b] rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
+            <button
+              onClick={() => setIsEnrollModalOpen(false)}
+              className="absolute top-5 right-5 text-[#64748b] hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-2.5 mb-1 text-[#6366f1]">
+              <BookOpen className="w-5 h-5" />
+              <h2 className="text-lg font-bold text-white">Enroll Student In Course</h2>
+            </div>
+            <p className="text-xs text-[#94a3b8] mb-5">
+              Grant course access license to {student.name} ({student.studentCode})
+            </p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!enrollForm.courseId) {
+                  toast.error("Please select a course");
+                  return;
+                }
+                enrollMutation.mutate({
+                  courseId: enrollForm.courseId,
+                  startsAt: enrollForm.startsAt || undefined,
+                  expiresAt: enrollForm.isLifetime ? null : enrollForm.expiresAt || null,
+                  note: enrollForm.note || undefined,
+                });
+              }}
+              className="space-y-4 text-xs"
+            >
+              <div>
+                <label className="block text-[#cbd5e1] font-medium mb-1">Select Course *</label>
+                <select
+                  required
+                  value={enrollForm.courseId}
+                  onChange={(e) => setEnrollForm({ ...enrollForm, courseId: e.target.value })}
+                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#6366f1]"
+                >
+                  <option value="">-- Choose Course --</option>
+                  {coursesData?.courses?.map((c) => (
+                    <option key={c._id.toString()} value={c._id.toString()}>
+                      {c.title} ({c.stats?.lectureCount || 0} lectures &bull; {c.status})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[#cbd5e1] font-medium mb-1">Start Date</label>
+                  <input
+                    type="date"
+                    value={enrollForm.startsAt}
+                    onChange={(e) => setEnrollForm({ ...enrollForm, startsAt: e.target.value })}
+                    className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[#cbd5e1] font-medium mb-1">Expiry Date</label>
+                  <input
+                    type="date"
+                    disabled={enrollForm.isLifetime}
+                    value={enrollForm.expiresAt}
+                    onChange={(e) => setEnrollForm({ ...enrollForm, expiresAt: e.target.value })}
+                    className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1] disabled:opacity-30"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="isLifetimeCheckbox"
+                  checked={enrollForm.isLifetime}
+                  onChange={(e) => setEnrollForm({ ...enrollForm, isLifetime: e.target.checked })}
+                  className="rounded border-[#1e293b] bg-[#121824] text-[#6366f1] focus:ring-0"
+                />
+                <label htmlFor="isLifetimeCheckbox" className="text-xs text-[#cbd5e1] cursor-pointer">
+                  Lifetime Access (No Expiry Date)
+                </label>
+              </div>
+
+              <div>
+                <label className="block text-[#cbd5e1] font-medium mb-1">Administrative Note</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Batch 26 Scholarship enrollment"
+                  value={enrollForm.note}
+                  onChange={(e) => setEnrollForm({ ...enrollForm, note: e.target.value })}
+                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2.5 pt-3 border-t border-[#1e293b]">
+                <button
+                  type="button"
+                  onClick={() => setIsEnrollModalOpen(false)}
+                  className="px-4 py-2 rounded-xl text-xs text-[#94a3b8] hover:bg-[#121824]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={enrollMutation.isPending}
+                  className="px-4 py-2 rounded-xl bg-[#6366f1] text-white text-xs font-semibold flex items-center gap-2 hover:bg-[#4f46e5] disabled:opacity-40"
+                >
+                  {enrollMutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                  <span>Confirm Enrollment</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT ENROLLMENT ACCESS MODAL */}
+      {editingEnrollment && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#0b0f17] border border-[#1e293b] rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
+            <button
+              onClick={() => setEditingEnrollment(null)}
+              className="absolute top-5 right-5 text-[#64748b] hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h2 className="text-lg font-bold text-white mb-1">Edit Enrollment Access</h2>
+            <p className="text-xs text-[#94a3b8] mb-5">
+              {editingEnrollment.courseId?.title || "Selected Course"}
+            </p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                updateEnrollmentMutation.mutate({
+                  enrollmentId: editingEnrollment._id,
+                  expiresAt: editExpiresAt ? new Date(editExpiresAt).toISOString() : null,
+                  status: editStatus,
+                });
+              }}
+              className="space-y-4 text-xs"
+            >
+              <div>
+                <label className="block text-[#cbd5e1] font-medium mb-1">Status</label>
+                <select
+                  value={editStatus}
+                  onChange={(e) => setEditStatus(e.target.value)}
+                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                >
+                  <option value="active">Active</option>
+                  <option value="expired">Expired</option>
+                  <option value="suspended">Suspended</option>
+                  <option value="revoked">Revoked</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[#cbd5e1] font-medium mb-1">
+                  Expiration Date (leave empty for Lifetime)
+                </label>
+                <input
+                  type="date"
+                  value={editExpiresAt}
+                  onChange={(e) => setEditExpiresAt(e.target.value)}
+                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2.5 pt-3 border-t border-[#1e293b]">
+                <button
+                  type="button"
+                  onClick={() => setEditingEnrollment(null)}
+                  className="px-4 py-2 rounded-xl text-xs text-[#94a3b8] hover:bg-[#121824]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={updateEnrollmentMutation.isPending}
+                  className="px-4 py-2 rounded-xl bg-[#6366f1] text-white text-xs font-semibold flex items-center gap-2 hover:bg-[#4f46e5]"
+                >
+                  {updateEnrollmentMutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                  <span>Save Changes</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

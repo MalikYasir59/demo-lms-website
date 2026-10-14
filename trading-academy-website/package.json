@@ -9,6 +9,7 @@
     "lint": "eslint",
     "db:indexes": "tsx scripts/create-indexes.ts",
     "seed:admin": "tsx scripts/seed-admin.ts",
+    "backup:db": "tsx scripts/backup.ts",
     "compress:images": "node scripts/compress-images.js public/images public/images-compressed --target-kb 220 --quality 82 --max-width 1800 --max-height 1800"
   },
   "dependencies": {

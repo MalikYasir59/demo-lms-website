@@ -64,4 +64,69 @@ export async function recordAuditLog(params: RecordAuditParams) {
   }
 }
 
+export async function listAuditLogs(params: {
+  page?: number;
+  limit?: number;
+  entityType?: string;
+  action?: string;
+  q?: string;
+}) {
+  await connectToDatabase();
+
+  const page = Math.max(1, Number(params.page) || 1);
+  const limit = Math.min(100, Math.max(1, Number(params.limit) || 20));
+  const skip = (page - 1) * limit;
+
+  const query: Record<string, unknown> = {};
+
+  if (params.entityType && params.entityType !== "all") {
+    query.entityType = params.entityType;
+  }
+
+  if (params.action && params.action !== "all") {
+    query.action = params.action;
+  }
+
+  if (params.q) {
+    const regex = new RegExp(params.q, "i");
+    query.$or = [{ summary: regex }, { action: regex }, { entityType: regex }];
+  }
+
+  const [items, total] = await Promise.all([
+    AuditLog.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate<{ actorId: { name: string; email: string; role: string } }>(
+        "actorId",
+        "name email role"
+      )
+      .lean(),
+    AuditLog.countDocuments(query),
+  ]);
+
+  return {
+    items: items.map((log) => ({
+      id: String(log._id),
+      actor: {
+        name: log.actorId?.name || "System",
+        email: log.actorId?.email || "",
+        role: log.actorId?.role || "system",
+      },
+      action: log.action,
+      entityType: log.entityType,
+      entityId: log.entityId,
+      summary: log.summary,
+      diff: log.diff,
+      ip: log.ip,
+      createdAt: log.createdAt,
+    })),
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
+}
+
 export default recordAuditLog;
+
