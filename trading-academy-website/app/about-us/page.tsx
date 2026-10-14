@@ -173,36 +173,36 @@ export default function AboutUsPage() {
 
       {/* Founder Spotlight */}
       <section className="w-full bg-[#080d16] py-20 relative overflow-hidden border-b border-slate-800/80">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative bg-gradient-to-br from-[#0d1524] via-[#101b2e] to-[#0a101b] p-8 sm:p-12 rounded-3xl border border-slate-800 border-t-emerald-500/40 shadow-2xl overflow-hidden">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative bg-gradient-to-br from-[#0d1524] via-[#101b2e] to-[#0a101b] p-6 sm:p-10 lg:p-12 rounded-3xl border border-slate-800 border-t-emerald-500/40 shadow-2xl overflow-hidden">
             <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-              <div className="md:col-span-5 relative flex justify-center">
-                <div className="w-full max-w-[360px] aspect-[3/2] rounded-2xl overflow-hidden ring-2 ring-emerald-500/40 shadow-2xl relative bg-[#05080e]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              <div className="lg:col-span-6 relative flex justify-center">
+                <div className="w-full aspect-[3/2] rounded-2xl overflow-hidden ring-2 ring-emerald-500/40 shadow-2xl relative bg-[#05080e] group">
                   <img
                     alt="Marcus Vance, Head Trader and Founder"
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     src="/images/Final (88).JPG"
                   />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#05080e]/95 via-[#05080e]/60 to-transparent p-3 text-center">
-                    <span className="font-mono text-xs font-bold text-emerald-400 tracking-wider">
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#05080e]/95 via-[#05080e]/60 to-transparent p-3.5 sm:p-4 text-center">
+                    <span className="font-mono text-xs sm:text-sm font-bold text-emerald-400 tracking-wider">
                       MARCUS VANCE
                     </span>
-                    <p className="text-[10px] text-slate-300 uppercase font-mono">
+                    <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-mono">
                       Senior Liquidity Specialist
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="md:col-span-7 flex flex-col gap-4">
+              <div className="lg:col-span-6 flex flex-col gap-4 sm:gap-5">
                 <div className="inline-flex items-center gap-2 text-emerald-400 font-mono text-xs uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full w-fit">
                   <Award className="w-3.5 h-3.5" />
                   <span>HEAD TRADER &amp; FOUNDER</span>
                 </div>
-                <blockquote className="text-xl sm:text-2xl font-bold text-white leading-relaxed">
+                <blockquote className="text-xl sm:text-2xl lg:text-3xl font-bold text-white leading-snug sm:leading-relaxed">
                   “Trading is not art — it is a probabilistic auction governed strictly by institutional liquidity.”
                 </blockquote>
-                <p className="text-sm text-slate-300 leading-relaxed">
+                <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
                   Prior to founding the Institute, Marcus operated on proprietary desks dissecting London fix liquidity imbalances and institutional delta skew. His framework eliminates subjective guesswork in favor of verified institutional physics.
                 </p>
                 <div className="flex flex-wrap items-center gap-3 pt-2">
