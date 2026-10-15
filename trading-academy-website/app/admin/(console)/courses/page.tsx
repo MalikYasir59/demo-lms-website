@@ -14,12 +14,12 @@ import {
   Video,
   Users,
   Loader2,
-  CheckCircle,
   X,
   Layers,
 } from "lucide-react";
 import { toast } from "sonner";
 import { ICourse, ICategory } from "@/types/lms";
+import { Button } from "@/components/ui/Button";
 
 export default function CoursesDirectoryPage() {
   const router = useRouter();
@@ -123,29 +123,31 @@ export default function CoursesDirectoryPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-bold text-white tracking-tight">Courses Catalogue</h1>
-            <span className="px-2.5 py-0.5 rounded-full bg-[#121824] border border-[#1e293b] text-xs font-mono text-[#6366f1]">
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Courses Catalogue</h1>
+            <span className="px-2.5 py-0.5 rounded-full bg-muted border border-border text-xs font-mono text-primary font-medium">
               {totalCourses} Courses
             </span>
           </div>
-          <p className="text-xs text-[#94a3b8] mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Build quantitative curriculum, manage encrypted video lectures, and drip rules
           </p>
         </div>
 
-        <button
+        <Button
           onClick={() => setIsCreateOpen(true)}
-          className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white text-xs font-semibold hover:opacity-95 transition-all shadow-md shadow-[#6366f1]/25 flex items-center gap-1.5 cursor-pointer"
+          variant="primary"
+          size="sm"
+          className="gap-1.5 shadow-xs"
         >
           <Plus className="w-4 h-4" />
           <span>New Course</span>
-        </button>
+        </Button>
       </div>
 
       {/* Search and Filters */}
-      <div className="p-3 rounded-2xl bg-[#0b0f17] border border-[#1e293b] flex flex-col md:flex-row items-center gap-3">
+      <div className="p-3 rounded-2xl bg-card border border-border flex flex-col md:flex-row items-center gap-3 shadow-xs">
         <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-[#64748b] absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search courses by title or tags..."
@@ -154,7 +156,7 @@ export default function CoursesDirectoryPage() {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="w-full bg-[#121824] border border-[#1e293b] rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder:text-[#475569] focus:outline-none focus:border-[#6366f1]"
+            className="w-full bg-background border border-input rounded-xl pl-10 pr-4 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
           />
         </div>
 
@@ -165,7 +167,7 @@ export default function CoursesDirectoryPage() {
               setStatusFilter(e.target.value);
               setPage(1);
             }}
-            className="bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-xs text-[#cbd5e1] focus:outline-none focus:border-[#6366f1]"
+            className="bg-background border border-input rounded-xl px-3 py-2 text-xs text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
           >
             <option value="all">All Statuses</option>
             <option value="published">Published</option>
@@ -179,7 +181,7 @@ export default function CoursesDirectoryPage() {
               setCategoryFilter(e.target.value);
               setPage(1);
             }}
-            className="bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-xs text-[#cbd5e1] focus:outline-none focus:border-[#6366f1]"
+            className="bg-background border border-input rounded-xl px-3 py-2 text-xs text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
           >
             <option value="">All Categories</option>
             {categories.map((c) => (
@@ -192,11 +194,11 @@ export default function CoursesDirectoryPage() {
       </div>
 
       {/* Courses Grid / Table */}
-      <div className="rounded-2xl bg-[#0b0f17] border border-[#1e293b] overflow-hidden shadow-xl">
+      <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="border-b border-[#1e293b] bg-[#121824]/60 text-[#64748b] uppercase tracking-wider font-mono">
+              <tr className="border-b border-border bg-muted/40 text-muted-foreground uppercase tracking-wider font-mono">
                 <th className="p-3.5">Course Title & Slug</th>
                 <th className="p-3.5">Category</th>
                 <th className="p-3.5">Curriculum</th>
@@ -206,20 +208,20 @@ export default function CoursesDirectoryPage() {
                 <th className="p-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#1e293b]/60">
+            <tbody className="divide-y divide-border">
               {isLoading ? (
                 <tr>
-                  <td colSpan={7} className="p-12 text-center text-[#94a3b8]">
-                    <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#6366f1]" />
+                  <td colSpan={7} className="p-12 text-center text-muted-foreground">
+                    <Loader2 className="w-6 h-6 animate-spin mx-auto text-primary" />
                     <p className="mt-2 text-xs">Loading course catalog...</p>
                   </td>
                 </tr>
               ) : coursesList.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="p-12 text-center text-[#64748b]">
-                    <BookOpen className="w-8 h-8 mx-auto text-[#334155] mb-2" />
-                    <p className="text-sm font-semibold text-[#94a3b8]">No courses found</p>
-                    <p className="text-xs text-[#64748b] mt-0.5">
+                  <td colSpan={7} className="p-12 text-center text-muted-foreground">
+                    <BookOpen className="w-8 h-8 mx-auto text-muted-foreground/60 mb-2" />
+                    <p className="text-sm font-semibold text-foreground">No courses found</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       Create your first institutional trading course.
                     </p>
                   </td>
@@ -228,17 +230,17 @@ export default function CoursesDirectoryPage() {
                 coursesList.map((course) => (
                   <tr
                     key={course._id.toString()}
-                    className="hover:bg-[#121824]/50 transition-colors"
+                    className="hover:bg-muted/40 transition-colors"
                   >
                     {/* Course Title */}
                     <td className="p-3.5">
                       <Link
                         href={`/admin/courses/${course._id.toString()}`}
-                        className="font-bold text-white hover:text-[#6366f1] transition-colors block text-sm"
+                        className="font-bold text-foreground hover:text-primary transition-colors block text-sm"
                       >
                         {course.title}
                       </Link>
-                      <div className="text-[11px] font-mono text-[#64748b] mt-0.5">
+                      <div className="text-[11px] font-mono text-muted-foreground mt-0.5">
                         /{course.slug}
                       </div>
                     </td>
@@ -250,43 +252,43 @@ export default function CoursesDirectoryPage() {
                           {(course.categoryIds as any[]).map((cat) => (
                             <span
                               key={cat._id || cat}
-                              className="px-2 py-0.5 rounded-md bg-[#121824] border border-[#1e293b] text-[11px] text-[#cbd5e1]"
+                              className="px-2 py-0.5 rounded-md bg-muted border border-border text-[11px] text-foreground"
                             >
                               {cat.name || "Category"}
                             </span>
                           ))}
                         </div>
                       ) : (
-                        <span className="text-[#64748b]">—</span>
+                        <span className="text-muted-foreground">—</span>
                       )}
                     </td>
 
                     {/* Curriculum Counts */}
-                    <td className="p-3.5 font-mono text-[#cbd5e1]">
+                    <td className="p-3.5 font-mono text-foreground">
                       <div className="flex items-center gap-3">
-                        <span className="flex items-center gap-1 text-[#94a3b8]">
-                          <Layers className="w-3.5 h-3.5 text-[#6366f1]" />
+                        <span className="flex items-center gap-1 text-muted-foreground">
+                          <Layers className="w-3.5 h-3.5 text-primary" />
                           <span>{course.stats?.moduleCount || 0} Modules</span>
                         </span>
-                        <span className="flex items-center gap-1 text-[#94a3b8]">
-                          <Video className="w-3.5 h-3.5 text-[#10b981]" />
+                        <span className="flex items-center gap-1 text-muted-foreground">
+                          <Video className="w-3.5 h-3.5 text-success" />
                           <span>{course.stats?.lectureCount || 0} Lectures</span>
                         </span>
                       </div>
                     </td>
 
                     {/* Duration */}
-                    <td className="p-3.5 font-mono text-[#94a3b8]">
+                    <td className="p-3.5 font-mono text-muted-foreground">
                       <div className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-[#64748b]" />
+                        <Clock className="w-3.5 h-3.5 text-muted-foreground" />
                         <span>{formatDuration(course.stats?.totalDurationSec || 0)}</span>
                       </div>
                     </td>
 
                     {/* Enrolled Students */}
-                    <td className="p-3.5 font-mono text-[#94a3b8]">
+                    <td className="p-3.5 font-mono text-muted-foreground">
                       <div className="flex items-center gap-1.5">
-                        <Users className="w-3.5 h-3.5 text-[#64748b]" />
+                        <Users className="w-3.5 h-3.5 text-muted-foreground" />
                         <span>{course.stats?.enrolledCount || 0}</span>
                       </div>
                     </td>
@@ -296,19 +298,19 @@ export default function CoursesDirectoryPage() {
                       <span
                         className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium border capitalize ${
                           course.status === "published"
-                            ? "bg-[#10b981]/10 text-[#10b981] border-[#10b981]/30"
+                            ? "bg-success/10 text-success border-success/30"
                             : course.status === "archived"
-                            ? "bg-red-500/10 text-red-400 border-red-500/30"
-                            : "bg-yellow-500/10 text-yellow-400 border-yellow-500/30"
+                            ? "bg-destructive/10 text-destructive border-destructive/30"
+                            : "bg-warning/10 text-warning border-warning/30"
                         }`}
                       >
                         <span
                           className={`w-1.5 h-1.5 rounded-full ${
                             course.status === "published"
-                              ? "bg-[#10b981] animate-pulse"
+                              ? "bg-success animate-pulse"
                               : course.status === "archived"
-                              ? "bg-red-400"
-                              : "bg-yellow-400"
+                              ? "bg-destructive"
+                              : "bg-warning"
                           }`}
                         />
                         <span>{course.status}</span>
@@ -320,7 +322,7 @@ export default function CoursesDirectoryPage() {
                       <Link
                         href={`/admin/courses/${course._id.toString()}`}
                         title="Open Builder"
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#6366f1]/15 text-[#6366f1] hover:bg-[#6366f1]/25 font-semibold text-[11px] transition-colors"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 font-semibold text-[11px] transition-colors"
                       >
                         <span>Builder</span>
                         <ExternalLink className="w-3 h-3" />
@@ -333,7 +335,7 @@ export default function CoursesDirectoryPage() {
                           }
                         }}
                         title="Delete Course"
-                        className="p-1.5 rounded-lg text-[#94a3b8] hover:text-red-400 hover:bg-[#121824] transition-colors"
+                        className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -348,17 +350,17 @@ export default function CoursesDirectoryPage() {
 
       {/* CREATE COURSE MODAL */}
       {isCreateOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-[#0b0f17] border border-[#1e293b] rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-card border border-border rounded-2xl p-6 shadow-xl relative animate-in zoom-in-95 duration-150">
             <button
               onClick={() => setIsCreateOpen(false)}
-              className="absolute top-5 right-5 text-[#64748b] hover:text-white"
+              className="absolute top-5 right-5 text-muted-foreground hover:text-foreground"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h2 className="text-xl font-bold text-white mb-1">Create New Course</h2>
-            <p className="text-xs text-[#94a3b8] mb-5">
+            <h2 className="text-xl font-bold text-foreground mb-1">Create New Course</h2>
+            <p className="text-xs text-muted-foreground mb-5">
               Initialize course title and structure for the curriculum builder
             </p>
 
@@ -370,35 +372,35 @@ export default function CoursesDirectoryPage() {
               className="space-y-4 text-xs"
             >
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Course Title *</label>
+                <label className="block text-foreground font-medium mb-1">Course Title *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Quantitative Order Flow & Volume Profile"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
                 />
               </div>
 
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Subtitle</label>
+                <label className="block text-foreground font-medium mb-1">Subtitle</label>
                 <input
                   type="text"
                   placeholder="e.g. Master institutional liquidity dynamics and auction market theory"
                   value={newSubtitle}
                   onChange={(e) => setNewSubtitle(e.target.value)}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[#cbd5e1] font-medium mb-1">Primary Category</label>
+                  <label className="block text-foreground font-medium mb-1">Primary Category</label>
                   <select
                     value={newCategoryId}
                     onChange={(e) => setNewCategoryId(e.target.value)}
-                    className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                    className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
                   >
                     <option value="">None / Unassigned</option>
                     {categories.map((c) => (
@@ -410,11 +412,11 @@ export default function CoursesDirectoryPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[#cbd5e1] font-medium mb-1">Difficulty Level</label>
+                  <label className="block text-foreground font-medium mb-1">Difficulty Level</label>
                   <select
                     value={newDifficulty}
                     onChange={(e) => setNewDifficulty(e.target.value)}
-                    className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                    className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
                   >
                     <option value="all">All Levels</option>
                     <option value="beginner">Beginner</option>
@@ -424,24 +426,27 @@ export default function CoursesDirectoryPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[#1e293b]">
-                <button
+              <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-border">
+                <Button
                   type="button"
+                  variant="secondary"
+                  size="sm"
                   onClick={() => setIsCreateOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs text-[#94a3b8] hover:bg-[#121824]"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
+                  variant="primary"
+                  size="sm"
                   disabled={createMutation.isPending || !newTitle.trim()}
-                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white text-xs font-semibold flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="gap-2"
                 >
                   {createMutation.isPending && (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
                   )}
                   <span>Create & Open Builder</span>
-                </button>
+                </Button>
               </div>
             </form>
           </div>

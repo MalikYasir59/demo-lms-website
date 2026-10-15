@@ -9,11 +9,7 @@ import {
   Save,
   KeyRound,
   Laptop,
-  CheckCircle2,
-  AlertCircle,
-  RefreshCw,
   Search,
-  Lock,
   Sun,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -23,7 +19,6 @@ type SettingsTab = "profile" | "appearance" | "security" | "platform" | "audit";
 
 export default function AdminSettingsPage() {
   const [activeTab, setActiveTab] = useState<SettingsTab>("profile");
-  const [loading, setLoading] = useState(false);
 
   // Profile Form State
   const [profile, setProfile] = useState({
@@ -76,6 +71,15 @@ export default function AdminSettingsPage() {
   const [auditSearch, setAuditSearch] = useState("");
   const [auditEntityType, setAuditEntityType] = useState("all");
 
+  const loadSessions = () => {
+    fetch("/api/admin/me/sessions")
+      .then((r) => r.json())
+      .then((res) => {
+        if (res.ok) setSessions(res.data);
+      })
+      .catch((err) => console.error(err));
+  };
+
   // Load initial data
   useEffect(() => {
     // 1. Load Admin Profile
@@ -106,15 +110,6 @@ export default function AdminSettingsPage() {
       })
       .catch((err) => console.error(err));
   }, []);
-
-  const loadSessions = () => {
-    fetch("/api/admin/me/sessions")
-      .then((r) => r.json())
-      .then((res) => {
-        if (res.ok) setSessions(res.data);
-      })
-      .catch((err) => console.error(err));
-  };
 
   const loadAuditLogs = () => {
     fetch(
@@ -230,14 +225,14 @@ export default function AdminSettingsPage() {
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white tracking-tight">Platform Settings & Audit</h1>
-        <p className="text-sm text-[#94a3b8] mt-1">
+        <h1 className="text-2xl font-bold text-foreground tracking-tight">Platform Settings & Audit</h1>
+        <p className="text-sm text-muted-foreground mt-1">
           Configure security policies, anti-piracy thresholds, admin credentials, and inspect immutable system audit records.
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-[#1e293b] pb-2 overflow-x-auto">
+      <div className="flex items-center gap-2 border-b border-border pb-2 overflow-x-auto">
         {(
           [
             { id: "profile", label: "My Profile", icon: User },
@@ -253,10 +248,10 @@ export default function AdminSettingsPage() {
             <button
               key={t.id}
               onClick={() => setActiveTab(t.id)}
-              className={`px-4 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
+              className={`px-4 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                 isActive
-                  ? "bg-[#6366f1] text-white shadow-lg shadow-[#6366f1]/25"
-                  : "text-[#94a3b8] hover:text-white hover:bg-[#121824]"
+                  ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -268,46 +263,46 @@ export default function AdminSettingsPage() {
 
       {/* TAB 1: PROFILE */}
       {activeTab === "profile" && (
-        <div className="p-6 rounded-2xl bg-[#0b0f17] border border-[#1e293b] max-w-2xl shadow-xl">
-          <h3 className="text-base font-semibold text-white mb-1">Administrator Profile</h3>
-          <p className="text-xs text-[#64748b] mb-6">Update your system name and contact information</p>
+        <div className="p-6 rounded-2xl bg-card border border-border max-w-2xl shadow-xs">
+          <h3 className="text-base font-semibold text-foreground mb-1">Administrator Profile</h3>
+          <p className="text-xs text-muted-foreground mb-6">Update your system name and contact information</p>
 
           <form onSubmit={handleSaveProfile} className="space-y-4">
             <div>
-              <label className="block text-xs font-mono text-[#94a3b8] uppercase mb-1.5">
+              <label className="block text-xs font-mono text-muted-foreground uppercase mb-1.5">
                 Full Name
               </label>
               <input
                 type="text"
                 value={profile.name}
                 onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                className="w-full px-3.5 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-white text-sm focus:outline-none focus:border-[#6366f1]"
+                className="w-full px-3.5 py-2 rounded-xl bg-muted/40 border border-border text-foreground text-sm focus:outline-none focus:border-primary"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-mono text-[#94a3b8] uppercase mb-1.5">
+              <label className="block text-xs font-mono text-muted-foreground uppercase mb-1.5">
                 Email Address
               </label>
               <input
                 type="email"
                 value={profile.email}
                 onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                className="w-full px-3.5 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-white text-sm focus:outline-none focus:border-[#6366f1]"
+                className="w-full px-3.5 py-2 rounded-xl bg-muted/40 border border-border text-foreground text-sm focus:outline-none focus:border-primary"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-mono text-[#94a3b8] uppercase mb-1.5">
+              <label className="block text-xs font-mono text-muted-foreground uppercase mb-1.5">
                 Phone Number
               </label>
               <input
                 type="tel"
                 value={profile.phone}
                 onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-                className="w-full px-3.5 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-white text-sm focus:outline-none focus:border-[#6366f1]"
+                className="w-full px-3.5 py-2 rounded-xl bg-muted/40 border border-border text-foreground text-sm focus:outline-none focus:border-primary"
               />
             </div>
 
@@ -315,7 +310,7 @@ export default function AdminSettingsPage() {
               <button
                 type="submit"
                 disabled={savingProfile}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white text-xs font-semibold hover:opacity-95 transition-opacity shadow-lg shadow-[#6366f1]/25 flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
               >
                 <Save className="w-4 h-4" />
                 <span>{savingProfile ? "Saving..." : "Save Profile"}</span>
@@ -327,10 +322,10 @@ export default function AdminSettingsPage() {
 
       {/* TAB 2: APPEARANCE */}
       {activeTab === "appearance" && (
-        <div className="p-6 rounded-2xl bg-[#0b0f17] border border-[#1e293b] max-w-3xl shadow-xl space-y-5">
+        <div className="p-6 rounded-2xl bg-card border border-border max-w-3xl shadow-xs space-y-5">
           <div>
-            <h3 className="text-base font-semibold text-white mb-1">Visual Theme & Display Mode</h3>
-            <p className="text-xs text-[#64748b]">
+            <h3 className="text-base font-semibold text-foreground mb-1">Visual Theme & Display Mode</h3>
+            <p className="text-xs text-muted-foreground">
               Switch the administrative console between Light Mode, Dark Mode, or synchronize automatically with your operating system.
             </p>
           </div>
@@ -342,15 +337,15 @@ export default function AdminSettingsPage() {
       {activeTab === "security" && (
         <div className="space-y-6 max-w-3xl">
           {/* Password Change Form */}
-          <div className="p-6 rounded-2xl bg-[#0b0f17] border border-[#1e293b] shadow-xl">
-            <h3 className="text-base font-semibold text-white mb-1">Change Admin Password</h3>
-            <p className="text-xs text-[#64748b] mb-6">
+          <div className="p-6 rounded-2xl bg-card border border-border shadow-xs">
+            <h3 className="text-base font-semibold text-foreground mb-1">Change Admin Password</h3>
+            <p className="text-xs text-muted-foreground mb-6">
               Must be at least 12 characters. Changing your password immediately revokes all other device sessions.
             </p>
 
             <form onSubmit={handleSavePassword} className="space-y-4">
               <div>
-                <label className="block text-xs font-mono text-[#94a3b8] uppercase mb-1.5">
+                <label className="block text-xs font-mono text-muted-foreground uppercase mb-1.5">
                   Current Password
                 </label>
                 <input
@@ -359,14 +354,14 @@ export default function AdminSettingsPage() {
                   onChange={(e) =>
                     setPasswordForm({ ...passwordForm, currentPassword: e.target.value })
                   }
-                  className="w-full px-3.5 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-white text-sm focus:outline-none focus:border-[#6366f1]"
+                  className="w-full px-3.5 py-2 rounded-xl bg-muted/40 border border-border text-foreground text-sm focus:outline-none focus:border-primary"
                   required
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-mono text-[#94a3b8] uppercase mb-1.5">
+                  <label className="block text-xs font-mono text-muted-foreground uppercase mb-1.5">
                     New Password
                   </label>
                   <input
@@ -375,12 +370,12 @@ export default function AdminSettingsPage() {
                     onChange={(e) =>
                       setPasswordForm({ ...passwordForm, newPassword: e.target.value })
                     }
-                    className="w-full px-3.5 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-white text-sm focus:outline-none focus:border-[#6366f1]"
+                    className="w-full px-3.5 py-2 rounded-xl bg-muted/40 border border-border text-foreground text-sm focus:outline-none focus:border-primary"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-mono text-[#94a3b8] uppercase mb-1.5">
+                  <label className="block text-xs font-mono text-muted-foreground uppercase mb-1.5">
                     Confirm New Password
                   </label>
                   <input
@@ -389,7 +384,7 @@ export default function AdminSettingsPage() {
                     onChange={(e) =>
                       setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })
                     }
-                    className="w-full px-3.5 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-white text-sm focus:outline-none focus:border-[#6366f1]"
+                    className="w-full px-3.5 py-2 rounded-xl bg-muted/40 border border-border text-foreground text-sm focus:outline-none focus:border-primary"
                     required
                   />
                 </div>
@@ -399,7 +394,7 @@ export default function AdminSettingsPage() {
                 <button
                   type="submit"
                   disabled={savingPassword}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white text-xs font-semibold hover:opacity-95 transition-opacity shadow-lg shadow-[#6366f1]/25 flex items-center gap-2"
+                  className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
                 >
                   <KeyRound className="w-4 h-4" />
                   <span>{savingPassword ? "Updating Password..." : "Update Password"}</span>
@@ -409,9 +404,9 @@ export default function AdminSettingsPage() {
           </div>
 
           {/* Active Sessions List */}
-          <div className="p-6 rounded-2xl bg-[#0b0f17] border border-[#1e293b] shadow-xl">
-            <h3 className="text-base font-semibold text-white mb-1">Active Administrator Devices</h3>
-            <p className="text-xs text-[#64748b] mb-4">
+          <div className="p-6 rounded-2xl bg-card border border-border shadow-xs">
+            <h3 className="text-base font-semibold text-foreground mb-1">Active Administrator Devices</h3>
+            <p className="text-xs text-muted-foreground mb-4">
               Authorized admin sessions currently signed in to the console
             </p>
 
@@ -419,24 +414,24 @@ export default function AdminSettingsPage() {
               {sessions.map((s) => (
                 <div
                   key={s.sid}
-                  className="p-4 rounded-xl bg-[#121824] border border-[#1e293b] flex items-center justify-between gap-4"
+                  className="p-4 rounded-xl bg-muted/40 border border-border flex items-center justify-between gap-4"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-[#0b0f17] border border-[#1e293b] flex items-center justify-center text-[#6366f1]">
+                    <div className="w-9 h-9 rounded-lg bg-card border border-border flex items-center justify-center text-primary shadow-xs">
                       <Laptop className="w-4 h-4" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-semibold text-white">
+                        <span className="text-xs font-semibold text-foreground">
                           {s.deviceLabel || "Web Browser"}
                         </span>
                         {s.isCurrent && (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#10b981]/20 text-[#10b981] font-mono">
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-success/15 text-success border border-success/30 font-mono">
                             Current Device
                           </span>
                         )}
                       </div>
-                      <div className="text-[11px] text-[#64748b] font-mono mt-0.5">
+                      <div className="text-[11px] text-muted-foreground font-mono mt-0.5">
                         IP: {s.ip} · Last active: {new Date(s.lastSeenAt).toLocaleString()}
                       </div>
                     </div>
@@ -445,7 +440,7 @@ export default function AdminSettingsPage() {
                   {!s.isCurrent && (
                     <button
                       onClick={() => handleRevokeSession(s.sid)}
-                      className="px-3 py-1.5 rounded-lg bg-[#ef4444]/15 hover:bg-[#ef4444]/25 text-[#ef4444] border border-[#ef4444]/30 text-xs font-mono transition-colors"
+                      className="px-3 py-1.5 rounded-lg bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/20 text-xs font-mono transition-colors cursor-pointer"
                     >
                       Revoke
                     </button>
@@ -461,15 +456,15 @@ export default function AdminSettingsPage() {
       {activeTab === "platform" && (
         <form onSubmit={handleSavePlatform} className="space-y-6 max-w-3xl">
           {/* Security & Multi-Device Policy */}
-          <div className="p-6 rounded-2xl bg-[#0b0f17] border border-[#1e293b] shadow-xl space-y-4">
-            <h3 className="text-base font-semibold text-white">Security & Multi-Device Gating</h3>
-            <p className="text-xs text-[#64748b]">
+          <div className="p-6 rounded-2xl bg-card border border-border shadow-xs space-y-4">
+            <h3 className="text-base font-semibold text-foreground">Security & Multi-Device Gating</h3>
+            <p className="text-xs text-muted-foreground">
               Enforce single-device playback and automated anti-tamper thresholds
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-mono text-[#94a3b8] uppercase mb-1">
+                <label className="block text-xs font-mono text-muted-foreground uppercase mb-1">
                   Max Devices Per Student
                 </label>
                 <input
@@ -486,13 +481,13 @@ export default function AdminSettingsPage() {
                       },
                     })
                   }
-                  className="w-full px-3 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-white text-xs font-mono focus:outline-none focus:border-[#6366f1]"
+                  className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border text-foreground text-xs font-mono focus:outline-none focus:border-primary"
                 />
-                <span className="text-[10px] text-[#64748b]">Recommended: 1 device</span>
+                <span className="text-[10px] text-muted-foreground">Recommended: 1 device</span>
               </div>
 
               <div>
-                <label className="block text-xs font-mono text-[#94a3b8] uppercase mb-1">
+                <label className="block text-xs font-mono text-muted-foreground uppercase mb-1">
                   Absolute Session Lifetime (Hours)
                 </label>
                 <input
@@ -509,20 +504,20 @@ export default function AdminSettingsPage() {
                       },
                     })
                   }
-                  className="w-full px-3 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-white text-xs font-mono focus:outline-none focus:border-[#6366f1]"
+                  className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border text-foreground text-xs font-mono focus:outline-none focus:border-primary"
                 />
-                <span className="text-[10px] text-[#64748b]">Default: 12 hours</span>
+                <span className="text-[10px] text-muted-foreground">Default: 12 hours</span>
               </div>
             </div>
 
             {/* Strike Thresholds */}
-            <div className="pt-2 border-t border-[#1e293b]">
-              <h4 className="text-xs font-semibold text-white uppercase font-mono mb-3">
+            <div className="pt-2 border-t border-border">
+              <h4 className="text-xs font-semibold text-foreground uppercase font-mono mb-3">
                 Anti-Piracy Strike Score Escalation Ladder (7-Day Rolling)
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3 rounded-xl bg-[#121824] border border-[#1e293b]">
-                  <span className="text-[10px] font-mono text-[#f59e0b] block uppercase">
+                <div className="p-3 rounded-xl bg-muted/40 border border-border">
+                  <span className="text-[10px] font-mono text-warning block uppercase font-medium">
                     Tier 1: Warn Notice
                   </span>
                   <input
@@ -540,13 +535,13 @@ export default function AdminSettingsPage() {
                         },
                       })
                     }
-                    className="w-full mt-1 px-2.5 py-1.5 rounded-lg bg-[#0b0f17] border border-[#1e293b] text-white text-xs font-mono"
+                    className="w-full mt-1 px-2.5 py-1.5 rounded-lg bg-card border border-border text-foreground text-xs font-mono"
                   />
-                  <span className="text-[9px] text-[#64748b] mt-1 block">Default: 3 points</span>
+                  <span className="text-[9px] text-muted-foreground mt-1 block">Default: 3 points</span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-[#121824] border border-[#1e293b]">
-                  <span className="text-[10px] font-mono text-[#ef4444] block uppercase">
+                <div className="p-3 rounded-xl bg-muted/40 border border-border">
+                  <span className="text-[10px] font-mono text-destructive block uppercase font-medium">
                     Tier 2: Force Logout
                   </span>
                   <input
@@ -564,13 +559,13 @@ export default function AdminSettingsPage() {
                         },
                       })
                     }
-                    className="w-full mt-1 px-2.5 py-1.5 rounded-lg bg-[#0b0f17] border border-[#1e293b] text-white text-xs font-mono"
+                    className="w-full mt-1 px-2.5 py-1.5 rounded-lg bg-card border border-border text-foreground text-xs font-mono"
                   />
-                  <span className="text-[9px] text-[#64748b] mt-1 block">Default: 8 points</span>
+                  <span className="text-[9px] text-muted-foreground mt-1 block">Default: 8 points</span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-[#121824] border border-[#1e293b]">
-                  <span className="text-[10px] font-mono text-[#ec4899] block uppercase">
+                <div className="p-3 rounded-xl bg-muted/40 border border-border">
+                  <span className="text-[10px] font-mono text-primary block uppercase font-medium">
                     Tier 3: Account Lock
                   </span>
                   <input
@@ -588,9 +583,9 @@ export default function AdminSettingsPage() {
                         },
                       })
                     }
-                    className="w-full mt-1 px-2.5 py-1.5 rounded-lg bg-[#0b0f17] border border-[#1e293b] text-white text-xs font-mono"
+                    className="w-full mt-1 px-2.5 py-1.5 rounded-lg bg-card border border-border text-foreground text-xs font-mono"
                   />
-                  <span className="text-[9px] text-[#64748b] mt-1 block">Default: 15 points</span>
+                  <span className="text-[9px] text-muted-foreground mt-1 block">Default: 15 points</span>
                 </div>
               </div>
             </div>
@@ -598,10 +593,10 @@ export default function AdminSettingsPage() {
             {/* Devtools guard toggle */}
             <div className="pt-2 flex items-center justify-between">
               <div>
-                <span className="text-xs font-medium text-white block">
+                <span className="text-xs font-medium text-foreground block">
                   Developer Tools Guard Probes
                 </span>
-                <span className="text-[11px] text-[#64748b]">
+                <span className="text-[11px] text-muted-foreground">
                   Detect console, timing, and resize inspection probes in player shell
                 </span>
               </div>
@@ -617,17 +612,17 @@ export default function AdminSettingsPage() {
                     },
                   })
                 }
-                className="w-4 h-4 rounded text-[#6366f1] bg-[#121824] border-[#1e293b] focus:ring-0"
+                className="w-4 h-4 rounded text-primary bg-muted border-border focus:ring-0 cursor-pointer"
               />
             </div>
           </div>
 
           {/* Academic & Completion Defaults */}
-          <div className="p-6 rounded-2xl bg-[#0b0f17] border border-[#1e293b] shadow-xl space-y-4">
-            <h3 className="text-base font-semibold text-white">Academy Defaults</h3>
+          <div className="p-6 rounded-2xl bg-card border border-border shadow-xs space-y-4">
+            <h3 className="text-base font-semibold text-foreground">Academy Defaults</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-mono text-[#94a3b8] uppercase mb-1">
+                <label className="block text-xs font-mono text-muted-foreground uppercase mb-1">
                   Default Access Duration (Days)
                 </label>
                 <input
@@ -642,12 +637,12 @@ export default function AdminSettingsPage() {
                       },
                     })
                   }
-                  className="w-full px-3 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-white text-xs font-mono"
+                  className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border text-foreground text-xs font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono text-[#94a3b8] uppercase mb-1">
+                <label className="block text-xs font-mono text-muted-foreground uppercase mb-1">
                   Lecture Completion Threshold (%)
                 </label>
                 <input
@@ -664,7 +659,7 @@ export default function AdminSettingsPage() {
                       },
                     })
                   }
-                  className="w-full px-3 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-white text-xs font-mono"
+                  className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border text-foreground text-xs font-mono"
                 />
               </div>
             </div>
@@ -673,7 +668,7 @@ export default function AdminSettingsPage() {
           <button
             type="submit"
             disabled={savingPlatform}
-            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white text-xs font-semibold hover:opacity-95 transition-opacity shadow-lg shadow-[#6366f1]/25 flex items-center gap-2"
+            className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
           >
             <Save className="w-4 h-4" />
             <span>{savingPlatform ? "Saving Changes..." : "Save Platform Policy"}</span>
@@ -685,24 +680,24 @@ export default function AdminSettingsPage() {
       {activeTab === "audit" && (
         <div className="space-y-4">
           {/* Audit Search Bar */}
-          <div className="p-4 rounded-xl bg-[#0b0f17] border border-[#1e293b] flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="p-4 rounded-xl bg-card border border-border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
             <div className="relative w-full sm:w-80">
-              <Search className="w-4 h-4 text-[#64748b] absolute left-3 top-2.5" />
+              <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-2.5" />
               <input
                 type="text"
                 placeholder="Search audit trail by summary, action..."
                 value={auditSearch}
                 onChange={(e) => setAuditSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-[#121824] border border-[#1e293b] text-white text-xs focus:outline-none focus:border-[#6366f1]"
+                className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-muted/40 border border-border text-foreground text-xs focus:outline-none focus:border-primary"
               />
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
-              <span className="text-xs text-[#64748b] font-mono">Entity:</span>
+              <span className="text-xs text-muted-foreground font-mono">Entity:</span>
               <select
                 value={auditEntityType}
                 onChange={(e) => setAuditEntityType(e.target.value)}
-                className="px-3 py-1.5 rounded-lg bg-[#121824] border border-[#1e293b] text-white text-xs font-mono focus:outline-none"
+                className="px-3 py-1.5 rounded-lg bg-muted/40 border border-border text-foreground text-xs font-mono focus:outline-none"
               >
                 <option value="all">All Entities</option>
                 <option value="student">Student</option>
@@ -715,11 +710,11 @@ export default function AdminSettingsPage() {
           </div>
 
           {/* Audit Table */}
-          <div className="rounded-2xl bg-[#0b0f17] border border-[#1e293b] overflow-hidden shadow-xl">
+          <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-xs">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="border-b border-[#1e293b] bg-[#121824]/50 text-[11px] font-mono text-[#64748b] uppercase tracking-wider">
+                  <tr className="border-b border-border bg-muted/40 text-[11px] font-mono text-muted-foreground uppercase tracking-wider">
                     <th className="p-4">Timestamp</th>
                     <th className="p-4">Actor</th>
                     <th className="p-4">Action</th>
@@ -728,29 +723,29 @@ export default function AdminSettingsPage() {
                     <th className="p-4">IP</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#1e293b]">
+                <tbody className="divide-y divide-border">
                   {auditLogs.map((log) => (
-                    <tr key={log.id} className="hover:bg-[#121824]/30 transition-colors">
-                      <td className="p-4 font-mono text-[#94a3b8] whitespace-nowrap">
+                    <tr key={log.id} className="hover:bg-muted/40 transition-colors">
+                      <td className="p-4 font-mono text-muted-foreground whitespace-nowrap">
                         {new Date(log.createdAt).toLocaleString()}
                       </td>
                       <td className="p-4">
-                        <div className="font-semibold text-white">{log.actor.name}</div>
-                        <div className="text-[10px] text-[#64748b]">{log.actor.role}</div>
+                        <div className="font-semibold text-foreground">{log.actor.name}</div>
+                        <div className="text-[10px] text-muted-foreground">{log.actor.role}</div>
                       </td>
-                      <td className="p-4 font-mono text-[#6366f1]">{log.action}</td>
-                      <td className="p-4 font-mono text-[#94a3b8]">
-                        <span className="px-2 py-0.5 rounded bg-[#1e293b] text-[10px]">
+                      <td className="p-4 font-mono text-primary">{log.action}</td>
+                      <td className="p-4 font-mono text-muted-foreground">
+                        <span className="px-2 py-0.5 rounded bg-muted border border-border/50 text-[10px]">
                           {log.entityType}
                         </span>
                       </td>
-                      <td className="p-4 text-white max-w-md">{log.summary}</td>
-                      <td className="p-4 font-mono text-[#64748b] text-[11px]">{log.ip}</td>
+                      <td className="p-4 text-foreground max-w-md">{log.summary}</td>
+                      <td className="p-4 font-mono text-muted-foreground text-[11px]">{log.ip}</td>
                     </tr>
                   ))}
                   {auditLogs.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-[#64748b]">
+                      <td colSpan={6} className="p-8 text-center text-muted-foreground">
                         No audit records found matching your filter.
                       </td>
                     </tr>

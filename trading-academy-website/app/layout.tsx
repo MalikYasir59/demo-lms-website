@@ -59,7 +59,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#080b11] font-sans text-[#e0e2eb] antialiased selection:bg-[#10b981] selection:text-black flex flex-col min-h-screen relative">
+      <body className="bg-background font-sans text-foreground antialiased flex flex-col min-h-screen relative">
         <Providers>{children}</Providers>
       </body>
     </html>

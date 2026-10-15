@@ -24,7 +24,7 @@ export function AreaTrendChart({
   if (!data || data.length === 0) {
     return (
       <div
-        className="w-full flex items-center justify-center text-xs text-[#64748b] font-mono border border-dashed border-[#1e293b] rounded-xl"
+        className="w-full flex items-center justify-center text-xs text-muted-foreground font-mono border border-dashed border-border rounded-xl"
         style={{ height }}
       >
         No activity recorded in this period
@@ -72,10 +72,10 @@ export function AreaTrendChart({
   return (
     <div className="w-full select-none">
       {title && (
-        <div className="text-xs font-semibold text-[#94a3b8] mb-2 font-mono flex items-center justify-between">
+        <div className="text-xs font-semibold text-muted-foreground mb-2 font-mono flex items-center justify-between">
           <span>{title}</span>
           {hoveredIdx !== null && (
-            <span className="text-white font-mono text-[11px] bg-[#1e293b] px-2 py-0.5 rounded">
+            <span className="text-foreground font-mono text-[11px] bg-muted px-2 py-0.5 rounded border border-border">
               {data[hoveredIdx].date}:{" "}
               <strong style={{ color }}>
                 {data[hoveredIdx].value}
@@ -111,7 +111,8 @@ export function AreaTrendChart({
                 y1={y}
                 x2={width - padding.right}
                 y2={y}
-                stroke="#1e293b"
+                stroke="currentColor"
+                className="text-border"
                 strokeDasharray="4 4"
                 strokeWidth="1"
               />
@@ -119,7 +120,7 @@ export function AreaTrendChart({
                 x={padding.left - 8}
                 y={y + 4}
                 textAnchor="end"
-                className="text-[9px] fill-[#64748b] font-mono"
+                className="text-[9px] fill-muted-foreground font-mono"
               >
                 {tick}
                 {unit}
@@ -170,7 +171,8 @@ export function AreaTrendChart({
                     y1={padding.top}
                     x2={pt.x}
                     y2={padding.top + chartHeight}
-                    stroke="#475569"
+                    stroke="currentColor"
+                    className="text-muted-foreground/60"
                     strokeDasharray="2 2"
                     strokeWidth="1"
                   />
@@ -179,7 +181,8 @@ export function AreaTrendChart({
                     cy={pt.y}
                     r="5"
                     fill={color}
-                    stroke="#ffffff"
+                    stroke="currentColor"
+                    className="text-background"
                     strokeWidth="2"
                   />
                 </>
@@ -197,7 +200,7 @@ export function AreaTrendChart({
                       ? "end"
                       : "middle"
                   }
-                  className="text-[10px] fill-[#64748b] font-mono"
+                  className="text-[10px] fill-muted-foreground font-mono"
                 >
                   {pt.date.slice(5)}
                 </text>

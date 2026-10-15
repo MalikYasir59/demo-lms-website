@@ -62,7 +62,7 @@ export default function StudentsDirectoryPage() {
   const [copied, setCopied] = useState(false);
 
   // Fetch Students
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["admin_students", page, search, statusFilter, levelFilter],
     queryFn: async () => {
       const params = new URLSearchParams({
@@ -298,12 +298,12 @@ export default function StudentsDirectoryPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-bold text-white tracking-tight">Student Directory</h1>
-            <span className="px-2.5 py-0.5 rounded-full bg-[#121824] border border-[#1e293b] text-xs font-mono text-[#10b981]">
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Student Directory</h1>
+            <span className="px-2.5 py-0.5 rounded-full bg-muted border border-border text-xs font-mono text-success font-medium">
               {totalStudents} Enrolled
             </span>
           </div>
-          <p className="text-xs text-[#94a3b8] mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Manage quantitative price action student accounts, credentials, and access rules
           </p>
         </div>
@@ -313,23 +313,23 @@ export default function StudentsDirectoryPage() {
           <a
             href="/api/admin/students/export"
             download
-            className="px-3.5 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-xs font-medium text-[#cbd5e1] hover:text-white hover:border-[#334155] transition-colors flex items-center gap-1.5"
+            className="px-3.5 py-2 rounded-xl bg-card border border-border text-xs font-medium text-foreground hover:bg-muted transition-colors flex items-center gap-1.5 shadow-xs"
           >
-            <Download className="w-3.5 h-3.5" />
+            <Download className="w-3.5 h-3.5 text-muted-foreground" />
             <span>Export CSV</span>
           </a>
 
           <button
             onClick={() => setIsImportOpen(true)}
-            className="px-3.5 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-xs font-medium text-[#cbd5e1] hover:text-white hover:border-[#334155] transition-colors flex items-center gap-1.5"
+            className="px-3.5 py-2 rounded-xl bg-card border border-border text-xs font-medium text-foreground hover:bg-muted transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
           >
-            <Upload className="w-3.5 h-3.5" />
+            <Upload className="w-3.5 h-3.5 text-muted-foreground" />
             <span>Import CSV</span>
           </button>
 
           <button
             onClick={() => setIsAddOpen(true)}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white text-xs font-semibold hover:opacity-95 transition-all shadow-md shadow-[#6366f1]/25 flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:opacity-95 transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
           >
             <UserPlus className="w-4 h-4" />
             <span>Add Student</span>
@@ -338,9 +338,9 @@ export default function StudentsDirectoryPage() {
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="p-3 rounded-2xl bg-[#0b0f17] border border-[#1e293b] flex flex-col md:flex-row items-center gap-3">
+      <div className="p-3 rounded-2xl bg-card border border-border flex flex-col md:flex-row items-center gap-3 shadow-xs">
         <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-[#64748b] absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search by student code, name, email or phone..."
@@ -349,7 +349,7 @@ export default function StudentsDirectoryPage() {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="w-full bg-[#121824] border border-[#1e293b] rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder:text-[#475569] focus:outline-none focus:border-[#6366f1]"
+            className="w-full bg-background border border-input rounded-xl pl-10 pr-4 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
           />
         </div>
 
@@ -360,7 +360,7 @@ export default function StudentsDirectoryPage() {
               setStatusFilter(e.target.value);
               setPage(1);
             }}
-            className="bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-xs text-[#cbd5e1] focus:outline-none focus:border-[#6366f1]"
+            className="bg-background border border-input rounded-xl px-3 py-2 text-xs text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
           >
             <option value="all">All Statuses</option>
             <option value="active">Active Only</option>
@@ -374,7 +374,7 @@ export default function StudentsDirectoryPage() {
               setLevelFilter(e.target.value);
               setPage(1);
             }}
-            className="bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-xs text-[#cbd5e1] focus:outline-none focus:border-[#6366f1]"
+            className="bg-background border border-input rounded-xl px-3 py-2 text-xs text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
           >
             <option value="all">All Levels</option>
             <option value="beginner">Beginner</option>
@@ -386,20 +386,20 @@ export default function StudentsDirectoryPage() {
 
       {/* Bulk Action Bar */}
       {selectedIds.length > 0 && (
-        <div className="p-3 rounded-xl bg-[#6366f1]/15 border border-[#6366f1]/30 flex items-center justify-between text-xs text-white animate-in fade-in duration-150">
+        <div className="p-3 rounded-xl bg-primary/10 border border-primary/25 flex items-center justify-between text-xs text-foreground animate-in fade-in duration-150">
           <div className="flex items-center gap-2">
             <span className="font-semibold">{selectedIds.length} students selected</span>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => bulkMutation.mutate("activate")}
-              className="px-2.5 py-1 rounded-lg bg-[#10b981]/20 text-[#10b981] hover:bg-[#10b981]/30 font-medium"
+              className="px-2.5 py-1 rounded-lg bg-success/15 text-success hover:bg-success/25 font-medium cursor-pointer"
             >
               Activate
             </button>
             <button
               onClick={() => bulkMutation.mutate("suspend")}
-              className="px-2.5 py-1 rounded-lg bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 font-medium"
+              className="px-2.5 py-1 rounded-lg bg-warning/15 text-warning hover:bg-warning/25 font-medium cursor-pointer"
             >
               Suspend
             </button>
@@ -409,7 +409,7 @@ export default function StudentsDirectoryPage() {
                   bulkMutation.mutate("delete");
                 }
               }}
-              className="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 font-medium"
+              className="px-2.5 py-1 rounded-lg bg-destructive/15 text-destructive hover:bg-destructive/25 font-medium cursor-pointer"
             >
               Delete
             </button>
@@ -418,11 +418,11 @@ export default function StudentsDirectoryPage() {
       )}
 
       {/* Students Table */}
-      <div className="rounded-2xl bg-[#0b0f17] border border-[#1e293b] overflow-hidden shadow-xl">
+      <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="border-b border-[#1e293b] bg-[#121824]/60 text-[#64748b] uppercase tracking-wider font-mono">
+              <tr className="border-b border-border bg-muted/40 text-muted-foreground uppercase tracking-wider font-mono">
                 <th className="p-3.5 w-10 text-center">
                   <input
                     type="checkbox"
@@ -430,7 +430,7 @@ export default function StudentsDirectoryPage() {
                       studentsList.length > 0 && selectedIds.length === studentsList.length
                     }
                     onChange={(e) => handleSelectAll(e.target.checked)}
-                    className="rounded border-[#1e293b] accent-[#6366f1]"
+                    className="rounded border-border accent-primary cursor-pointer"
                   />
                 </th>
                 <th className="p-3.5">Student Code</th>
@@ -442,20 +442,20 @@ export default function StudentsDirectoryPage() {
                 <th className="p-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#1e293b]/60">
+            <tbody className="divide-y divide-border">
               {isLoading ? (
                 <tr>
-                  <td colSpan={8} className="p-12 text-center text-[#94a3b8]">
-                    <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#6366f1]" />
+                  <td colSpan={8} className="p-12 text-center text-muted-foreground">
+                    <Loader2 className="w-6 h-6 animate-spin mx-auto text-primary" />
                     <p className="mt-2 text-xs">Loading directory...</p>
                   </td>
                 </tr>
               ) : studentsList.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="p-12 text-center text-[#64748b]">
-                    <Users className="w-8 h-8 mx-auto text-[#334155] mb-2" />
-                    <p className="text-sm font-semibold text-[#94a3b8]">No students found</p>
-                    <p className="text-xs text-[#64748b] mt-0.5">
+                  <td colSpan={8} className="p-12 text-center text-muted-foreground">
+                    <Users className="w-8 h-8 mx-auto text-muted-foreground/60 mb-2" />
+                    <p className="text-sm font-semibold text-foreground">No students found</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       Try adjusting filters or add a new student.
                     </p>
                   </td>
@@ -466,8 +466,8 @@ export default function StudentsDirectoryPage() {
                   return (
                     <tr
                       key={student._id.toString()}
-                      className={`hover:bg-[#121824]/50 transition-colors ${
-                        isChecked ? "bg-[#6366f1]/5" : ""
+                      className={`hover:bg-muted/40 transition-colors ${
+                        isChecked ? "bg-primary/5" : ""
                       }`}
                     >
                       <td className="p-3.5 text-center">
@@ -477,31 +477,31 @@ export default function StudentsDirectoryPage() {
                           onChange={(e) =>
                             handleSelectRow(student._id.toString(), e.target.checked)
                           }
-                          className="rounded border-[#1e293b] accent-[#6366f1]"
+                          className="rounded border-border accent-primary cursor-pointer"
                         />
                       </td>
 
                       {/* Student Code Badge */}
-                      <td className="p-3.5 font-mono text-[#cbd5e1] font-semibold">
-                        <span className="px-2 py-1 rounded-md bg-[#121824] border border-[#1e293b]">
+                      <td className="p-3.5 font-mono text-foreground font-semibold">
+                        <span className="px-2 py-1 rounded-md bg-muted border border-border">
                           {student.studentCode || "—"}
                         </span>
                       </td>
 
                       {/* Name & Email */}
                       <td className="p-3.5">
-                        <div className="font-semibold text-white">{student.name}</div>
-                        <div className="text-[11px] font-mono text-[#64748b]">{student.email}</div>
+                        <div className="font-semibold text-foreground">{student.name}</div>
+                        <div className="text-[11px] font-mono text-muted-foreground">{student.email}</div>
                       </td>
 
                       {/* Phone */}
-                      <td className="p-3.5 font-mono text-[#94a3b8]">
+                      <td className="p-3.5 font-mono text-muted-foreground">
                         {student.phone || "—"}
                       </td>
 
                       {/* Experience Level */}
                       <td className="p-3.5">
-                        <span className="capitalize px-2 py-0.5 rounded-md bg-[#121824] border border-[#1e293b] text-[11px] text-[#94a3b8]">
+                        <span className="capitalize px-2 py-0.5 rounded-md bg-muted border border-border text-[11px] text-muted-foreground font-medium">
                           {student.profile?.experienceLevel || "beginner"}
                         </span>
                       </td>
@@ -511,19 +511,19 @@ export default function StudentsDirectoryPage() {
                         <span
                           className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${
                             student.status === "active"
-                              ? "bg-[#10b981]/10 text-[#10b981] border-[#10b981]/30"
+                              ? "bg-success/10 text-success border-success/30"
                               : student.status === "suspended"
-                              ? "bg-red-500/10 text-red-400 border-red-500/30"
-                              : "bg-gray-500/10 text-gray-400 border-gray-500/30"
+                              ? "bg-destructive/10 text-destructive border-destructive/30"
+                              : "bg-muted text-muted-foreground border-border"
                           }`}
                         >
                           <span
                             className={`w-1.5 h-1.5 rounded-full ${
                               student.status === "active"
-                                ? "bg-[#10b981] animate-pulse"
+                                ? "bg-success animate-pulse"
                                 : student.status === "suspended"
-                                ? "bg-red-400"
-                                : "bg-gray-400"
+                                ? "bg-destructive"
+                                : "bg-muted-foreground"
                             }`}
                           />
                           <span className="capitalize">{student.status}</span>
@@ -531,7 +531,7 @@ export default function StudentsDirectoryPage() {
                       </td>
 
                       {/* Created At */}
-                      <td className="p-3.5 text-[#64748b] font-mono text-[11px]">
+                      <td className="p-3.5 text-muted-foreground font-mono text-[11px]">
                         {student.createdAt
                           ? new Date(student.createdAt).toLocaleDateString()
                           : "—"}
@@ -545,7 +545,7 @@ export default function StudentsDirectoryPage() {
                             setIsResetOpen(true);
                           }}
                           title="Reset Password"
-                          className="p-1.5 rounded-lg text-[#94a3b8] hover:text-[#f59e0b] hover:bg-[#121824] transition-colors"
+                          className="p-1.5 rounded-lg text-muted-foreground hover:text-warning hover:bg-muted transition-colors cursor-pointer"
                         >
                           <Key className="w-3.5 h-3.5" />
                         </button>
@@ -560,7 +560,7 @@ export default function StudentsDirectoryPage() {
                             });
                           }}
                           title={`Set ${student.status === "active" ? "Suspended" : "Active"}`}
-                          className="p-1.5 rounded-lg text-[#94a3b8] hover:text-[#10b981] hover:bg-[#121824] transition-colors"
+                          className="p-1.5 rounded-lg text-muted-foreground hover:text-success hover:bg-muted transition-colors cursor-pointer"
                         >
                           <Shield className="w-3.5 h-3.5" />
                         </button>
@@ -568,7 +568,7 @@ export default function StudentsDirectoryPage() {
                         <Link
                           href={`/admin/students/${student._id.toString()}`}
                           title="View Details"
-                          className="inline-block p-1.5 rounded-lg text-[#94a3b8] hover:text-white hover:bg-[#121824] transition-colors"
+                          className="inline-block p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
                         </Link>
@@ -580,7 +580,7 @@ export default function StudentsDirectoryPage() {
                             }
                           }}
                           title="Delete"
-                          className="p-1.5 rounded-lg text-[#94a3b8] hover:text-red-400 hover:bg-[#121824] transition-colors"
+                          className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -594,7 +594,7 @@ export default function StudentsDirectoryPage() {
         </div>
 
         {/* Pagination Footer */}
-        <div className="p-3.5 border-t border-[#1e293b] flex items-center justify-between text-xs text-[#94a3b8]">
+        <div className="p-3.5 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
           <div>
             Page {page} of {totalPages} &bull; Total {totalStudents} students
           </div>
@@ -602,14 +602,14 @@ export default function StudentsDirectoryPage() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1}
-              className="p-1.5 rounded-lg bg-[#121824] border border-[#1e293b] text-[#cbd5e1] disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#1e293b]"
+              className="p-1.5 rounded-lg bg-card border border-border text-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-muted transition-colors cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page >= totalPages}
-              className="p-1.5 rounded-lg bg-[#121824] border border-[#1e293b] text-[#cbd5e1] disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#1e293b]"
+              className="p-1.5 rounded-lg bg-card border border-border text-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-muted transition-colors cursor-pointer"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -617,21 +617,19 @@ export default function StudentsDirectoryPage() {
         </div>
       </div>
 
-      {/* ========================================================================= */}
       {/* ADD STUDENT MODAL */}
-      {/* ========================================================================= */}
       {isAddOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-[#0b0f17] border border-[#1e293b] rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-card border border-border rounded-2xl p-6 shadow-xl relative animate-in zoom-in-95 duration-150">
             <button
               onClick={() => setIsAddOpen(false)}
-              className="absolute top-5 right-5 text-[#64748b] hover:text-white"
+              className="absolute top-5 right-5 text-muted-foreground hover:text-foreground cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h2 className="text-xl font-bold text-white mb-1">Add New Student</h2>
-            <p className="text-xs text-[#94a3b8] mb-5">
+            <h2 className="text-xl font-bold text-foreground mb-1">Add New Student</h2>
+            <p className="text-xs text-muted-foreground mb-5">
               Generates official student ID and credential package
             </p>
 
@@ -643,51 +641,51 @@ export default function StudentsDirectoryPage() {
               className="space-y-4 text-xs"
             >
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Full Name *</label>
+                <label className="block text-foreground font-medium mb-1">Full Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Tariq Mehmood"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[#cbd5e1] font-medium mb-1">Email Address *</label>
+                  <label className="block text-foreground font-medium mb-1">Email Address *</label>
                   <input
                     type="email"
                     required
                     placeholder="student@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                    className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[#cbd5e1] font-medium mb-1">Phone Number</label>
+                  <label className="block text-foreground font-medium mb-1">Phone Number</label>
                   <input
                     type="tel"
                     placeholder="+923001234567"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                    className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[#cbd5e1] font-medium mb-1">Experience Level</label>
+                  <label className="block text-foreground font-medium mb-1">Experience Level</label>
                   <select
                     value={formData.experienceLevel}
                     onChange={(e) =>
                       setFormData({ ...formData, experienceLevel: e.target.value })
                     }
-                    className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                    className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
                   >
                     <option value="beginner">Beginner</option>
                     <option value="intermediate">Intermediate</option>
@@ -696,8 +694,8 @@ export default function StudentsDirectoryPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[#cbd5e1] font-medium mb-1">
-                    Custom Password <span className="text-[#64748b]">(optional)</span>
+                  <label className="block text-foreground font-medium mb-1">
+                    Custom Password <span className="text-muted-foreground">(optional)</span>
                   </label>
                   <input
                     type="text"
@@ -706,13 +704,13 @@ export default function StudentsDirectoryPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, customPassword: e.target.value })
                     }
-                    className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1] font-mono"
+                    className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary font-mono"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">
+                <label className="block text-foreground font-medium mb-1">
                   Admin Internal Notes
                 </label>
                 <textarea
@@ -720,22 +718,22 @@ export default function StudentsDirectoryPage() {
                   placeholder="Private administrative observations or enrollment remarks..."
                   value={formData.adminNotes}
                   onChange={(e) => setFormData({ ...formData, adminNotes: e.target.value })}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#1e293b]">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-border">
                 <button
                   type="button"
                   onClick={() => setIsAddOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs text-[#94a3b8] hover:bg-[#121824]"
+                  className="px-4 py-2 rounded-xl text-xs text-muted-foreground hover:bg-muted cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={createMutation.isPending}
-                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white text-xs font-semibold flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {createMutation.isPending && (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -748,30 +746,28 @@ export default function StudentsDirectoryPage() {
         </div>
       )}
 
-      {/* ========================================================================= */}
       {/* RESET PASSWORD CONFIRMATION MODAL */}
-      {/* ========================================================================= */}
       {isResetOpen && activeStudent && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-[#0b0f17] border border-[#1e293b] rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
-            <div className="flex items-center gap-3 mb-4 text-[#f59e0b]">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-card border border-border rounded-2xl p-6 shadow-xl relative animate-in zoom-in-95 duration-150">
+            <div className="flex items-center gap-3 mb-4 text-warning">
               <AlertTriangle className="w-6 h-6" />
-              <h2 className="text-lg font-bold text-white">Reset Student Password</h2>
+              <h2 className="text-lg font-bold text-foreground">Reset Student Password</h2>
             </div>
 
-            <p className="text-xs text-[#94a3b8] leading-relaxed mb-6">
-              Resetting password for <span className="text-white font-semibold">{activeStudent.name}</span> ({activeStudent.studentCode}).
+            <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+              Resetting password for <span className="text-foreground font-semibold">{activeStudent.name}</span> ({activeStudent.studentCode}).
               This will generate a fresh secure temporary password and{" "}
-              <span className="text-red-400 font-semibold">
+              <span className="text-destructive font-semibold">
                 immediately terminate all active device streaming sessions
               </span>.
             </p>
 
-            <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[#1e293b]">
+            <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-border">
               <button
                 type="button"
                 onClick={() => setIsResetOpen(false)}
-                className="px-4 py-2 rounded-xl text-xs text-[#94a3b8] hover:bg-[#121824]"
+                className="px-4 py-2 rounded-xl text-xs text-muted-foreground hover:bg-muted cursor-pointer"
               >
                 Cancel
               </button>
@@ -779,10 +775,10 @@ export default function StudentsDirectoryPage() {
                 type="button"
                 disabled={resetPasswordMutation.isPending}
                 onClick={() => resetPasswordMutation.mutate(activeStudent._id.toString())}
-                className="px-4 py-2 rounded-xl bg-[#f59e0b] text-black text-xs font-semibold flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                className="px-4 py-2 rounded-xl bg-warning text-warning-foreground text-xs font-semibold flex items-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {resetPasswordMutation.isPending && (
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-black" />
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-current" />
                 )}
                 <span>Generate New Password</span>
               </button>
@@ -791,43 +787,41 @@ export default function StudentsDirectoryPage() {
         </div>
       )}
 
-      {/* ========================================================================= */}
-      {/* CREDENTIAL NOTICE MODAL (Shows One-Time Password with One-Click Copy) */}
-      {/* ========================================================================= */}
+      {/* CREDENTIAL NOTICE MODAL */}
       {credentialNotice && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-[#0b0f17] border border-[#10b981]/50 rounded-2xl p-6 shadow-2xl shadow-[#10b981]/10 relative animate-in zoom-in-95 duration-150">
-            <div className="flex items-center gap-3 mb-4 text-[#10b981]">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-card border border-success/40 rounded-2xl p-6 shadow-xl relative animate-in zoom-in-95 duration-150">
+            <div className="flex items-center gap-3 mb-4 text-success">
               <Check className="w-6 h-6" />
-              <h2 className="text-lg font-bold text-white">Generated Credentials</h2>
+              <h2 className="text-lg font-bold text-foreground">Generated Credentials</h2>
             </div>
 
-            <p className="text-xs text-[#94a3b8] mb-4">
+            <p className="text-xs text-muted-foreground mb-4">
               Please copy and securely deliver these credentials to the student. The password is not stored in plain text and cannot be viewed again.
             </p>
 
-            <div className="p-4 rounded-xl bg-[#121824] border border-[#1e293b] font-mono text-xs space-y-2 text-[#cbd5e1]">
+            <div className="p-4 rounded-xl bg-muted border border-border font-mono text-xs space-y-2 text-foreground">
               <div>
-                <span className="text-[#64748b]">Student ID: </span>
-                <span className="text-[#10b981] font-semibold">{credentialNotice.studentCode}</span>
+                <span className="text-muted-foreground">Student ID: </span>
+                <span className="text-success font-semibold">{credentialNotice.studentCode}</span>
               </div>
               <div>
-                <span className="text-[#64748b]">Email: </span>
-                <span className="text-white">{credentialNotice.email}</span>
+                <span className="text-muted-foreground">Email: </span>
+                <span className="text-foreground">{credentialNotice.email}</span>
               </div>
               <div>
-                <span className="text-[#64748b]">Temporary Password: </span>
-                <span className="text-[#f59e0b] font-bold text-sm bg-black/40 px-2 py-0.5 rounded">
+                <span className="text-muted-foreground">Temporary Password: </span>
+                <span className="text-warning font-bold text-sm bg-background px-2 py-0.5 rounded border border-border">
                   {credentialNotice.password}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center justify-between gap-3 mt-6 pt-4 border-t border-[#1e293b]">
+            <div className="flex items-center justify-between gap-3 mt-6 pt-4 border-t border-border">
               <button
                 type="button"
                 onClick={copyCredentials}
-                className="px-4 py-2.5 rounded-xl bg-[#10b981] text-black text-xs font-semibold flex items-center gap-1.5 hover:opacity-95 transition-opacity"
+                className="px-4 py-2.5 rounded-xl bg-success text-success-foreground text-xs font-semibold flex items-center gap-1.5 hover:opacity-95 transition-opacity cursor-pointer"
               >
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 <span>{copied ? "Copied Package!" : "Copy Credential Package"}</span>
@@ -836,7 +830,7 @@ export default function StudentsDirectoryPage() {
               <button
                 type="button"
                 onClick={() => setCredentialNotice(null)}
-                className="px-4 py-2 rounded-xl text-xs text-[#94a3b8] hover:bg-[#121824]"
+                className="px-4 py-2 rounded-xl text-xs text-muted-foreground hover:bg-muted cursor-pointer"
               >
                 Dismiss
               </button>
@@ -845,23 +839,21 @@ export default function StudentsDirectoryPage() {
         </div>
       )}
 
-      {/* ========================================================================= */}
       {/* CSV IMPORT MODAL */}
-      {/* ========================================================================= */}
       {isImportOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-[#0b0f17] border border-[#1e293b] rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-card border border-border rounded-2xl p-6 shadow-xl relative animate-in zoom-in-95 duration-150">
             <button
               onClick={() => setIsImportOpen(false)}
-              className="absolute top-5 right-5 text-[#64748b] hover:text-white"
+              className="absolute top-5 right-5 text-muted-foreground hover:text-foreground cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h2 className="text-xl font-bold text-white mb-1">Import Students from CSV</h2>
-            <p className="text-xs text-[#94a3b8] mb-4">
+            <h2 className="text-xl font-bold text-foreground mb-1">Import Students from CSV</h2>
+            <p className="text-xs text-muted-foreground mb-4">
               Paste CSV rows or copy from Excel. Format:{" "}
-              <code className="text-[#10b981] font-mono">Name, Email, Phone, Level</code>
+              <code className="text-success font-mono">Name, Email, Phone, Level</code>
             </p>
 
             <textarea
@@ -869,14 +861,14 @@ export default function StudentsDirectoryPage() {
               placeholder="Tariq Mehmood, tariq@example.com, +923001234567, beginner&#10;Zainab Khan, zainab@example.com, +923019876543, intermediate"
               value={importText}
               onChange={(e) => setImportText(e.target.value)}
-              className="w-full bg-[#121824] border border-[#1e293b] rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#6366f1] font-mono"
+              className="w-full bg-background border border-input rounded-xl p-3 text-xs text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary font-mono"
             />
 
-            <div className="flex items-center justify-end gap-2.5 mt-4 pt-3 border-t border-[#1e293b]">
+            <div className="flex items-center justify-end gap-2.5 mt-4 pt-3 border-t border-border">
               <button
                 type="button"
                 onClick={() => setIsImportOpen(false)}
-                className="px-4 py-2 rounded-xl text-xs text-[#94a3b8] hover:bg-[#121824]"
+                className="px-4 py-2 rounded-xl text-xs text-muted-foreground hover:bg-muted cursor-pointer"
               >
                 Cancel
               </button>
@@ -884,10 +876,10 @@ export default function StudentsDirectoryPage() {
                 type="button"
                 disabled={importMutation.isPending || !importText.trim()}
                 onClick={() => importMutation.mutate(importText)}
-                className="px-4 py-2 rounded-xl bg-[#6366f1] text-white text-xs font-semibold flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {importMutation.isPending && (
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-primary-foreground" />
                 )}
                 <span>Run Batch Import</span>
               </button>

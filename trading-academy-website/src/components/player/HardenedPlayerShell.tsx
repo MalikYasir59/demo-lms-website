@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useId } from "react";
 import {
   Play,
   Pause,
@@ -10,7 +10,6 @@ import {
   Minimize2,
   RotateCcw,
   Shield,
-  AlertTriangle,
   Lock,
   Loader2,
 } from "lucide-react";
@@ -50,7 +49,8 @@ export default function HardenedPlayerShell({
 }: HardenedPlayerShellProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const playerRef = useRef<any>(null);
-  const playerId = useRef(`itt-yt-${Math.random().toString(36).substring(2, 9)}`);
+  const reactId = useId();
+  const playerId = `itt-yt-${reactId.replace(/:/g, "")}`;
 
   // Playback state
   const [isPlaying, setIsPlaying] = useState(false);
@@ -103,7 +103,7 @@ export default function HardenedPlayerShell({
     const initPlayer = () => {
       if (!window.YT || !window.YT.Player) return;
 
-      playerRef.current = new window.YT.Player(playerId.current, {
+      playerRef.current = new window.YT.Player(playerId, {
         videoId,
         playerVars: {
           autoplay: 0,
@@ -163,7 +163,7 @@ export default function HardenedPlayerShell({
         playerRef.current?.destroy();
       } catch {}
     };
-  }, [videoId, initialResumeAt, onLectureCompleted]);
+  }, [videoId, initialResumeAt, onLectureCompleted, playerId]);
 
   // 2. Playback Position & Seek-Ahead Polling Loop
   useEffect(() => {
@@ -355,7 +355,7 @@ export default function HardenedPlayerShell({
     >
       {/* 1. Underlying YouTube Iframe Container */}
       <div className="absolute inset-0 w-full h-full pointer-events-none">
-        <div id={playerId.current} className="w-full h-full" />
+        <div id={playerId} className="w-full h-full" />
       </div>
 
       {/* 2. Transparent Interactive Guard Shield */}
@@ -388,19 +388,19 @@ export default function HardenedPlayerShell({
 
       {/* 5. Security Termination / Lockout Overlay */}
       {isSecurityLocked && (
-        <div className="absolute inset-0 z-50 bg-[#07090e]/98 backdrop-blur-lg flex flex-col items-center justify-center text-center p-6 space-y-4">
-          <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400">
+        <div className="absolute inset-0 z-50 bg-background/95 backdrop-blur-lg flex flex-col items-center justify-center text-center p-6 space-y-4">
+          <div className="w-12 h-12 rounded-2xl bg-destructive/10 border border-destructive/25 flex items-center justify-center text-destructive">
             <Lock className="w-6 h-6" />
           </div>
-          <h3 className="text-lg font-bold text-white">Playback Session Locked</h3>
-          <p className="text-xs text-[#94a3b8] max-w-md leading-relaxed">
+          <h3 className="text-lg font-bold text-foreground">Playback Session Locked</h3>
+          <p className="text-xs text-muted-foreground max-w-md leading-relaxed">
             {securityMessage || "Your stream has been locked by institutional security policy."}
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-white text-xs font-semibold hover:border-[#6366f1] flex items-center gap-1.5"
+            className="px-4 py-2 rounded-xl bg-card border border-border text-foreground text-xs font-semibold hover:border-primary/50 flex items-center gap-1.5 transition-colors shadow-xs"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <RotateCcw className="w-3.5 h-3.5 text-primary" />
             <span>Reload Stream</span>
           </button>
         </div>

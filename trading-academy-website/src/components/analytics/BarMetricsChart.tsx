@@ -22,7 +22,7 @@ export function BarMetricsChart({
   if (!data || data.length === 0) {
     return (
       <div
-        className="w-full flex items-center justify-center text-xs text-[#64748b] font-mono border border-dashed border-[#1e293b] rounded-xl"
+        className="w-full flex items-center justify-center text-xs text-muted-foreground font-mono border border-dashed border-border rounded-xl"
         style={{ height }}
       >
         No comparative metrics available
@@ -42,10 +42,10 @@ export function BarMetricsChart({
   return (
     <div className="w-full select-none">
       {title && (
-        <div className="text-xs font-semibold text-[#94a3b8] mb-2 font-mono flex items-center justify-between">
+        <div className="text-xs font-semibold text-muted-foreground mb-2 font-mono flex items-center justify-between">
           <span>{title}</span>
           {hoveredIdx !== null && (
-            <span className="text-white font-mono text-[11px] bg-[#1e293b] px-2 py-0.5 rounded">
+            <span className="text-foreground font-mono text-[11px] bg-muted px-2 py-0.5 rounded border border-border">
               {data[hoveredIdx].label}:{" "}
               <strong style={{ color }}>
                 {data[hoveredIdx].value}
@@ -67,7 +67,8 @@ export function BarMetricsChart({
           y1={padding.top + chartHeight}
           x2={width - padding.right}
           y2={padding.top + chartHeight}
-          stroke="#1e293b"
+          stroke="currentColor"
+          className="text-border"
           strokeWidth="1"
         />
 
@@ -94,8 +95,9 @@ export function BarMetricsChart({
                   y={padding.top}
                   width={slotWidth}
                   height={chartHeight}
-                  fill="#1e293b"
-                  opacity="0.3"
+                  fill="currentColor"
+                  className="text-muted"
+                  opacity="0.6"
                   rx="4"
                 />
               )}
@@ -117,7 +119,7 @@ export function BarMetricsChart({
                 x={x + barWidth / 2}
                 y={y - 5}
                 textAnchor="middle"
-                className="text-[9px] font-mono fill-[#94a3b8]"
+                className="text-[9px] font-mono fill-muted-foreground"
               >
                 {d.value}
                 {unit}
@@ -128,7 +130,7 @@ export function BarMetricsChart({
                 x={x + barWidth / 2}
                 y={height - 10}
                 textAnchor="middle"
-                className="text-[10px] font-mono fill-[#64748b]"
+                className="text-[10px] font-mono fill-muted-foreground"
               >
                 {d.label.length > 12 ? d.label.slice(0, 10) + ".." : d.label}
               </text>

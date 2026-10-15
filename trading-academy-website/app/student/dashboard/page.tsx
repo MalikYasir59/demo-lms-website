@@ -17,6 +17,8 @@ import {
   Award,
   Sparkles,
 } from "lucide-react";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { Button } from "@/components/ui/Button";
 
 export default function StudentDashboardPage() {
   const { data: session } = useSession();
@@ -50,8 +52,8 @@ export default function StudentDashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="py-20 text-center text-[#94a3b8]">
-        <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#6366f1] mb-3" />
+      <div className="py-20 text-center text-muted-foreground">
+        <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary mb-3" />
         <p className="text-xs">Loading your learning workspace...</p>
       </div>
     );
@@ -68,42 +70,41 @@ export default function StudentDashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* Welcome Banner */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#0b0f17] via-[#121824] to-[#0b0f17] border border-[#1e293b] flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#6366f1]/10 via-transparent to-transparent pointer-events-none" />
+      {/* Welcome Hero Banner */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-linear-to-r from-card via-muted/40 to-card border border-border flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-linear-to-bl from-primary/10 via-transparent to-transparent pointer-events-none" />
 
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-[#10b981]/15 border border-[#10b981]/30 text-[#10b981] text-[11px] font-semibold tracking-wide font-mono">
+            <span className="px-2.5 py-0.5 rounded-full bg-success/15 border border-success/30 text-success text-[11px] font-semibold tracking-wide font-mono">
               {session?.user?.studentCode || "STUDENT"}
             </span>
-            <span className="text-xs text-[#64748b]">&bull;</span>
-            <span className="text-xs text-[#94a3b8]">Institutional Learning Workspace</span>
+            <span className="text-xs text-muted-foreground">&bull;</span>
+            <span className="text-xs text-muted-foreground">Institutional Learning Workspace</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
             Welcome back, {session?.user?.name || "Student"}
           </h1>
-          <p className="text-xs sm:text-sm text-[#94a3b8] mt-1 max-w-xl">
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl">
             Track your curriculum progress, resume your lectures, and build market mastery.
           </p>
         </div>
 
         <div className="relative z-10 flex items-center gap-3">
-          <Link
-            href="/student/courses"
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white text-xs font-semibold hover:opacity-95 transition-all shadow-lg shadow-[#6366f1]/25 flex items-center gap-2"
-          >
-            <BookOpen className="w-4 h-4" />
-            <span>View All Courses</span>
+          <Link href="/student/courses">
+            <Button variant="primary" size="md" className="gap-2 shadow-xs">
+              <BookOpen className="w-4 h-4" />
+              <span>View All Courses</span>
+            </Button>
           </Link>
         </div>
       </div>
 
       {/* Expiring Soon Banner (if any) */}
       {expiringSoon.length > 0 && (
-        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center gap-3 text-xs text-amber-300">
-          <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />
+        <div className="p-4 rounded-2xl bg-warning/10 border border-warning/30 flex items-center gap-3 text-xs text-warning">
+          <AlertTriangle className="w-5 h-5 shrink-0" />
           <div>
             <span className="font-semibold">Access Expiry Notice: </span>
             {expiringSoon.map((exp, idx) => (
@@ -118,58 +119,58 @@ export default function StudentDashboardPage() {
 
       {/* 4 Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl bg-[#0b0f17] border border-[#1e293b] hover:border-[#6366f1]/50 transition-colors">
-          <div className="flex items-center justify-between text-[#64748b] mb-3">
+        <div className="p-5 rounded-2xl bg-card border border-border hover:border-primary/50 transition-colors shadow-xs">
+          <div className="flex items-center justify-between text-muted-foreground mb-3">
             <span className="text-xs font-medium">Enrolled Courses</span>
-            <BookOpen className="w-4 h-4 text-[#6366f1]" />
+            <BookOpen className="w-4 h-4 text-primary" />
           </div>
-          <div className="text-2xl font-bold text-white font-mono">
+          <div className="text-2xl font-bold text-foreground font-mono">
             {stats.enrolledCoursesCount}
           </div>
-          <div className="text-[11px] text-[#64748b] mt-1 flex items-center gap-1">
-            <span className="text-[#10b981] font-semibold">Active</span>
+          <div className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
+            <span className="text-success font-semibold">Active</span>
             <span>Licenses</span>
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-[#0b0f17] border border-[#1e293b] hover:border-[#10b981]/50 transition-colors">
-          <div className="flex items-center justify-between text-[#64748b] mb-3">
+        <div className="p-5 rounded-2xl bg-card border border-border hover:border-success/50 transition-colors shadow-xs">
+          <div className="flex items-center justify-between text-muted-foreground mb-3">
             <span className="text-xs font-medium">Lectures Completed</span>
-            <CheckCircle2 className="w-4 h-4 text-[#10b981]" />
+            <CheckCircle2 className="w-4 h-4 text-success" />
           </div>
-          <div className="text-2xl font-bold text-white font-mono">
+          <div className="text-2xl font-bold text-foreground font-mono">
             {stats.lecturesCompletedCount}
           </div>
-          <div className="text-[11px] text-[#64748b] mt-1 flex items-center gap-1">
-            <Award className="w-3 h-3 text-[#10b981]" />
+          <div className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
+            <Award className="w-3 h-3 text-success" />
             <span>Passed Thresholds</span>
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-[#0b0f17] border border-[#1e293b] hover:border-[#38bdf8]/50 transition-colors">
-          <div className="flex items-center justify-between text-[#64748b] mb-3">
+        <div className="p-5 rounded-2xl bg-card border border-border hover:border-info/50 transition-colors shadow-xs">
+          <div className="flex items-center justify-between text-muted-foreground mb-3">
             <span className="text-xs font-medium">Hours Learned</span>
-            <Clock className="w-4 h-4 text-[#38bdf8]" />
+            <Clock className="w-4 h-4 text-info" />
           </div>
-          <div className="text-2xl font-bold text-white font-mono">
+          <div className="text-2xl font-bold text-foreground font-mono">
             {stats.totalHoursWatched}h
           </div>
-          <div className="text-[11px] text-[#64748b] mt-1 flex items-center gap-1">
-            <TrendingUp className="w-3 h-3 text-[#38bdf8]" />
+          <div className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
+            <TrendingUp className="w-3 h-3 text-info" />
             <span>Unique Watched Time</span>
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-[#0b0f17] border border-[#1e293b] hover:border-[#10b981]/50 transition-colors">
-          <div className="flex items-center justify-between text-[#64748b] mb-3">
+        <div className="p-5 rounded-2xl bg-card border border-border hover:border-success/50 transition-colors shadow-xs">
+          <div className="flex items-center justify-between text-muted-foreground mb-3">
             <span className="text-xs font-medium">Device Security</span>
-            <Shield className="w-4 h-4 text-[#10b981]" />
+            <Shield className="w-4 h-4 text-success" />
           </div>
-          <div className="text-sm font-bold text-[#10b981] flex items-center gap-1.5 mt-1">
-            <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse" />
+          <div className="text-sm font-bold text-success flex items-center gap-1.5 mt-1">
+            <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
             <span>Single-Device Active</span>
           </div>
-          <div className="text-[11px] text-[#64748b] mt-2 font-mono truncate">
+          <div className="text-[11px] text-muted-foreground mt-2 font-mono truncate">
             {session?.user?.studentCode} Verified
           </div>
         </div>
@@ -177,21 +178,21 @@ export default function StudentDashboardPage() {
 
       {/* Continue Learning Hero Card */}
       {continueTarget && (
-        <div className="p-6 sm:p-7 rounded-3xl bg-gradient-to-r from-[#121824] to-[#0b0f17] border border-[#6366f1]/30 shadow-2xl relative overflow-hidden">
+        <div className="p-6 sm:p-7 rounded-3xl bg-linear-to-r from-card via-muted/30 to-card border border-primary/30 shadow-sm relative overflow-hidden">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-2">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#6366f1]/20 border border-[#6366f1]/30 text-[#6366f1] text-[11px] font-semibold">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/25 text-primary text-[11px] font-semibold">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Continue Learning</span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
                 {continueTarget.lectureTitle}
               </h2>
-              <p className="text-xs text-[#94a3b8]">
-                From course: <strong className="text-white">{continueTarget.courseTitle}</strong>
+              <p className="text-xs text-muted-foreground">
+                From course: <strong className="text-foreground">{continueTarget.courseTitle}</strong>
               </p>
               {continueTarget.resumeAtSec > 0 && (
-                <div className="text-xs font-mono text-[#10b981] flex items-center gap-1.5 pt-1">
+                <div className="text-xs font-mono text-success flex items-center gap-1.5 pt-1">
                   <Clock className="w-3.5 h-3.5" />
                   <span>
                     Resume at {Math.floor(continueTarget.resumeAtSec / 60)}m{" "}
@@ -203,9 +204,9 @@ export default function StudentDashboardPage() {
 
             <Link
               href={`/student/courses/${continueTarget.courseId}`}
-              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#10b981] to-[#059669] text-black text-xs font-bold hover:opacity-95 transition-all shadow-lg shadow-[#10b981]/25 flex items-center gap-2 self-start md:self-auto shrink-0"
+              className="px-6 py-3 rounded-2xl bg-success text-success-foreground text-xs font-bold hover:opacity-95 transition-all shadow-md flex items-center gap-2 self-start md:self-auto shrink-0"
             >
-              <Play className="w-4 h-4 fill-black" />
+              <Play className="w-4 h-4 fill-current" />
               <span>Resume Lecture</span>
             </Link>
           </div>
@@ -215,13 +216,13 @@ export default function StudentDashboardPage() {
       {/* My Enrolled Courses Grid */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-[#6366f1]" />
+          <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-primary" />
             <span>My Enrolled Courses</span>
           </h2>
           <Link
             href="/student/courses"
-            className="text-xs text-[#6366f1] hover:underline flex items-center gap-1"
+            className="text-xs text-primary hover:underline flex items-center gap-1 font-medium"
           >
             <span>View All</span>
             <ArrowRight className="w-3 h-3" />
@@ -229,13 +230,11 @@ export default function StudentDashboardPage() {
         </div>
 
         {courses.length === 0 ? (
-          <div className="p-12 rounded-3xl bg-[#0b0f17] border border-[#1e293b] text-center">
-            <BookOpen className="w-8 h-8 text-[#334155] mx-auto mb-3" />
-            <h3 className="text-base font-bold text-white">No Enrolled Courses Yet</h3>
-            <p className="text-xs text-[#64748b] max-w-md mx-auto mt-1">
-              Your account has not been enrolled in any trading courses yet. Contact your instructor or administration for course access grants.
-            </p>
-          </div>
+          <EmptyState
+            icon={BookOpen}
+            title="No Enrolled Courses Yet"
+            description="Your account has not been enrolled in any trading courses yet. Contact your instructor or administration for course access grants."
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {courses.map((en) => {
@@ -245,56 +244,56 @@ export default function StudentDashboardPage() {
               return (
                 <div
                   key={en._id}
-                  className="rounded-2xl bg-[#0b0f17] border border-[#1e293b] hover:border-[#6366f1]/40 transition-all flex flex-col justify-between overflow-hidden group shadow-lg"
+                  className="rounded-2xl bg-card border border-border hover:border-primary/40 transition-all flex flex-col justify-between overflow-hidden group shadow-xs hover:shadow-md"
                 >
                   <div className="p-5 space-y-4">
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="px-2 py-0.5 rounded-full bg-[#6366f1]/15 text-[#6366f1] font-semibold capitalize">
+                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-semibold capitalize">
                         {course?.difficulty || "Comprehensive"}
                       </span>
-                      <span className="text-[#64748b] font-mono">
+                      <span className="text-muted-foreground font-mono">
                         {en.expiresAt ? `Expires: ${new Date(en.expiresAt).toLocaleDateString()}` : "Lifetime Access"}
                       </span>
                     </div>
 
                     <div>
-                      <h3 className="text-base font-bold text-white group-hover:text-[#6366f1] transition-colors line-clamp-2">
+                      <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2">
                         {course?.title || "Trading Curriculum"}
                       </h3>
-                      <p className="text-xs text-[#64748b] mt-1 line-clamp-2">
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                         {course?.subtitle || "Institute of Trading Tricks specialized course"}
                       </p>
                     </div>
 
                     <div className="space-y-1.5 pt-2">
                       <div className="flex items-center justify-between text-xs font-mono">
-                        <span className="text-[#94a3b8]">Curriculum Progress</span>
-                        <span className="font-bold text-white">{percent}%</span>
+                        <span className="text-muted-foreground">Curriculum Progress</span>
+                        <span className="font-bold text-foreground">{percent}%</span>
                       </div>
-                      <div className="w-full bg-[#121824] rounded-full h-2 overflow-hidden">
+                      <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
                         <div
-                          className="bg-gradient-to-r from-[#6366f1] to-[#10b981] h-2 rounded-full transition-all duration-300"
+                          className="bg-linear-to-r from-primary to-success h-2 rounded-full transition-all duration-300"
                           style={{ width: `${percent}%` }}
                         />
                       </div>
-                      <div className="text-[10px] text-[#64748b] flex justify-between font-mono pt-0.5">
+                      <div className="text-[10px] text-muted-foreground flex justify-between font-mono pt-0.5">
                         <span>
                           {en.progress?.completedLectures || 0} of {en.progress?.totalLectures || course?.stats?.lectureCount || 0} lectures
                         </span>
                         {percent === 100 && (
-                          <span className="text-[#10b981] font-semibold">Completed</span>
+                          <span className="text-success font-semibold">Completed</span>
                         )}
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-[#121824]/50 border-t border-[#1e293b]/60 flex items-center justify-between">
-                    <div className="text-[11px] text-[#94a3b8]">
+                  <div className="p-4 bg-muted/40 border-t border-border flex items-center justify-between">
+                    <div className="text-[11px] text-muted-foreground">
                       {course?.authorId?.name ? `By ${course.authorId.name}` : "Institute Instructors"}
                     </div>
                     <Link
                       href={`/student/courses/${course?._id}`}
-                      className="px-3.5 py-1.5 rounded-xl bg-[#6366f1]/15 text-[#6366f1] hover:bg-[#6366f1] hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all"
+                      className="px-3.5 py-1.5 rounded-xl bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground text-xs font-semibold flex items-center gap-1.5 transition-all"
                     >
                       <span>Continue</span>
                       <ArrowRight className="w-3.5 h-3.5" />

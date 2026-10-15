@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -15,23 +15,21 @@ import {
   Users,
   CheckCircle2,
   AlertCircle,
+  AlertTriangle,
   Trash2,
   ChevronUp,
   ChevronDown,
   Edit2,
-  ExternalLink,
   ShieldCheck,
   Loader2,
   X,
   Play,
-  Eye,
 } from "lucide-react";
 import { toast } from "sonner";
 import { ICourse, IModule, ILecture, ICategory, IAuthor } from "@/types/lms";
 
 export default function CourseBuilderPage() {
   const params = useParams();
-  const router = useRouter();
   const queryClient = useQueryClient();
   const courseId = params.id as string;
 
@@ -465,8 +463,8 @@ export default function CourseBuilderPage() {
 
   if (isLoading) {
     return (
-      <div className="p-16 text-center text-[#94a3b8]">
-        <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#6366f1] mb-3" />
+      <div className="p-16 text-center text-muted-foreground">
+        <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary mb-3" />
         <p className="text-xs">Loading course builder...</p>
       </div>
     );
@@ -474,10 +472,10 @@ export default function CourseBuilderPage() {
 
   if (!course) {
     return (
-      <div className="p-12 text-center text-[#94a3b8]">
-        <AlertCircle className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-        <h2 className="text-lg font-bold text-white">Course Not Found</h2>
-        <Link href="/admin/courses" className="mt-4 inline-block px-4 py-2 bg-[#121824] rounded-xl text-xs text-white">
+      <div className="p-12 text-center text-muted-foreground">
+        <AlertCircle className="w-8 h-8 text-warning mx-auto mb-2" />
+        <h2 className="text-lg font-bold text-foreground">Course Not Found</h2>
+        <Link href="/admin/courses" className="mt-4 inline-block px-4 py-2 bg-card border border-border rounded-xl text-xs text-foreground hover:bg-muted transition-colors shadow-xs">
           Back to Courses
         </Link>
       </div>
@@ -485,7 +483,6 @@ export default function CourseBuilderPage() {
   }
 
   // Calculate readiness status
-  const totalModules = course.modules?.length || 0;
   const publishedModules = course.modules?.filter((m) => m.status === "published") || [];
   const publishedLectures = course.modules?.flatMap((m) => m.lectures?.filter((l) => l.status === "published") || []) || [];
   const hasEmptyModule = publishedModules.some((m) => !m.lectures || m.lectures.length === 0);
@@ -497,7 +494,7 @@ export default function CourseBuilderPage() {
       <div className="flex items-center justify-between">
         <Link
           href="/admin/courses"
-          className="inline-flex items-center gap-1.5 text-xs text-[#94a3b8] hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Courses</span>
@@ -507,8 +504,8 @@ export default function CourseBuilderPage() {
           <span
             className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border capitalize ${
               course.status === "published"
-                ? "bg-[#10b981]/10 text-[#10b981] border-[#10b981]/30"
-                : "bg-yellow-500/10 text-yellow-400 border-yellow-500/30"
+                ? "bg-success/10 text-success border-success/30"
+                : "bg-warning/10 text-warning border-warning/30"
             }`}
           >
             {course.status}
@@ -517,19 +514,19 @@ export default function CourseBuilderPage() {
       </div>
 
       {/* Course Builder Header */}
-      <div className="p-6 rounded-2xl bg-[#0b0f17] border border-[#1e293b] flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl">
+      <div className="p-6 rounded-2xl bg-card border border-border flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xs">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">{course.title}</h1>
-          <div className="text-xs text-[#94a3b8] mt-1 flex items-center gap-3 flex-wrap">
-            <span className="font-mono text-[#64748b]">/{course.slug}</span>
-            <span className="text-[#334155]">&bull;</span>
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">{course.title}</h1>
+          <div className="text-xs text-muted-foreground mt-1 flex items-center gap-3 flex-wrap">
+            <span className="font-mono text-muted-foreground/80">/{course.slug}</span>
+            <span className="text-muted-foreground/40">&bull;</span>
             <span className="flex items-center gap-1">
-              <Layers className="w-3.5 h-3.5 text-[#6366f1]" />
+              <Layers className="w-3.5 h-3.5 text-primary" />
               <span>{course.stats?.moduleCount || 0} Modules</span>
             </span>
-            <span className="text-[#334155]">&bull;</span>
+            <span className="text-muted-foreground/40">&bull;</span>
             <span className="flex items-center gap-1">
-              <Video className="w-3.5 h-3.5 text-[#10b981]" />
+              <Video className="w-3.5 h-3.5 text-success" />
               <span>{course.stats?.lectureCount || 0} Lectures</span>
             </span>
           </div>
@@ -540,13 +537,13 @@ export default function CourseBuilderPage() {
             <button
               onClick={() => publishMutation.mutate()}
               disabled={!isReadyToPublish || publishMutation.isPending}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#10b981] to-[#059669] text-black text-xs font-semibold hover:opacity-95 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-md shadow-[#10b981]/20 flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-success text-success-foreground text-xs font-semibold hover:bg-success/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
             >
-              {publishMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin text-black" /> : <CheckCircle2 className="w-4 h-4" />}
+              {publishMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
               <span>Publish Course</span>
             </button>
           ) : (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#10b981]/15 border border-[#10b981]/30 text-xs font-semibold text-[#10b981]">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-success/15 border border-success/30 text-xs font-semibold text-success">
               <CheckCircle2 className="w-4 h-4" />
               <span>Live & Published</span>
             </div>
@@ -555,11 +552,11 @@ export default function CourseBuilderPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-[#1e293b] pb-1 text-xs font-medium">
+      <div className="flex items-center gap-2 border-b border-border pb-1 text-xs font-medium overflow-x-auto">
         <button
           onClick={() => setActiveTab("curriculum")}
-          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${
-            activeTab === "curriculum" ? "bg-[#6366f1] text-white font-semibold" : "text-[#94a3b8] hover:text-white hover:bg-[#121824]"
+          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+            activeTab === "curriculum" ? "bg-primary text-primary-foreground font-semibold shadow-xs" : "text-muted-foreground hover:text-foreground hover:bg-muted"
           }`}
         >
           <Layers className="w-3.5 h-3.5" />
@@ -568,8 +565,8 @@ export default function CourseBuilderPage() {
 
         <button
           onClick={() => setActiveTab("details")}
-          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${
-            activeTab === "details" ? "bg-[#6366f1] text-white font-semibold" : "text-[#94a3b8] hover:text-white hover:bg-[#121824]"
+          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+            activeTab === "details" ? "bg-primary text-primary-foreground font-semibold shadow-xs" : "text-muted-foreground hover:text-foreground hover:bg-muted"
           }`}
         >
           <Edit2 className="w-3.5 h-3.5" />
@@ -578,8 +575,8 @@ export default function CourseBuilderPage() {
 
         <button
           onClick={() => setActiveTab("settings")}
-          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${
-            activeTab === "settings" ? "bg-[#6366f1] text-white font-semibold" : "text-[#94a3b8] hover:text-white hover:bg-[#121824]"
+          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+            activeTab === "settings" ? "bg-primary text-primary-foreground font-semibold shadow-xs" : "text-muted-foreground hover:text-foreground hover:bg-muted"
           }`}
         >
           <Settings className="w-3.5 h-3.5" />
@@ -588,8 +585,8 @@ export default function CourseBuilderPage() {
 
         <button
           onClick={() => setActiveTab("students")}
-          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${
-            activeTab === "students" ? "bg-[#6366f1] text-white font-semibold" : "text-[#94a3b8] hover:text-white hover:bg-[#121824]"
+          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+            activeTab === "students" ? "bg-primary text-primary-foreground font-semibold shadow-xs" : "text-muted-foreground hover:text-foreground hover:bg-muted"
           }`}
         >
           <Users className="w-3.5 h-3.5" />
@@ -598,8 +595,8 @@ export default function CourseBuilderPage() {
 
         <button
           onClick={() => setActiveTab("publish")}
-          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${
-            activeTab === "publish" ? "bg-[#6366f1] text-white font-semibold" : "text-[#94a3b8] hover:text-white hover:bg-[#121824]"
+          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+            activeTab === "publish" ? "bg-primary text-primary-foreground font-semibold shadow-xs" : "text-muted-foreground hover:text-foreground hover:bg-muted"
           }`}
         >
           <ShieldCheck className="w-3.5 h-3.5" />
@@ -613,10 +610,10 @@ export default function CourseBuilderPage() {
       {activeTab === "curriculum" && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-white">Course Curriculum Modules</h2>
+            <h2 className="text-base font-bold text-foreground">Course Curriculum Modules</h2>
             <button
               onClick={() => setIsAddModuleOpen(true)}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-[#6366f1]/20 hover:opacity-95"
+              className="px-3.5 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-1.5 shadow-xs hover:bg-primary/90 transition-colors cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Add Module</span>
@@ -624,15 +621,15 @@ export default function CourseBuilderPage() {
           </div>
 
           {!course.modules || course.modules.length === 0 ? (
-            <div className="p-12 text-center rounded-2xl bg-[#0b0f17] border border-[#1e293b]">
-              <Layers className="w-10 h-10 text-[#334155] mx-auto mb-2" />
-              <h3 className="text-sm font-bold text-white">No Modules Yet</h3>
-              <p className="text-xs text-[#64748b] mt-1 mb-4">
+            <div className="p-12 text-center rounded-2xl bg-card border border-border shadow-xs">
+              <Layers className="w-10 h-10 text-muted-foreground/40 mx-auto mb-2" />
+              <h3 className="text-sm font-bold text-foreground">No Modules Yet</h3>
+              <p className="text-xs text-muted-foreground mt-1 mb-4">
                 Organize your course into structured chapters (e.g. Market Structure, Order Blocks, Liquidity).
               </p>
               <button
                 onClick={() => setIsAddModuleOpen(true)}
-                className="px-4 py-2 bg-[#121824] border border-[#1e293b] rounded-xl text-xs text-white hover:border-[#6366f1]"
+                className="px-4 py-2 bg-card border border-border rounded-xl text-xs text-foreground hover:bg-muted transition-colors shadow-xs cursor-pointer"
               >
                 Create First Module
               </button>
@@ -642,18 +639,18 @@ export default function CourseBuilderPage() {
               {course.modules.map((module, mIdx) => (
                 <div
                   key={module._id.toString()}
-                  className="rounded-2xl bg-[#0b0f17] border border-[#1e293b] overflow-hidden shadow-lg"
+                  className="rounded-2xl bg-card border border-border overflow-hidden shadow-xs"
                 >
                   {/* Module Header */}
-                  <div className="p-4 bg-[#121824]/70 border-b border-[#1e293b] flex items-center justify-between gap-3">
+                  <div className="p-4 bg-muted/40 border-b border-border flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <span className="w-7 h-7 rounded-lg bg-[#0b0f17] border border-[#1e293b] flex items-center justify-center text-xs font-mono font-bold text-[#6366f1]">
+                      <span className="w-7 h-7 rounded-lg bg-card border border-border flex items-center justify-center text-xs font-mono font-bold text-primary shadow-xs">
                         {mIdx + 1}
                       </span>
                       <div>
-                        <h3 className="text-sm font-bold text-white">{module.title}</h3>
+                        <h3 className="text-sm font-bold text-foreground">{module.title}</h3>
                         {module.description && (
-                          <p className="text-[11px] text-[#94a3b8]">{module.description}</p>
+                          <p className="text-[11px] text-muted-foreground">{module.description}</p>
                         )}
                       </div>
                     </div>
@@ -664,7 +661,7 @@ export default function CourseBuilderPage() {
                         onClick={() => moveModule(mIdx, "up")}
                         disabled={mIdx === 0}
                         title="Move Up"
-                        className="p-1 rounded text-[#94a3b8] hover:text-white disabled:opacity-20"
+                        className="p-1 rounded text-muted-foreground hover:text-foreground disabled:opacity-20 cursor-pointer"
                       >
                         <ChevronUp className="w-4 h-4" />
                       </button>
@@ -672,19 +669,19 @@ export default function CourseBuilderPage() {
                         onClick={() => moveModule(mIdx, "down")}
                         disabled={mIdx === course.modules.length - 1}
                         title="Move Down"
-                        className="p-1 rounded text-[#94a3b8] hover:text-white disabled:opacity-20"
+                        className="p-1 rounded text-muted-foreground hover:text-foreground disabled:opacity-20 cursor-pointer"
                       >
                         <ChevronDown className="w-4 h-4" />
                       </button>
 
-                      <div className="h-4 w-px bg-[#1e293b] mx-1" />
+                      <div className="h-4 w-px bg-border mx-1" />
 
                       <button
                         onClick={() => {
                           setActiveModuleId(module._id.toString());
                           setIsAddLectureOpen(true);
                         }}
-                        className="px-2.5 py-1 rounded-lg bg-[#10b981]/15 text-[#10b981] hover:bg-[#10b981]/25 text-xs font-semibold flex items-center gap-1 transition-colors"
+                        className="px-2.5 py-1 rounded-lg bg-success/15 text-success hover:bg-success/25 border border-success/20 text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>Add Lecture</span>
@@ -696,7 +693,7 @@ export default function CourseBuilderPage() {
                             deleteModuleMutation.mutate(module._id.toString());
                           }
                         }}
-                        className="p-1 text-[#94a3b8] hover:text-red-400"
+                        className="p-1 text-muted-foreground hover:text-destructive cursor-pointer"
                         title="Delete Module"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -705,28 +702,28 @@ export default function CourseBuilderPage() {
                   </div>
 
                   {/* Lectures List */}
-                  <div className="p-3 divide-y divide-[#1e293b]/40">
+                  <div className="p-3 divide-y divide-border/60">
                     {!module.lectures || module.lectures.length === 0 ? (
-                      <div className="p-4 text-center text-xs text-[#64748b]">
+                      <div className="p-4 text-center text-xs text-muted-foreground">
                         No lectures in this module. Click &quot;Add Lecture&quot; to ingest a video.
                       </div>
                     ) : (
                       module.lectures.map((lecture, lIdx) => (
                         <div
                           key={lecture._id.toString()}
-                          className="py-2.5 px-3 flex items-center justify-between gap-3 hover:bg-[#121824]/40 rounded-xl transition-colors text-xs"
+                          className="py-2.5 px-3 flex items-center justify-between gap-3 hover:bg-muted/40 rounded-xl transition-colors text-xs"
                         >
                           <div className="flex items-center gap-3">
-                            <span className="text-[11px] font-mono text-[#64748b] w-5 text-right">
+                            <span className="text-[11px] font-mono text-muted-foreground w-5 text-right">
                               {lIdx + 1}.
                             </span>
-                            <Video className="w-4 h-4 text-[#10b981] shrink-0" />
+                            <Video className="w-4 h-4 text-success shrink-0" />
                             <div>
-                              <div className="font-medium text-white">{lecture.title}</div>
-                              <div className="text-[10px] font-mono text-[#64748b] flex items-center gap-2 mt-0.5">
+                              <div className="font-medium text-foreground">{lecture.title}</div>
+                              <div className="text-[10px] font-mono text-muted-foreground flex items-center gap-2 mt-0.5">
                                 <span>{Math.floor((lecture.video?.durationSec || 0) / 60)}m {((lecture.video?.durationSec || 0) % 60)}s</span>
                                 <span>&bull;</span>
-                                <span className="text-[#10b981]">Encrypted Ref AES-256</span>
+                                <span className="text-success">Encrypted Ref AES-256</span>
                               </div>
                             </div>
                           </div>
@@ -735,14 +732,14 @@ export default function CourseBuilderPage() {
                             <button
                               onClick={() => moveLecture(module._id.toString(), module.lectures, lIdx, "up")}
                               disabled={lIdx === 0}
-                              className="p-1 text-[#94a3b8] hover:text-white disabled:opacity-20"
+                              className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-20 cursor-pointer"
                             >
                               <ChevronUp className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => moveLecture(module._id.toString(), module.lectures, lIdx, "down")}
                               disabled={lIdx === module.lectures.length - 1}
-                              className="p-1 text-[#94a3b8] hover:text-white disabled:opacity-20"
+                              className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-20 cursor-pointer"
                             >
                               <ChevronDown className="w-3.5 h-3.5" />
                             </button>
@@ -753,7 +750,7 @@ export default function CourseBuilderPage() {
                                   deleteLectureMutation.mutate(lecture._id.toString());
                                 }
                               }}
-                              className="p-1 text-[#94a3b8] hover:text-red-400"
+                              className="p-1 text-muted-foreground hover:text-destructive cursor-pointer"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -773,13 +770,13 @@ export default function CourseBuilderPage() {
       {/* TAB 2: COURSE DETAILS */}
       {/* ========================================================================= */}
       {activeTab === "details" && (
-        <div className="p-6 rounded-2xl bg-[#0b0f17] border border-[#1e293b] space-y-5 text-xs">
-          <div className="flex items-center justify-between border-b border-[#1e293b] pb-4">
-            <h2 className="text-base font-bold text-white">Course Metadata & Overview</h2>
+        <div className="p-6 rounded-2xl bg-card border border-border space-y-5 text-xs shadow-xs">
+          <div className="flex items-center justify-between border-b border-border pb-4">
+            <h2 className="text-base font-bold text-foreground">Course Metadata & Overview</h2>
             <button
               onClick={() => updateDetailsMutation.mutate()}
               disabled={updateDetailsMutation.isPending}
-              className="px-4 py-2 rounded-xl bg-[#6366f1] text-white font-semibold flex items-center gap-1.5 hover:opacity-95 disabled:opacity-50"
+              className="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-semibold flex items-center gap-1.5 hover:bg-primary/90 disabled:opacity-50 transition-colors shadow-xs cursor-pointer"
             >
               <Save className="w-3.5 h-3.5" />
               <span>Save Changes</span>
@@ -788,32 +785,32 @@ export default function CourseBuilderPage() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-[#cbd5e1] font-medium mb-1">Course Title</label>
+              <label className="block text-foreground font-medium mb-1">Course Title</label>
               <input
                 type="text"
                 value={detailsForm.title}
                 onChange={(e) => setDetailsForm({ ...detailsForm, title: e.target.value })}
-                className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">URL Slug</label>
+                <label className="block text-foreground font-medium mb-1">URL Slug</label>
                 <input
                   type="text"
                   value={detailsForm.slug}
                   onChange={(e) => setDetailsForm({ ...detailsForm, slug: e.target.value })}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground font-mono focus:outline-none focus:border-primary"
                 />
               </div>
 
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Difficulty Level</label>
+                <label className="block text-foreground font-medium mb-1">Difficulty Level</label>
                 <select
                   value={detailsForm.difficulty}
                   onChange={(e) => setDetailsForm({ ...detailsForm, difficulty: e.target.value })}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
                 >
                   <option value="all">All Levels</option>
                   <option value="beginner">Beginner</option>
@@ -825,11 +822,11 @@ export default function CourseBuilderPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Category</label>
+                <label className="block text-foreground font-medium mb-1">Category</label>
                 <select
                   value={detailsForm.categoryId}
                   onChange={(e) => setDetailsForm({ ...detailsForm, categoryId: e.target.value })}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
                 >
                   <option value="">Unassigned</option>
                   {categories.map((c) => (
@@ -841,11 +838,11 @@ export default function CourseBuilderPage() {
               </div>
 
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Instructor / Author</label>
+                <label className="block text-foreground font-medium mb-1">Instructor / Author</label>
                 <select
                   value={detailsForm.authorId}
                   onChange={(e) => setDetailsForm({ ...detailsForm, authorId: e.target.value })}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
                 >
                   <option value="">None</option>
                   {authors.map((a) => (
@@ -858,12 +855,12 @@ export default function CourseBuilderPage() {
             </div>
 
             <div>
-              <label className="block text-[#cbd5e1] font-medium mb-1">Course Description</label>
+              <label className="block text-foreground font-medium mb-1">Course Description</label>
               <textarea
                 rows={5}
                 value={detailsForm.description}
                 onChange={(e) => setDetailsForm({ ...detailsForm, description: e.target.value })}
-                className="w-full bg-[#121824] border border-[#1e293b] rounded-xl p-3 text-white focus:outline-none focus:border-[#6366f1]"
+                className="w-full bg-muted/40 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-primary"
               />
             </div>
           </div>
@@ -874,17 +871,17 @@ export default function CourseBuilderPage() {
       {/* TAB 3: SETTINGS & DRIP */}
       {/* ========================================================================= */}
       {activeTab === "settings" && (
-        <div className="p-6 rounded-2xl bg-[#0b0f17] border border-[#1e293b] space-y-6 text-xs">
-          <h2 className="text-base font-bold text-white border-b border-[#1e293b] pb-3">
+        <div className="p-6 rounded-2xl bg-card border border-border space-y-6 text-xs shadow-xs">
+          <h2 className="text-base font-bold text-foreground border-b border-border pb-3">
             Security, Playback & Drip Settings
           </h2>
 
           <div className="space-y-4 max-w-xl">
             <div>
-              <label className="block text-[#cbd5e1] font-medium mb-1">Content Drip Engine</label>
+              <label className="block text-foreground font-medium mb-1">Content Drip Engine</label>
               <select
                 defaultValue={course.settings?.drip?.mode || "none"}
-                className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
               >
                 <option value="none">None — Immediate access to all lectures</option>
                 <option value="sequential">Sequential — Must complete previous lecture to unlock next</option>
@@ -893,8 +890,8 @@ export default function CourseBuilderPage() {
             </div>
 
             <div>
-              <label className="block text-[#cbd5e1] font-medium mb-1">Completion Threshold</label>
-              <p className="text-[#64748b] text-[11px] mb-2">
+              <label className="block text-foreground font-medium mb-1">Completion Threshold</label>
+              <p className="text-muted-foreground text-[11px] mb-2">
                 Percent of unique video seconds a student must watch before marking complete.
               </p>
               <div className="flex items-center gap-3">
@@ -903,9 +900,9 @@ export default function CourseBuilderPage() {
                   min="50"
                   max="100"
                   defaultValue={course.settings?.completionThreshold || 90}
-                  className="flex-1 accent-[#6366f1]"
+                  className="flex-1 accent-primary"
                 />
-                <span className="font-mono text-white font-bold">{course.settings?.completionThreshold || 90}%</span>
+                <span className="font-mono text-foreground font-bold">{course.settings?.completionThreshold || 90}%</span>
               </div>
             </div>
           </div>
@@ -916,68 +913,68 @@ export default function CourseBuilderPage() {
       {/* TAB 4: PUBLISH READINESS */}
       {/* ========================================================================= */}
       {activeTab === "publish" && (
-        <div className="p-6 rounded-2xl bg-[#0b0f17] border border-[#1e293b] space-y-6 text-xs">
-          <h2 className="text-base font-bold text-white border-b border-[#1e293b] pb-3">
+        <div className="p-6 rounded-2xl bg-card border border-border space-y-6 text-xs shadow-xs">
+          <h2 className="text-base font-bold text-foreground border-b border-border pb-3">
             Publish Readiness Checklist
           </h2>
 
           <div className="space-y-3">
-            <div className="p-3.5 rounded-xl bg-[#121824] border border-[#1e293b] flex items-center justify-between">
+            <div className="p-3.5 rounded-xl bg-muted/40 border border-border flex items-center justify-between">
               <div>
-                <div className="font-semibold text-white">At least 1 Published Module</div>
-                <div className="text-[11px] text-[#64748b]">{publishedModules.length} published module(s) found</div>
+                <div className="font-semibold text-foreground">At least 1 Published Module</div>
+                <div className="text-[11px] text-muted-foreground">{publishedModules.length} published module(s) found</div>
               </div>
               {publishedModules.length > 0 ? (
-                <CheckCircle2 className="w-5 h-5 text-[#10b981]" />
+                <CheckCircle2 className="w-5 h-5 text-success" />
               ) : (
-                <AlertCircle className="w-5 h-5 text-red-400" />
+                <AlertCircle className="w-5 h-5 text-destructive" />
               )}
             </div>
 
-            <div className="p-3.5 rounded-xl bg-[#121824] border border-[#1e293b] flex items-center justify-between">
+            <div className="p-3.5 rounded-xl bg-muted/40 border border-border flex items-center justify-between">
               <div>
-                <div className="font-semibold text-white">Lectures within Modules</div>
-                <div className="text-[11px] text-[#64748b]">
+                <div className="font-semibold text-foreground">Lectures within Modules</div>
+                <div className="text-[11px] text-muted-foreground">
                   {hasEmptyModule ? "Some modules have no lectures" : "All modules have lectures"}
                 </div>
               </div>
               {!hasEmptyModule && publishedLectures.length > 0 ? (
-                <CheckCircle2 className="w-5 h-5 text-[#10b981]" />
+                <CheckCircle2 className="w-5 h-5 text-success" />
               ) : (
-                <AlertCircle className="w-5 h-5 text-red-400" />
+                <AlertCircle className="w-5 h-5 text-destructive" />
               )}
             </div>
 
-            <div className="p-3.5 rounded-xl bg-[#121824] border border-[#1e293b] flex items-center justify-between">
+            <div className="p-3.5 rounded-xl bg-muted/40 border border-border flex items-center justify-between">
               <div>
-                <div className="font-semibold text-white">Video References Encrypted (AES-256-GCM)</div>
-                <div className="text-[11px] text-[#64748b]">All video URLs converted to ciphertext</div>
+                <div className="font-semibold text-foreground">Video References Encrypted (AES-256-GCM)</div>
+                <div className="text-[11px] text-muted-foreground">All video URLs converted to ciphertext</div>
               </div>
-              <CheckCircle2 className="w-5 h-5 text-[#10b981]" />
+              <CheckCircle2 className="w-5 h-5 text-success" />
             </div>
           </div>
         </div>
       )}
 
       {/* ========================================================================= */}
-      {/* TAB 4: ENROLLED STUDENTS & CAPACITY */}
+      {/* TAB 5: ENROLLED STUDENTS & CAPACITY */}
       {/* ========================================================================= */}
       {activeTab === "students" && (
         <div className="space-y-6">
-          <div className="p-6 rounded-2xl bg-[#0b0f17] border border-[#1e293b] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-6 rounded-2xl bg-card border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
             <div>
-              <h2 className="text-base font-bold text-white flex items-center gap-2">
-                <Users className="w-4 h-4 text-[#6366f1]" />
+              <h2 className="text-base font-bold text-foreground flex items-center gap-2">
+                <Users className="w-4 h-4 text-primary" />
                 <span>Enrolled Students</span>
               </h2>
-              <div className="text-xs text-[#94a3b8] mt-1 flex items-center gap-3">
+              <div className="text-xs text-muted-foreground mt-1 flex items-center gap-3">
                 <span>
-                  Active Enrolled: <strong className="text-white">{course.stats?.enrolledCount || 0}</strong>
+                  Active Enrolled: <strong className="text-foreground">{course.stats?.enrolledCount || 0}</strong>
                 </span>
                 <span>&bull;</span>
                 <span>
                   Capacity Cap:{" "}
-                  <strong className="text-white">
+                  <strong className="text-foreground">
                     {course.settings?.maxStudents ? `${course.settings.maxStudents} max` : "Unlimited"}
                   </strong>
                 </span>
@@ -990,11 +987,11 @@ export default function CourseBuilderPage() {
                 placeholder="Search students..."
                 value={studentSearchQuery}
                 onChange={(e) => setStudentSearchQuery(e.target.value)}
-                className="bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#6366f1] w-48"
+                className="bg-muted/40 border border-border rounded-xl px-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary w-48"
               />
               <button
                 onClick={() => setIsEnrollStudentOpen(true)}
-                className="px-3.5 py-1.5 rounded-xl bg-[#6366f1] text-white text-xs font-semibold hover:bg-[#4f46e5] flex items-center gap-1.5 transition-colors cursor-pointer shadow-md shadow-[#6366f1]/20"
+                className="px-3.5 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Enroll Student</span>
@@ -1002,121 +999,123 @@ export default function CourseBuilderPage() {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-[#0b0f17] border border-[#1e293b] overflow-hidden">
-            <table className="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr className="border-b border-[#1e293b] bg-[#121824]/60 text-[#64748b] font-mono">
-                  <th className="p-3.5">Student</th>
-                  <th className="p-3.5">Status</th>
-                  <th className="p-3.5">Access Window</th>
-                  <th className="p-3.5">Progress</th>
-                  <th className="p-3.5 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#1e293b]/60">
-                {enrollmentsLoading ? (
-                  <tr>
-                    <td colSpan={5} className="p-8 text-center text-[#94a3b8]">
-                      <Loader2 className="w-5 h-5 animate-spin mx-auto text-[#6366f1] mb-2" />
-                      Loading enrolled students...
-                    </td>
+          <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-xs">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-border bg-muted/40 text-muted-foreground font-mono">
+                    <th className="p-3.5">Student</th>
+                    <th className="p-3.5">Status</th>
+                    <th className="p-3.5">Access Window</th>
+                    <th className="p-3.5">Progress</th>
+                    <th className="p-3.5 text-right">Actions</th>
                   </tr>
-                ) : !courseEnrollmentsData?.enrollments || courseEnrollmentsData.enrollments.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="p-8 text-center text-[#64748b]">
-                      No students enrolled in this course yet. Click &quot;Enroll Student&quot; to assign access.
-                    </td>
-                  </tr>
-                ) : (
-                  courseEnrollmentsData.enrollments.map((en: any) => {
-                    const st = en.studentId;
-                    const isExpired = en.expiresAt && new Date(en.expiresAt) <= new Date();
-                    const statusText = isExpired && en.status === "active" ? "expired" : en.status;
+                </thead>
+                <tbody className="divide-y divide-border/60">
+                  {enrollmentsLoading ? (
+                    <tr>
+                      <td colSpan={5} className="p-8 text-center text-muted-foreground">
+                        <Loader2 className="w-5 h-5 animate-spin mx-auto text-primary mb-2" />
+                        Loading enrolled students...
+                      </td>
+                    </tr>
+                  ) : !courseEnrollmentsData?.enrollments || courseEnrollmentsData.enrollments.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="p-8 text-center text-muted-foreground">
+                        No students enrolled in this course yet. Click &quot;Enroll Student&quot; to assign access.
+                      </td>
+                    </tr>
+                  ) : (
+                    courseEnrollmentsData.enrollments.map((en: any) => {
+                      const st = en.studentId;
+                      const isExpired = en.expiresAt && new Date(en.expiresAt) <= new Date();
+                      const statusText = isExpired && en.status === "active" ? "expired" : en.status;
 
-                    return (
-                      <tr key={en._id} className="hover:bg-[#121824]/40 transition-colors">
-                        <td className="p-3.5">
-                          <div className="font-semibold text-white">{st?.name || "Unknown"}</div>
-                          <div className="text-[11px] font-mono text-[#64748b]">
-                            <span>{st?.studentCode || "No Code"} &bull; </span>
-                            <span>{st?.email}</span>
-                          </div>
-                        </td>
-                        <td className="p-3.5">
-                          <span
-                            className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border capitalize ${
-                              statusText === "active"
-                                ? "bg-[#10b981]/10 text-[#10b981] border-[#10b981]/30"
-                                : statusText === "expired"
-                                ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
-                                : "bg-red-500/10 text-red-400 border-red-500/30"
-                            }`}
-                          >
-                            {statusText}
-                          </span>
-                        </td>
-                        <td className="p-3.5 text-[#94a3b8]">
-                          <div className="flex items-center gap-1.5">
-                            <Clock className="w-3.5 h-3.5 text-[#64748b]" />
-                            <span>
-                              {en.expiresAt
-                                ? `Expires: ${new Date(en.expiresAt).toLocaleDateString()}`
-                                : "Lifetime Access"}
+                      return (
+                        <tr key={en._id} className="hover:bg-muted/40 transition-colors">
+                          <td className="p-3.5">
+                            <div className="font-semibold text-foreground">{st?.name || "Unknown"}</div>
+                            <div className="text-[11px] font-mono text-muted-foreground">
+                              <span>{st?.studentCode || "No Code"} &bull; </span>
+                              <span>{st?.email}</span>
+                            </div>
+                          </td>
+                          <td className="p-3.5">
+                            <span
+                              className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border capitalize ${
+                                statusText === "active"
+                                  ? "bg-success/10 text-success border-success/30"
+                                  : statusText === "expired"
+                                  ? "bg-warning/10 text-warning border-warning/30"
+                                  : "bg-destructive/10 text-destructive border-destructive/30"
+                              }`}
+                            >
+                              {statusText}
                             </span>
-                          </div>
-                          <div className="text-[10px] text-[#64748b] mt-0.5">
-                            Enrolled: {new Date(en.startsAt).toLocaleDateString()}
-                          </div>
-                        </td>
-                        <td className="p-3.5">
-                          <div className="w-32">
-                            <div className="flex items-center justify-between text-[11px] mb-1">
-                              <span className="font-semibold text-white">{en.progress?.percent || 0}%</span>
-                              <span className="text-[#64748b]">
-                                {en.progress?.completedLectures || 0}/{en.progress?.totalLectures || course.stats?.lectureCount || 0}
+                          </td>
+                          <td className="p-3.5 text-muted-foreground">
+                            <div className="flex items-center gap-1.5">
+                              <Clock className="w-3.5 h-3.5 text-muted-foreground" />
+                              <span>
+                                {en.expiresAt
+                                  ? `Expires: ${new Date(en.expiresAt).toLocaleDateString()}`
+                                  : "Lifetime Access"}
                               </span>
                             </div>
-                            <div className="w-full bg-[#121824] rounded-full h-1.5 overflow-hidden">
-                              <div
-                                className="bg-[#10b981] h-1.5 rounded-full transition-all"
-                                style={{ width: `${Math.min(100, en.progress?.percent || 0)}%` }}
-                              />
+                            <div className="text-[10px] text-muted-foreground mt-0.5">
+                              Enrolled: {new Date(en.startsAt).toLocaleDateString()}
                             </div>
-                          </div>
-                        </td>
-                        <td className="p-3.5 text-right space-x-2">
-                          <button
-                            onClick={() => {
-                              setEditingCourseEnrollment(en);
-                              setEditCourseExpiresAt(
-                                en.expiresAt ? new Date(en.expiresAt).toISOString().split("T")[0] : ""
-                              );
-                              setEditCourseStatus(en.status);
-                            }}
-                            className="px-2.5 py-1 rounded-lg bg-[#121824] border border-[#1e293b] text-[#94a3b8] hover:text-white hover:border-[#6366f1] text-[11px] font-medium transition-colors"
-                          >
-                            Edit Access
-                          </button>
-                          {en.status !== "revoked" && (
+                          </td>
+                          <td className="p-3.5">
+                            <div className="w-32">
+                              <div className="flex items-center justify-between text-[11px] mb-1">
+                                <span className="font-semibold text-foreground">{en.progress?.percent || 0}%</span>
+                                <span className="text-muted-foreground">
+                                  {en.progress?.completedLectures || 0}/{en.progress?.totalLectures || course.stats?.lectureCount || 0}
+                                </span>
+                              </div>
+                              <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
+                                <div
+                                  className="bg-success h-1.5 rounded-full transition-all"
+                                  style={{ width: `${Math.min(100, en.progress?.percent || 0)}%` }}
+                                />
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-3.5 text-right space-x-2">
                             <button
                               onClick={() => {
-                                const reason = prompt("Enter revocation reason (logged to audit trail):", "Admin discretion");
-                                if (reason) {
-                                  revokeCourseEnrollmentMutation.mutate({ enrollmentId: en._id, reason });
-                                }
+                                setEditingCourseEnrollment(en);
+                                setEditCourseExpiresAt(
+                                  en.expiresAt ? new Date(en.expiresAt).toISOString().split("T")[0] : ""
+                                );
+                                setEditCourseStatus(en.status);
                               }}
-                              className="px-2.5 py-1 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 text-[11px] font-medium transition-colors"
+                              className="px-2.5 py-1 rounded-lg bg-card border border-border text-foreground hover:bg-muted text-[11px] font-medium transition-colors shadow-xs cursor-pointer"
                             >
-                              Revoke
+                              Edit Access
                             </button>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
+                            {en.status !== "revoked" && (
+                              <button
+                                onClick={() => {
+                                  const reason = prompt("Enter revocation reason (logged to audit trail):", "Admin discretion");
+                                  if (reason) {
+                                    revokeCourseEnrollmentMutation.mutate({ enrollmentId: en._id, reason });
+                                  }
+                                }}
+                                className="px-2.5 py-1 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive hover:bg-destructive/20 text-[11px] font-medium transition-colors cursor-pointer"
+                              >
+                                Revoke
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
@@ -1125,14 +1124,14 @@ export default function CourseBuilderPage() {
       {/* ADD MODULE MODAL */}
       {/* ========================================================================= */}
       {isAddModuleOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-[#0b0f17] border border-[#1e293b] rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
-            <button onClick={() => setIsAddModuleOpen(false)} className="absolute top-5 right-5 text-[#64748b] hover:text-white">
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-card border border-border rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
+            <button onClick={() => setIsAddModuleOpen(false)} className="absolute top-5 right-5 text-muted-foreground hover:text-foreground cursor-pointer">
               <X className="w-5 h-5" />
             </button>
 
-            <h2 className="text-lg font-bold text-white mb-1">Add Curriculum Module</h2>
-            <p className="text-xs text-[#94a3b8] mb-4">Creates a chapter container for video lectures</p>
+            <h2 className="text-lg font-bold text-foreground mb-1">Add Curriculum Module</h2>
+            <p className="text-xs text-muted-foreground mb-4">Creates a chapter container for video lectures</p>
 
             <form
               onSubmit={(e) => {
@@ -1142,36 +1141,36 @@ export default function CourseBuilderPage() {
               className="space-y-4 text-xs"
             >
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Module Title *</label>
+                <label className="block text-foreground font-medium mb-1">Module Title *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Chapter 1: Market Structure & Order Flow"
                   value={moduleTitle}
                   onChange={(e) => setModuleTitle(e.target.value)}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
                 />
               </div>
 
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Description (optional)</label>
+                <label className="block text-foreground font-medium mb-1">Description (optional)</label>
                 <textarea
                   rows={2}
                   placeholder="Core concepts covered in this module..."
                   value={moduleDesc}
                   onChange={(e) => setModuleDesc(e.target.value)}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl p-3 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-muted/40 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-primary"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-3 border-t border-[#1e293b]">
-                <button type="button" onClick={() => setIsAddModuleOpen(false)} className="px-3 py-1.5 text-[#94a3b8]">
+              <div className="flex justify-end gap-2 pt-3 border-t border-border">
+                <button type="button" onClick={() => setIsAddModuleOpen(false)} className="px-3 py-1.5 text-muted-foreground hover:bg-muted rounded-xl transition-colors cursor-pointer">
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={createModuleMutation.isPending || !moduleTitle.trim()}
-                  className="px-4 py-2 bg-[#6366f1] text-white rounded-xl font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2 bg-primary text-primary-foreground rounded-xl font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50 hover:bg-primary/90 transition-colors shadow-xs"
                 >
                   {createModuleMutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Create Module</span>
@@ -1186,14 +1185,14 @@ export default function CourseBuilderPage() {
       {/* ADD LECTURE MODAL (With Live Video Validation & oEmbed metadata) */}
       {/* ========================================================================= */}
       {isAddLectureOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-[#0b0f17] border border-[#1e293b] rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
-            <button onClick={() => setIsAddLectureOpen(false)} className="absolute top-5 right-5 text-[#64748b] hover:text-white">
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-card border border-border rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
+            <button onClick={() => setIsAddLectureOpen(false)} className="absolute top-5 right-5 text-muted-foreground hover:text-foreground cursor-pointer">
               <X className="w-5 h-5" />
             </button>
 
-            <h2 className="text-lg font-bold text-white mb-1">Add Video Lecture</h2>
-            <p className="text-xs text-[#94a3b8] mb-4">
+            <h2 className="text-lg font-bold text-foreground mb-1">Add Video Lecture</h2>
+            <p className="text-xs text-muted-foreground mb-4">
               Ingest an unlisted YouTube video with AES-256-GCM encryption at rest
             </p>
 
@@ -1205,7 +1204,7 @@ export default function CourseBuilderPage() {
               className="space-y-4 text-xs"
             >
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">YouTube URL or Video ID *</label>
+                <label className="block text-foreground font-medium mb-1">YouTube URL or Video ID *</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -1216,13 +1215,13 @@ export default function CourseBuilderPage() {
                       setVideoInput(e.target.value);
                       setValidatedVideo(null);
                     }}
-                    className="flex-1 bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                    className="flex-1 bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
                   />
                   <button
                     type="button"
                     onClick={() => handleValidateVideo(videoInput)}
                     disabled={validatingVideo || !videoInput.trim()}
-                    className="px-3 py-2 rounded-xl bg-[#121824] border border-[#1e293b] text-[#10b981] hover:border-[#10b981]/50 font-semibold flex items-center gap-1 cursor-pointer disabled:opacity-40"
+                    className="px-3 py-2 rounded-xl bg-card border border-border text-success hover:bg-muted font-semibold flex items-center gap-1 cursor-pointer disabled:opacity-40 shadow-xs"
                   >
                     {validatingVideo ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
                     <span>Validate</span>
@@ -1232,23 +1231,25 @@ export default function CourseBuilderPage() {
 
               {/* Validation Result Preview Card */}
               {validatedVideo && (
-                <div className="p-3 rounded-xl bg-[#121824] border border-[#10b981]/30 flex items-center gap-3">
+                <div className="p-3 rounded-xl bg-muted/40 border border-success/30 flex items-center gap-3">
                   <img
                     src={validatedVideo.thumbnailUrl}
                     alt="Preview"
-                    className="w-20 h-12 object-cover rounded-lg border border-[#1e293b] shrink-0"
+                    className="w-20 h-12 object-cover rounded-lg border border-border shrink-0"
                   />
                   <div className="overflow-hidden">
-                    <div className="text-white font-semibold truncate">{validatedVideo.title}</div>
-                    <div className="text-[10px] text-[#10b981] font-mono mt-0.5 flex items-center gap-2">
-                      <span>✓ Valid Video ID ({validatedVideo.videoId})</span>
+                    <div className="text-foreground font-semibold truncate">{validatedVideo.title}</div>
+                    <div className="text-[10px] text-success font-mono mt-0.5 flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                      <span>Valid Video ID ({validatedVideo.videoId})</span>
                       {validatedVideo.durationSec > 0 && (
                         <span>&bull; {Math.floor(validatedVideo.durationSec / 60)}m</span>
                       )}
                     </div>
                     {validatedVideo.isDuplicate && (
-                      <div className="text-[10px] text-yellow-400 mt-0.5">
-                        ⚠️ Note: Used in {validatedVideo.duplicateIn?.courseTitle}
+                      <div className="text-[10px] text-warning mt-1 flex items-center gap-1.5 font-medium">
+                        <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                        <span>Note: Used in {validatedVideo.duplicateIn?.courseTitle}</span>
                       </div>
                     )}
                   </div>
@@ -1256,36 +1257,36 @@ export default function CourseBuilderPage() {
               )}
 
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Lecture Title *</label>
+                <label className="block text-foreground font-medium mb-1">Lecture Title *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Identifying Institutional Liquidity Pools"
                   value={lectureTitle}
                   onChange={(e) => setLectureTitle(e.target.value)}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
                 />
               </div>
 
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Lecture Notes / Summary</label>
+                <label className="block text-foreground font-medium mb-1">Lecture Notes / Summary</label>
                 <textarea
                   rows={2}
                   placeholder="Key concepts, indicators, and charts referenced..."
                   value={lectureDesc}
                   onChange={(e) => setLectureDesc(e.target.value)}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl p-3 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-muted/40 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-primary"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-3 border-t border-[#1e293b]">
-                <button type="button" onClick={() => setIsAddLectureOpen(false)} className="px-3 py-1.5 text-[#94a3b8]">
+              <div className="flex justify-end gap-2 pt-3 border-t border-border">
+                <button type="button" onClick={() => setIsAddLectureOpen(false)} className="px-3 py-1.5 text-muted-foreground hover:bg-muted rounded-xl transition-colors cursor-pointer">
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={createLectureMutation.isPending || !lectureTitle.trim() || !videoInput.trim()}
-                  className="px-4 py-2 bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white rounded-xl font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2 bg-primary text-primary-foreground rounded-xl font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50 hover:bg-primary/90 transition-colors shadow-xs"
                 >
                   {createLectureMutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Save Lecture</span>
@@ -1298,20 +1299,20 @@ export default function CourseBuilderPage() {
 
       {/* ENROLL STUDENT MODAL */}
       {isEnrollStudentOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-[#0b0f17] border border-[#1e293b] rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-card border border-border rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
             <button
               onClick={() => setIsEnrollStudentOpen(false)}
-              className="absolute top-5 right-5 text-[#64748b] hover:text-white"
+              className="absolute top-5 right-5 text-muted-foreground hover:text-foreground cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="flex items-center gap-2.5 mb-1 text-[#6366f1]">
+            <div className="flex items-center gap-2.5 mb-1 text-primary">
               <Users className="w-5 h-5" />
-              <h2 className="text-lg font-bold text-white">Enroll Student in this Course</h2>
+              <h2 className="text-lg font-bold text-foreground">Enroll Student in this Course</h2>
             </div>
-            <p className="text-xs text-[#94a3b8] mb-5">
+            <p className="text-xs text-muted-foreground mb-5">
               Select a student to grant active access to &quot;{course.title}&quot;
             </p>
 
@@ -1332,12 +1333,12 @@ export default function CourseBuilderPage() {
               className="space-y-4 text-xs"
             >
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Select Student *</label>
+                <label className="block text-foreground font-medium mb-1">Select Student *</label>
                 <select
                   required
                   value={enrollStudentForm.studentId}
                   onChange={(e) => setEnrollStudentForm({ ...enrollStudentForm, studentId: e.target.value })}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2.5 text-foreground focus:outline-none focus:border-primary"
                 >
                   <option value="">-- Choose Student --</option>
                   {allStudentsData?.students?.map((s) => (
@@ -1350,23 +1351,23 @@ export default function CourseBuilderPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[#cbd5e1] font-medium mb-1">Start Date</label>
+                  <label className="block text-foreground font-medium mb-1">Start Date</label>
                   <input
                     type="date"
                     value={enrollStudentForm.startsAt}
                     onChange={(e) => setEnrollStudentForm({ ...enrollStudentForm, startsAt: e.target.value })}
-                    className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                    className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[#cbd5e1] font-medium mb-1">Expiry Date</label>
+                  <label className="block text-foreground font-medium mb-1">Expiry Date</label>
                   <input
                     type="date"
                     disabled={enrollStudentForm.isLifetime}
                     value={enrollStudentForm.expiresAt}
                     onChange={(e) => setEnrollStudentForm({ ...enrollStudentForm, expiresAt: e.target.value })}
-                    className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1] disabled:opacity-30"
+                    className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary disabled:opacity-30"
                   />
                 </div>
               </div>
@@ -1377,36 +1378,36 @@ export default function CourseBuilderPage() {
                   id="courseLifetimeCheckbox"
                   checked={enrollStudentForm.isLifetime}
                   onChange={(e) => setEnrollStudentForm({ ...enrollStudentForm, isLifetime: e.target.checked })}
-                  className="rounded border-[#1e293b] bg-[#121824] text-[#6366f1] focus:ring-0"
+                  className="rounded border-border bg-muted text-primary focus:ring-0"
                 />
-                <label htmlFor="courseLifetimeCheckbox" className="text-xs text-[#cbd5e1] cursor-pointer">
+                <label htmlFor="courseLifetimeCheckbox" className="text-xs text-foreground cursor-pointer">
                   Lifetime Access (No Expiry Date)
                 </label>
               </div>
 
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Administrative Note</label>
+                <label className="block text-foreground font-medium mb-1">Administrative Note</label>
                 <input
                   type="text"
                   placeholder="e.g. Granted direct access by Admin"
                   value={enrollStudentForm.note}
                   onChange={(e) => setEnrollStudentForm({ ...enrollStudentForm, note: e.target.value })}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
                 />
               </div>
 
-              <div className="flex justify-end gap-2.5 pt-3 border-t border-[#1e293b]">
+              <div className="flex justify-end gap-2.5 pt-3 border-t border-border">
                 <button
                   type="button"
                   onClick={() => setIsEnrollStudentOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs text-[#94a3b8] hover:bg-[#121824]"
+                  className="px-4 py-2 rounded-xl text-xs text-muted-foreground hover:bg-muted transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={enrollStudentMutation.isPending}
-                  className="px-4 py-2 rounded-xl bg-[#6366f1] text-white text-xs font-semibold flex items-center gap-2 hover:bg-[#4f46e5] disabled:opacity-40"
+                  className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-2 hover:bg-primary/90 disabled:opacity-40 shadow-xs cursor-pointer"
                 >
                   {enrollStudentMutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Confirm Enrollment</span>
@@ -1419,17 +1420,17 @@ export default function CourseBuilderPage() {
 
       {/* EDIT COURSE ENROLLMENT ACCESS MODAL */}
       {editingCourseEnrollment && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-[#0b0f17] border border-[#1e293b] rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-card border border-border rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
             <button
               onClick={() => setEditingCourseEnrollment(null)}
-              className="absolute top-5 right-5 text-[#64748b] hover:text-white"
+              className="absolute top-5 right-5 text-muted-foreground hover:text-foreground cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h2 className="text-lg font-bold text-white mb-1">Edit Student Access</h2>
-            <p className="text-xs text-[#94a3b8] mb-5">
+            <h2 className="text-lg font-bold text-foreground mb-1">Edit Student Access</h2>
+            <p className="text-xs text-muted-foreground mb-5">
               {editingCourseEnrollment.studentId?.name} ({editingCourseEnrollment.studentId?.studentCode})
             </p>
 
@@ -1445,11 +1446,11 @@ export default function CourseBuilderPage() {
               className="space-y-4 text-xs"
             >
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">Status</label>
+                <label className="block text-foreground font-medium mb-1">Status</label>
                 <select
                   value={editCourseStatus}
                   onChange={(e) => setEditCourseStatus(e.target.value)}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
                 >
                   <option value="active">Active</option>
                   <option value="expired">Expired</option>
@@ -1459,29 +1460,29 @@ export default function CourseBuilderPage() {
               </div>
 
               <div>
-                <label className="block text-[#cbd5e1] font-medium mb-1">
+                <label className="block text-foreground font-medium mb-1">
                   Expiration Date (leave empty for Lifetime)
                 </label>
                 <input
                   type="date"
                   value={editCourseExpiresAt}
                   onChange={(e) => setEditCourseExpiresAt(e.target.value)}
-                  className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                  className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
                 />
               </div>
 
-              <div className="flex justify-end gap-2.5 pt-3 border-t border-[#1e293b]">
+              <div className="flex justify-end gap-2.5 pt-3 border-t border-border">
                 <button
                   type="button"
                   onClick={() => setEditingCourseEnrollment(null)}
-                  className="px-4 py-2 rounded-xl text-xs text-[#94a3b8] hover:bg-[#121824]"
+                  className="px-4 py-2 rounded-xl text-xs text-muted-foreground hover:bg-muted transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={updateCourseEnrollmentMutation.isPending}
-                  className="px-4 py-2 rounded-xl bg-[#6366f1] text-white text-xs font-semibold flex items-center gap-2 hover:bg-[#4f46e5]"
+                  className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-2 hover:bg-primary/90 shadow-xs cursor-pointer"
                 >
                   {updateCourseEnrollmentMutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Save Changes</span>

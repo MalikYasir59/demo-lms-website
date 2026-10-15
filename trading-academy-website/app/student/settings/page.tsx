@@ -10,16 +10,14 @@ import {
   Copy,
   Check,
   Loader2,
-  AlertCircle,
   MapPin,
   Phone,
-  Briefcase,
-  GraduationCap,
   Sun,
 } from "lucide-react";
 import { toast } from "sonner";
 import { IUser } from "@/types/lms";
 import { ThemeSelector } from "@/components/shared/ThemeSelector";
+import { Button } from "@/components/ui/Button";
 
 export default function StudentSettingsPage() {
   const queryClient = useQueryClient();
@@ -110,8 +108,8 @@ export default function StudentSettingsPage() {
 
   if (isLoading) {
     return (
-      <div className="py-20 text-center text-[#94a3b8]">
-        <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#6366f1] mb-2" />
+      <div className="py-20 text-center text-muted-foreground">
+        <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary mb-2" />
         <p className="text-xs">Loading profile...</p>
       </div>
     );
@@ -121,73 +119,73 @@ export default function StudentSettingsPage() {
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-          <User className="w-6 h-6 text-[#6366f1]" />
+        <h1 className="text-2xl font-bold text-foreground tracking-tight flex items-center gap-2">
+          <User className="w-6 h-6 text-primary" />
           <span>Student Profile & Settings</span>
         </h1>
-        <p className="text-xs text-[#94a3b8] mt-1">
+        <p className="text-xs text-muted-foreground mt-1">
           Manage your student profile, contact info, and experience settings
         </p>
       </div>
 
       {/* Security & Watermark Alert */}
-      <div className="p-5 rounded-2xl bg-[#0b0f17] border border-[#6366f1]/30 flex items-start gap-3.5 shadow-xl">
-        <Shield className="w-5 h-5 text-[#6366f1] shrink-0 mt-0.5" />
+      <div className="p-5 rounded-2xl bg-card border border-primary/30 flex items-start gap-3.5 shadow-xs">
+        <Shield className="w-5 h-5 text-primary shrink-0 mt-0.5" />
         <div className="text-xs space-y-1">
-          <h2 className="font-semibold text-white">
+          <h2 className="font-semibold text-foreground">
             Forensic Watermarking & Account Integrity
           </h2>
-          <p className="text-[#94a3b8] leading-relaxed">
+          <p className="text-muted-foreground leading-relaxed">
             Your legal Name, Student ID, Email, and Phone number are bound to your student account and rendered dynamically onto all encrypted video streams for copyright protection. To request institutional updates to these credentials, please submit a formal request to Institute Administration.
           </p>
         </div>
       </div>
 
       {/* Institutional Credentials Card (Read-Only) */}
-      <div className="p-6 rounded-3xl bg-[#0b0f17] border border-[#1e293b] space-y-5">
-        <div className="flex items-center justify-between border-b border-[#1e293b] pb-3">
-          <h2 className="text-sm font-bold text-white flex items-center gap-2">
-            <Lock className="w-4 h-4 text-[#10b981]" />
+      <div className="p-6 rounded-3xl bg-card border border-border space-y-5 shadow-xs">
+        <div className="flex items-center justify-between border-b border-border pb-3">
+          <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+            <Lock className="w-4 h-4 text-success" />
             <span>Official Student Credentials (Verified)</span>
           </h2>
-          <span className="text-[11px] font-mono text-[#10b981] bg-[#10b981]/10 px-2 py-0.5 rounded-full border border-[#10b981]/20">
+          <span className="text-[11px] font-mono text-success bg-success/10 px-2 py-0.5 rounded-full border border-success/20">
             Active Student
           </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-          <div className="p-3.5 rounded-xl bg-[#121824] border border-[#1e293b]">
-            <span className="text-[#64748b] block mb-1">Student ID</span>
-            <div className="flex items-center justify-between font-mono font-bold text-white">
+          <div className="p-3.5 rounded-xl bg-muted/50 border border-border">
+            <span className="text-muted-foreground block mb-1">Student ID</span>
+            <div className="flex items-center justify-between font-mono font-bold text-foreground">
               <span>{student?.studentCode || "Unassigned"}</span>
               <button
                 type="button"
                 onClick={copyStudentId}
-                className="text-[#94a3b8] hover:text-white transition-colors"
+                className="text-muted-foreground hover:text-foreground transition-colors"
                 title="Copy Student Code"
               >
-                {copied ? <Check className="w-3.5 h-3.5 text-[#10b981]" /> : <Copy className="w-3.5 h-3.5" />}
+                {copied ? <Check className="w-3.5 h-3.5 text-success" /> : <Copy className="w-3.5 h-3.5" />}
               </button>
             </div>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#121824] border border-[#1e293b]">
-            <span className="text-[#64748b] block mb-1">Full Legal Name</span>
-            <span className="font-semibold text-white block truncate">
+          <div className="p-3.5 rounded-xl bg-muted/50 border border-border">
+            <span className="text-muted-foreground block mb-1">Full Legal Name</span>
+            <span className="font-semibold text-foreground block truncate">
               {student?.name || "Student"}
             </span>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#121824] border border-[#1e293b]">
-            <span className="text-[#64748b] block mb-1">Registered Email</span>
-            <span className="font-mono text-white block truncate">
+          <div className="p-3.5 rounded-xl bg-muted/50 border border-border">
+            <span className="text-muted-foreground block mb-1">Registered Email</span>
+            <span className="font-mono text-foreground block truncate">
               {student?.email}
             </span>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#121824] border border-[#1e293b]">
-            <span className="text-[#64748b] block mb-1">Registered Phone</span>
-            <span className="font-mono text-white block truncate">
+          <div className="p-3.5 rounded-xl bg-muted/50 border border-border">
+            <span className="text-muted-foreground block mb-1">Registered Phone</span>
+            <span className="font-mono text-foreground block truncate">
               {student?.phone || "None"}
             </span>
           </div>
@@ -195,13 +193,13 @@ export default function StudentSettingsPage() {
       </div>
 
       {/* Appearance & Visual Theme Selection */}
-      <div className="p-6 rounded-3xl bg-[#0b0f17] border border-[#1e293b] space-y-4 shadow-xl">
+      <div className="p-6 rounded-3xl bg-card border border-border space-y-4 shadow-xs">
         <div>
-          <h2 className="text-sm font-bold text-white flex items-center gap-2">
-            <Sun className="w-4 h-4 text-[#f59e0b]" />
+          <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+            <Sun className="w-4 h-4 text-warning" />
             <span>Appearance & Theme Mode</span>
           </h2>
-          <p className="text-xs text-[#94a3b8] mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Choose your preferred learning environment appearance (Light Mode, Dark Mode, or System Sync).
           </p>
         </div>
@@ -214,20 +212,20 @@ export default function StudentSettingsPage() {
           e.preventDefault();
           updateProfileMutation.mutate();
         }}
-        className="p-6 rounded-3xl bg-[#0b0f17] border border-[#1e293b] space-y-6"
+        className="p-6 rounded-3xl bg-card border border-border space-y-6 shadow-xs"
       >
-        <div className="flex items-center justify-between border-b border-[#1e293b] pb-3">
-          <h2 className="text-sm font-bold text-white flex items-center gap-2">
-            <User className="w-4 h-4 text-[#6366f1]" />
+        <div className="flex items-center justify-between border-b border-border pb-3">
+          <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+            <User className="w-4 h-4 text-primary" />
             <span>Personal & Telemetry Details</span>
           </h2>
-          <span className="text-xs text-[#64748b]">Editable by student</span>
+          <span className="text-xs text-muted-foreground">Editable by student</span>
         </div>
 
         {/* Experience Level & Education */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
           <div>
-            <label className="block text-[#cbd5e1] font-medium mb-1">Trading Experience</label>
+            <label className="block text-foreground font-medium mb-1">Trading Experience</label>
             <select
               value={form.profile.experienceLevel}
               onChange={(e) =>
@@ -239,7 +237,7 @@ export default function StudentSettingsPage() {
                   },
                 })
               }
-              className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+              className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
             >
               <option value="beginner">Beginner (0-1 year)</option>
               <option value="intermediate">Intermediate (1-3 years)</option>
@@ -248,7 +246,7 @@ export default function StudentSettingsPage() {
           </div>
 
           <div>
-            <label className="block text-[#cbd5e1] font-medium mb-1">Education Level</label>
+            <label className="block text-foreground font-medium mb-1">Education Level</label>
             <input
               type="text"
               placeholder="e.g. Bachelor's in Finance"
@@ -259,12 +257,12 @@ export default function StudentSettingsPage() {
                   profile: { ...form.profile, education: e.target.value },
                 })
               }
-              className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+              className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
             />
           </div>
 
           <div>
-            <label className="block text-[#cbd5e1] font-medium mb-1">Occupation</label>
+            <label className="block text-foreground font-medium mb-1">Occupation</label>
             <input
               type="text"
               placeholder="e.g. Independent Trader / Engineer"
@@ -275,21 +273,21 @@ export default function StudentSettingsPage() {
                   profile: { ...form.profile, occupation: e.target.value },
                 })
               }
-              className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+              className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
             />
           </div>
         </div>
 
         {/* Residential Address */}
         <div className="space-y-3 pt-2 text-xs">
-          <h3 className="font-semibold text-white flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-[#6366f1]" />
+          <h3 className="font-semibold text-foreground flex items-center gap-1.5">
+            <MapPin className="w-3.5 h-3.5 text-primary" />
             <span>Mailing & Physical Address</span>
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[#64748b] mb-1">Street Address Line 1</label>
+              <label className="block text-muted-foreground mb-1">Street Address Line 1</label>
               <input
                 type="text"
                 placeholder="House / Apt, Street"
@@ -303,12 +301,12 @@ export default function StudentSettingsPage() {
                     },
                   })
                 }
-                className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
               />
             </div>
 
             <div>
-              <label className="block text-[#64748b] mb-1">Street Address Line 2</label>
+              <label className="block text-muted-foreground mb-1">Street Address Line 2</label>
               <input
                 type="text"
                 placeholder="Sector, Landmark (Optional)"
@@ -322,14 +320,14 @@ export default function StudentSettingsPage() {
                     },
                   })
                 }
-                className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div>
-              <label className="block text-[#64748b] mb-1">City</label>
+              <label className="block text-muted-foreground mb-1">City</label>
               <input
                 type="text"
                 placeholder="e.g. Lahore"
@@ -343,12 +341,12 @@ export default function StudentSettingsPage() {
                     },
                   })
                 }
-                className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
               />
             </div>
 
             <div>
-              <label className="block text-[#64748b] mb-1">State / Province</label>
+              <label className="block text-muted-foreground mb-1">State / Province</label>
               <input
                 type="text"
                 placeholder="e.g. Punjab"
@@ -362,12 +360,12 @@ export default function StudentSettingsPage() {
                     },
                   })
                 }
-                className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
               />
             </div>
 
             <div>
-              <label className="block text-[#64748b] mb-1">Country</label>
+              <label className="block text-muted-foreground mb-1">Country</label>
               <input
                 type="text"
                 placeholder="Pakistan"
@@ -381,12 +379,12 @@ export default function StudentSettingsPage() {
                     },
                   })
                 }
-                className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
               />
             </div>
 
             <div>
-              <label className="block text-[#64748b] mb-1">Postal Code</label>
+              <label className="block text-muted-foreground mb-1">Postal Code</label>
               <input
                 type="text"
                 placeholder="54000"
@@ -400,7 +398,7 @@ export default function StudentSettingsPage() {
                     },
                   })
                 }
-                className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
               />
             </div>
           </div>
@@ -408,14 +406,14 @@ export default function StudentSettingsPage() {
 
         {/* Emergency Contact */}
         <div className="space-y-3 pt-2 text-xs">
-          <h3 className="font-semibold text-white flex items-center gap-1.5">
-            <Phone className="w-3.5 h-3.5 text-[#10b981]" />
+          <h3 className="font-semibold text-foreground flex items-center gap-1.5">
+            <Phone className="w-3.5 h-3.5 text-success" />
             <span>Emergency Contact</span>
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-[#64748b] mb-1">Contact Name</label>
+              <label className="block text-muted-foreground mb-1">Contact Name</label>
               <input
                 type="text"
                 placeholder="Guardian / Spouse Name"
@@ -432,12 +430,12 @@ export default function StudentSettingsPage() {
                     },
                   })
                 }
-                className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
               />
             </div>
 
             <div>
-              <label className="block text-[#64748b] mb-1">Contact Phone</label>
+              <label className="block text-muted-foreground mb-1">Contact Phone</label>
               <input
                 type="text"
                 placeholder="+92 300 1234567"
@@ -454,12 +452,12 @@ export default function StudentSettingsPage() {
                     },
                   })
                 }
-                className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
               />
             </div>
 
             <div>
-              <label className="block text-[#64748b] mb-1">Relationship</label>
+              <label className="block text-muted-foreground mb-1">Relationship</label>
               <input
                 type="text"
                 placeholder="e.g. Brother, Parent"
@@ -476,18 +474,20 @@ export default function StudentSettingsPage() {
                     },
                   })
                 }
-                className="w-full bg-[#121824] border border-[#1e293b] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#6366f1]"
+                className="w-full bg-background border border-input rounded-xl px-3 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
               />
             </div>
           </div>
         </div>
 
         {/* Submit Button */}
-        <div className="pt-4 border-t border-[#1e293b] flex justify-end">
-          <button
+        <div className="pt-4 border-t border-border flex justify-end">
+          <Button
             type="submit"
+            variant="primary"
+            size="md"
             disabled={updateProfileMutation.isPending}
-            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white text-xs font-semibold hover:opacity-95 transition-all shadow-md shadow-[#6366f1]/20 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+            className="gap-2 shadow-xs"
           >
             {updateProfileMutation.isPending ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -495,7 +495,7 @@ export default function StudentSettingsPage() {
               <Save className="w-4 h-4" />
             )}
             <span>Save Profile Changes</span>
-          </button>
+          </Button>
         </div>
       </form>
     </div>

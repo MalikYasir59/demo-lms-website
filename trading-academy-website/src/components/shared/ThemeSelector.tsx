@@ -1,22 +1,24 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { Sun, Moon, Laptop, Check } from "lucide-react";
 
+const emptySubscribe = () => () => {};
+
 export function ThemeSelector() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   if (!mounted) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 animate-pulse">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-20 rounded-2xl bg-[#121824] border border-[#1e293b]" />
+          <div key={i} className="h-20 rounded-2xl bg-muted border border-border" />
         ))}
       </div>
     );
@@ -26,23 +28,23 @@ export function ThemeSelector() {
     {
       id: "light",
       label: "Light Mode",
-      desc: "Clean institutional daylight aesthetic",
+      desc: "Clean, bright workspace aesthetic",
       icon: Sun,
-      iconColor: "text-amber-500",
+      iconColor: "text-warning",
     },
     {
       id: "dark",
       label: "Dark Mode",
-      desc: "Obsidian low-strain terminal palette",
+      desc: "Deep, comfortable low-strain palette",
       icon: Moon,
-      iconColor: "text-indigo-400",
+      iconColor: "text-primary",
     },
     {
       id: "system",
       label: "System Sync",
       desc: "Matches your operating system preference",
       icon: Laptop,
-      iconColor: "text-emerald-400",
+      iconColor: "text-success",
     },
   ];
 
@@ -59,30 +61,30 @@ export function ThemeSelector() {
             onClick={() => setTheme(opt.id)}
             className={`p-4 rounded-2xl border text-left transition-all relative flex flex-col justify-between group cursor-pointer ${
               isSelected
-                ? "bg-[#6366f1]/10 border-[#6366f1] ring-1 ring-[#6366f1]"
-                : "bg-[#121824] border-[#1e293b] hover:border-[#334155]"
+                ? "bg-primary/10 border-primary ring-1 ring-primary"
+                : "bg-muted border-border hover:border-muted-foreground/30"
             }`}
           >
             <div className="flex items-center justify-between mb-3">
               <div
-                className={`w-9 h-9 rounded-xl flex items-center justify-center border border-[#1e293b] ${
-                  isSelected ? "bg-[#6366f1]/20 text-[#6366f1]" : "bg-[#0b0f17] text-[#94a3b8]"
+                className={`w-9 h-9 rounded-xl flex items-center justify-center border border-border ${
+                  isSelected ? "bg-primary/20 text-primary" : "bg-card text-muted-foreground"
                 } ${opt.iconColor}`}
               >
                 <Icon className="w-4 h-4" />
               </div>
               {isSelected && (
-                <div className="w-5 h-5 rounded-full bg-[#6366f1] text-white flex items-center justify-center">
+                <div className="w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
                   <Check className="w-3 h-3 stroke-[3]" />
                 </div>
               )}
             </div>
 
             <div>
-              <div className="text-xs font-bold text-white group-hover:text-[#6366f1] transition-colors">
+              <div className="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
                 {opt.label}
               </div>
-              <div className="text-[11px] text-[#64748b] mt-0.5 leading-snug">
+              <div className="text-[11px] text-muted-foreground mt-0.5 leading-snug">
                 {opt.desc}
               </div>
             </div>

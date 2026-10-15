@@ -13,12 +13,11 @@ import {
   Download,
   AlertCircle,
   Loader2,
-  GraduationCap,
-  Shield,
   BookOpen,
 } from "lucide-react";
 import HardenedPlayerShell from "@/components/player/HardenedPlayerShell";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/Button";
 
 export default function SecureLectureViewerPage() {
   const params = useParams();
@@ -140,11 +139,11 @@ export default function SecureLectureViewerPage() {
   if (lectureLoading || isInitializingStream) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center text-center p-6 space-y-3">
-        <Loader2 className="w-10 h-10 animate-spin text-[#10b981]" />
-        <h2 className="text-base font-bold text-white tracking-tight">
+        <Loader2 className="w-10 h-10 animate-spin text-primary" />
+        <h2 className="text-base font-bold text-foreground tracking-tight">
           Authorizing Playback Stream
         </h2>
-        <p className="text-xs text-[#64748b] font-mono">
+        <p className="text-xs text-muted-foreground font-mono">
           Verifying enrollment ticket & initialising forensic watermark...
         </p>
       </div>
@@ -153,19 +152,21 @@ export default function SecureLectureViewerPage() {
 
   if (streamError) {
     return (
-      <div className="max-w-md mx-auto my-20 p-8 rounded-3xl bg-[#0b0f17] border border-red-500/30 text-center space-y-4 shadow-2xl">
-        <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center mx-auto text-red-400">
+      <div className="max-w-md mx-auto my-20 p-8 rounded-3xl bg-card border border-destructive/30 text-center space-y-4 shadow-sm">
+        <div className="w-12 h-12 rounded-2xl bg-destructive/10 border border-destructive/25 flex items-center justify-center mx-auto text-destructive">
           <AlertCircle className="w-6 h-6" />
         </div>
-        <h2 className="text-lg font-bold text-white">Playback Unauthorized</h2>
-        <p className="text-xs text-[#94a3b8] leading-relaxed">{streamError}</p>
-        <button
+        <h2 className="text-lg font-bold text-foreground">Playback Unauthorized</h2>
+        <p className="text-xs text-muted-foreground leading-relaxed">{streamError}</p>
+        <Button
           onClick={() => router.back()}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#121824] border border-[#1e293b] text-xs font-semibold text-white hover:border-[#6366f1]"
+          variant="secondary"
+          size="sm"
+          className="gap-2"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Return to Syllabus</span>
-        </button>
+        </Button>
       </div>
     );
   }
@@ -179,7 +180,7 @@ export default function SecureLectureViewerPage() {
       <div className="flex items-center justify-between gap-4">
         <button
           onClick={() => router.back()}
-          className="inline-flex items-center gap-1.5 text-xs text-[#94a3b8] hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Syllabus</span>
@@ -189,7 +190,7 @@ export default function SecureLectureViewerPage() {
           {navigation.prev && (
             <Link
               href={`/student/learn/${navigation.prev.id}`}
-              className="px-3 py-1.5 rounded-xl bg-[#121824] border border-[#1e293b] text-xs font-semibold text-[#94a3b8] hover:text-white hover:border-[#6366f1] flex items-center gap-1 transition-colors"
+              className="px-3 py-1.5 rounded-xl bg-card border border-border text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/40 flex items-center gap-1 transition-colors shadow-xs"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Previous</span>
@@ -199,7 +200,7 @@ export default function SecureLectureViewerPage() {
           {navigation.next && (
             <Link
               href={`/student/learn/${navigation.next.id}`}
-              className="px-3 py-1.5 rounded-xl bg-[#6366f1] text-white text-xs font-semibold hover:bg-[#4f46e5] flex items-center gap-1 transition-colors shadow-md shadow-[#6366f1]/20"
+              className="px-3.5 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:opacity-95 flex items-center gap-1 transition-all shadow-xs"
             >
               <span className="hidden sm:inline">Next Lesson</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -229,25 +230,25 @@ export default function SecureLectureViewerPage() {
       )}
 
       {/* Lecture Title & Completion Status Header */}
-      <div className="p-6 rounded-3xl bg-[#0b0f17] border border-[#1e293b] flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl">
+      <div className="p-6 rounded-3xl bg-card border border-border flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xs">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-full bg-[#10b981]/15 text-[#10b981] border border-[#10b981]/30 text-[10px] font-mono font-semibold">
+            <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-[10px] font-mono font-semibold">
               LESSON
             </span>
             {isCompleted ? (
-              <span className="flex items-center gap-1 text-[#10b981] text-xs font-semibold">
+              <span className="flex items-center gap-1 text-success text-xs font-semibold">
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>Threshold Reached (Completed)</span>
               </span>
             ) : (
-              <span className="text-xs text-[#64748b] font-mono">
+              <span className="text-xs text-muted-foreground font-mono">
                 {progress.percent}% Unique Seconds Watched
               </span>
             )}
           </div>
 
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
             {lecture.title}
           </h1>
         </div>
@@ -255,7 +256,7 @@ export default function SecureLectureViewerPage() {
         {navigation.next && (
           <Link
             href={`/student/learn/${navigation.next.id}`}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white text-xs font-semibold hover:opacity-95 transition-all shadow-md shadow-[#6366f1]/20 flex items-center gap-1.5 self-start md:self-auto shrink-0"
+            className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:opacity-95 transition-all shadow-xs flex items-center gap-1.5 self-start md:self-auto shrink-0"
           >
             <span>Continue Next</span>
             <ChevronRight className="w-4 h-4" />
@@ -266,25 +267,25 @@ export default function SecureLectureViewerPage() {
       {/* Lecture Notes & Resource Downloads */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Notes */}
-        <div className="md:col-span-2 p-6 rounded-3xl bg-[#0b0f17] border border-[#1e293b] space-y-3">
-          <h2 className="text-sm font-bold text-white flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-[#6366f1]" />
+        <div className="md:col-span-2 p-6 rounded-3xl bg-card border border-border space-y-3 shadow-xs">
+          <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+            <BookOpen className="w-4 h-4 text-primary" />
             <span>Lesson Notes & Key Takeaways</span>
           </h2>
-          <p className="text-xs text-[#94a3b8] leading-relaxed whitespace-pre-wrap">
+          <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-wrap">
             {lecture.description || "No specific lesson notes provided for this video."}
           </p>
         </div>
 
         {/* Attachments / Downloads */}
-        <div className="p-6 rounded-3xl bg-[#0b0f17] border border-[#1e293b] space-y-4">
-          <h2 className="text-sm font-bold text-white flex items-center gap-2">
-            <FileText className="w-4 h-4 text-[#10b981]" />
+        <div className="p-6 rounded-3xl bg-card border border-border space-y-4 shadow-xs">
+          <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+            <FileText className="w-4 h-4 text-success" />
             <span>Lesson Resources</span>
           </h2>
 
           {!lecture.resources || lecture.resources.length === 0 ? (
-            <div className="text-xs text-[#64748b]">
+            <div className="text-xs text-muted-foreground">
               No downloadable attachments for this lesson.
             </div>
           ) : (
@@ -292,17 +293,17 @@ export default function SecureLectureViewerPage() {
               {lecture.resources.map((res, idx) => (
                 <div
                   key={idx}
-                  className="p-3 rounded-xl bg-[#121824] border border-[#1e293b] flex items-center justify-between gap-3 text-xs"
+                  className="p-3 rounded-xl bg-muted/50 border border-border flex items-center justify-between gap-3 text-xs"
                 >
                   <div className="truncate">
-                    <div className="font-semibold text-white truncate">{res.title}</div>
-                    <div className="text-[10px] text-[#64748b] font-mono">
+                    <div className="font-semibold text-foreground truncate">{res.title}</div>
+                    <div className="text-[10px] text-muted-foreground font-mono">
                       {(res.size / 1024 / 1024).toFixed(2)} MB
                     </div>
                   </div>
                   <button
                     onClick={() => toast.info("Resource download initiated")}
-                    className="p-2 rounded-lg bg-[#6366f1]/15 text-[#6366f1] hover:bg-[#6366f1] hover:text-white transition-colors"
+                    className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5" />
                   </button>
