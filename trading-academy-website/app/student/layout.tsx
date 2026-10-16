@@ -69,6 +69,7 @@ export default function StudentLayout({
           email: session?.user?.email,
           studentCode: (session?.user as any)?.studentCode,
           roleBadge: "Student",
+          avatar: session?.user?.avatar,
         }}
         onSignOut={() => signOut({ callbackUrl: "/login" })}
         bottomExtra={

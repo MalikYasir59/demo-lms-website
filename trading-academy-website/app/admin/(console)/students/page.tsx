@@ -490,8 +490,26 @@ export default function StudentsDirectoryPage() {
 
                       {/* Name & Email */}
                       <td className="p-3.5">
-                        <div className="font-semibold text-foreground">{student.name}</div>
-                        <div className="text-[11px] font-mono text-muted-foreground">{student.email}</div>
+                        <div className="flex items-center gap-2.5">
+                          {student.avatar?.url ? (
+                            <div className="w-8 h-8 rounded-full border border-primary/20 overflow-hidden shrink-0 bg-muted">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={student.avatar.url}
+                                alt={student.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold text-xs shrink-0 select-none">
+                              {student.name.charAt(0).toUpperCase()}
+                            </div>
+                          )}
+                          <div className="min-w-0">
+                            <div className="font-semibold text-foreground truncate">{student.name}</div>
+                            <div className="text-[11px] font-mono text-muted-foreground truncate">{student.email}</div>
+                          </div>
+                        </div>
                       </td>
 
                       {/* Phone */}

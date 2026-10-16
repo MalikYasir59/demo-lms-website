@@ -59,6 +59,7 @@ export default function AdminConsoleLayout({ children }: AdminLayoutProps) {
           name: session?.user?.name || "Administrator",
           email: session?.user?.email || "admin@itt.edu",
           roleBadge: "Master Authority",
+          avatar: session?.user?.avatar,
         }}
         onSignOut={() => signOut({ callbackUrl: "/admin/login" })}
         bottomExtra={

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { ThemeSelector } from "@/components/shared/ThemeSelector";
+import { AvatarUpload } from "@/components/shared/AvatarUpload";
 
 type SettingsTab = "profile" | "appearance" | "security" | "platform" | "audit";
 
@@ -26,6 +27,7 @@ export default function AdminSettingsPage() {
     email: "",
     phone: "",
     role: "admin",
+    avatar: "",
   });
   const [savingProfile, setSavingProfile] = useState(false);
 
@@ -92,6 +94,7 @@ export default function AdminSettingsPage() {
             email: res.data.email || "",
             phone: res.data.phone || "",
             role: res.data.role || "admin",
+            avatar: res.data.avatar?.url || "",
           });
         }
       })
@@ -263,11 +266,23 @@ export default function AdminSettingsPage() {
 
       {/* TAB 1: PROFILE */}
       {activeTab === "profile" && (
-        <div className="p-6 rounded-2xl bg-card border border-border max-w-2xl shadow-xs">
-          <h3 className="text-base font-semibold text-foreground mb-1">Administrator Profile</h3>
-          <p className="text-xs text-muted-foreground mb-6">Update your system name and contact information</p>
+        <div className="p-6 rounded-2xl bg-card border border-border max-w-2xl shadow-xs space-y-6">
+          <div>
+            <h3 className="text-base font-semibold text-foreground mb-1">Administrator Profile</h3>
+            <p className="text-xs text-muted-foreground">Update your avatar, administrative name, and contact details</p>
+          </div>
 
-          <form onSubmit={handleSaveProfile} className="space-y-4">
+          {/* Institutional Avatar Upload with Square Cropper */}
+          <AvatarUpload
+            role="admin"
+            currentAvatarUrl={profile.avatar}
+            userName={profile.name}
+            onAvatarUpdated={(newUrl) => {
+              setProfile((prev) => ({ ...prev, avatar: newUrl || "" }));
+            }}
+          />
+
+          <form onSubmit={handleSaveProfile} className="space-y-4 pt-2 border-t border-border">
             <div>
               <label className="block text-xs font-mono text-muted-foreground uppercase mb-1.5">
                 Full Name

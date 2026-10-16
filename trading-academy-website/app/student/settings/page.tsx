@@ -13,11 +13,13 @@ import {
   MapPin,
   Phone,
   Sun,
+  Camera,
 } from "lucide-react";
 import { toast } from "sonner";
 import { IUser } from "@/types/lms";
 import { ThemeSelector } from "@/components/shared/ThemeSelector";
 import { Button } from "@/components/ui/Button";
+import { AvatarUpload } from "@/components/shared/AvatarUpload";
 
 export default function StudentSettingsPage() {
   const queryClient = useQueryClient();
@@ -190,6 +192,27 @@ export default function StudentSettingsPage() {
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Student Profile Photo & Avatar Card */}
+      <div className="p-6 rounded-3xl bg-card border border-border space-y-4 shadow-xs">
+        <div>
+          <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+            <Camera className="w-4 h-4 text-primary" />
+            <span>Profile Photo & Avatar</span>
+          </h2>
+          <p className="text-xs text-muted-foreground mt-1">
+            Upload your personal identification photo. It will appear on your student console, dashboard, and discussion threads.
+          </p>
+        </div>
+        <AvatarUpload
+          role="student"
+          currentAvatarUrl={student?.avatar?.url}
+          userName={student?.name}
+          onAvatarUpdated={() => {
+            queryClient.invalidateQueries({ queryKey: ["student_me_profile"] });
+          }}
+        />
       </div>
 
       {/* Appearance & Visual Theme Selection */}

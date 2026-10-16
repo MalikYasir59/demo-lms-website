@@ -9,15 +9,15 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import { User } from "../src/models/User";
 import { ROLES, USER_STATUS } from "../src/lib/constants";
+import { connectToDatabase, ALLOWED_DB_NAME } from "../src/lib/db";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/itt_lms";
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "admin@tradingtricks.institute").toLowerCase().trim();
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "AdminPassword123!";
 const ADMIN_NAME = process.env.ADMIN_NAME || "ITT Master Admin";
 
 async function seedAdmin() {
-  console.log("Connecting to MongoDB:", MONGODB_URI.replace(/:([^@]+)@/, ":****@"));
-  await mongoose.connect(MONGODB_URI);
+  console.log(`Connecting to MongoDB (target database: ${ALLOWED_DB_NAME})...`);
+  const mongooseInstance = await connectToDatabase();
 
   const existingAdmin = await User.findOne({
     $or: [{ role: ROLES.ADMIN }, { email: ADMIN_EMAIL }],

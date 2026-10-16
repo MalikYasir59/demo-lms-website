@@ -508,9 +508,20 @@ export default function StudentDetailPage() {
       {/* Main Student Header Card */}
       <div className="p-6 rounded-2xl bg-card border border-border flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xs">
         <div className="flex items-start sm:items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-xl shrink-0">
-            {student.name.charAt(0).toUpperCase()}
-          </div>
+          {student.avatar?.url ? (
+            <div className="w-16 h-16 rounded-2xl border border-primary/20 overflow-hidden shrink-0 shadow-xs bg-muted">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={student.avatar.url}
+                alt={student.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ) : (
+            <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-xl shrink-0">
+              {student.name.charAt(0).toUpperCase()}
+            </div>
+          )}
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
               <h1 className="text-2xl font-bold text-foreground tracking-tight">{student.name}</h1>

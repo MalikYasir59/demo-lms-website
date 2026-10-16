@@ -162,18 +162,31 @@ export const authOptions: NextAuthOptions = {
           studentCode: user.studentCode,
           name: user.name,
           email: user.email,
+          avatar: user.avatar?.url || null,
         };
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
         token.sid = user.sid;
         token.studentCode = user.studentCode;
+        token.avatar = (user as any).avatar || null;
       }
+
+      // Handle client session.update({ avatar: ... })
+      if (trigger === "update" && session) {
+        if (session.avatar !== undefined) {
+          token.avatar = session.avatar;
+        }
+        if (session.name) {
+          token.name = session.name;
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {
@@ -182,6 +195,7 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role as UserRole;
         session.user.sid = token.sid as string;
         session.user.studentCode = token.studentCode as string | undefined;
+        session.user.avatar = (token.avatar as string | null | undefined) ?? null;
       }
       return session;
     },

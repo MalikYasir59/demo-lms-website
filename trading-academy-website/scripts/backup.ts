@@ -9,13 +9,12 @@
 import mongoose from "mongoose";
 import * as fs from "fs";
 import * as path from "path";
-
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/itt_lms";
+import { connectToDatabase, ALLOWED_DB_NAME } from "../src/lib/db";
 
 async function runBackup() {
-  console.log("Connecting to MongoDB for backup snapshot...");
-  await mongoose.connect(MONGODB_URI);
-  const db = mongoose.connection.db;
+  console.log(`Connecting to MongoDB (target database: ${ALLOWED_DB_NAME})...`);
+  const mongooseInstance = await connectToDatabase();
+  const db = mongooseInstance.connection.db;
 
   if (!db) {
     throw new Error("Could not connect to MongoDB database handle.");

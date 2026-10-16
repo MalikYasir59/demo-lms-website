@@ -38,6 +38,7 @@ export interface AppSidebarProps {
     email?: string | null;
     studentCode?: string | null;
     roleBadge?: string;
+    avatar?: string | null;
   };
   onSignOut: () => void;
   bottomExtra?: React.ReactNode;
@@ -50,6 +51,59 @@ function getStoredCollapsed(role: string): boolean {
   } catch {
     return false;
   }
+}
+
+function SidebarAvatarCircle({
+  avatar,
+  initials,
+  sizeClass = "w-8 h-8",
+  textClass = "text-xs",
+  title,
+}: {
+  avatar?: string | null;
+  initials: string;
+  sizeClass?: string;
+  textClass?: string;
+  title?: string;
+}) {
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [avatar]);
+
+  if (avatar && !imgError) {
+    return (
+      <div
+        className={cn(
+          "rounded-full border border-primary/20 overflow-hidden shrink-0 select-none bg-muted shadow-2xs",
+          sizeClass
+        )}
+        title={title}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={avatar}
+          alt={title || "User avatar"}
+          className="w-full h-full object-cover"
+          onError={() => setImgError(true)}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        "rounded-full bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold shrink-0 select-none",
+        sizeClass,
+        textClass
+      )}
+      title={title}
+    >
+      {initials}
+    </div>
+  );
 }
 
 export function AppSidebar({
@@ -141,12 +195,12 @@ export function AppSidebar({
 
         <div className="flex items-center gap-2">
           <ThemeToggle variant="inline" />
-          <div
-            className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold text-xs select-none"
+          <SidebarAvatarCircle
+            avatar={user?.avatar}
+            initials={initials}
+            sizeClass="w-8 h-8"
             title={user?.name || user?.email || "User"}
-          >
-            {initials}
-          </div>
+          />
         </div>
       </header>
 
@@ -229,9 +283,12 @@ export function AppSidebar({
 
               <div className="flex items-center justify-between p-2.5 rounded-xl bg-sidebar-accent border border-sidebar-border">
                 <div className="flex items-center gap-2.5 overflow-hidden">
-                  <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold text-xs shrink-0">
-                    {initials}
-                  </div>
+                  <SidebarAvatarCircle
+                    avatar={user?.avatar}
+                    initials={initials}
+                    sizeClass="w-9 h-9"
+                    title={user?.name || user?.email || "User"}
+                  />
                   <div className="overflow-hidden">
                     <div className="text-xs font-semibold text-foreground truncate">
                       {user?.name || (role === "admin" ? "Administrator" : "Student")}
@@ -355,12 +412,12 @@ export function AppSidebar({
             )}
           >
             <div className={cn("flex items-center gap-2.5 overflow-hidden", isCollapsed && "justify-center")}>
-              <div
-                className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold text-xs shrink-0 select-none"
+              <SidebarAvatarCircle
+                avatar={user?.avatar}
+                initials={initials}
+                sizeClass="w-8 h-8"
                 title={user?.name || user?.email || "Account"}
-              >
-                {initials}
-              </div>
+              />
               {!isCollapsed && (
                 <div className="overflow-hidden min-w-0">
                   <div className="text-xs font-semibold text-foreground truncate">

@@ -18,11 +18,11 @@ import { Enrollment } from "../src/models/Enrollment";
 import { encryptVideoId, hashVideoId } from "../src/lib/crypto";
 import { ROLES, USER_STATUS, COURSE_STATUS, ENROLLMENT_STATUS } from "../src/lib/constants";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/itt_lms";
+import { connectToDatabase, ALLOWED_DB_NAME } from "../src/lib/db";
 
 async function seedDemoData() {
-  console.log("Connecting to MongoDB:", MONGODB_URI.replace(/:([^@]+)@/, ":****@"));
-  await mongoose.connect(MONGODB_URI);
+  console.log(`Connecting to MongoDB (target database: ${ALLOWED_DB_NAME})...`);
+  const mongooseInstance = await connectToDatabase();
 
   // 1. Seed Demo Student
   const studentEmail = "student@tradingtricks.institute";

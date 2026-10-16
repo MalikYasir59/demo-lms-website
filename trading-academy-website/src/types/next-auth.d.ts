@@ -9,6 +9,7 @@ declare module "next-auth" {
     studentCode?: string;
     name: string;
     email: string;
+    avatar?: string | null;
   }
 
   interface Session {
@@ -17,6 +18,7 @@ declare module "next-auth" {
       role: UserRole;
       sid: string;
       studentCode?: string;
+      avatar?: string | null;
     } & DefaultSession["user"];
   }
 }
@@ -27,5 +29,6 @@ declare module "next-auth/jwt" {
     role: UserRole;
     sid: string;
     studentCode?: string;
+    avatar?: string | null;
   }
 }
