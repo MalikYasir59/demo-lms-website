@@ -324,3 +324,6 @@ If unlisted video footage is detected online:
 
 #### Email:       admin@tradingtricks.institute
 #### Password:    AdminPassword123!
+
+Student ID: ITT-26-0002
+New Password: AfXr9WaFzX
