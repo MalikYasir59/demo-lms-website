@@ -56,7 +56,7 @@ export default function StudentLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row antialiased selection:bg-primary/20 selection:text-foreground">
+    <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row antialiased selection:bg-primary/20 selection:text-foreground">
       {/* Institutional Left Sidebar */}
       <AppSidebar
         role="student"

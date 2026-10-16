@@ -6,12 +6,14 @@ import {
   Camera,
   Upload,
   Trash2,
-  ZoomIn,
   ZoomOut,
   Check,
   X,
   Loader2,
   ImageIcon,
+  RotateCcw,
+  Plus,
+  Minus,
 } from "lucide-react";
 import { toast } from "sonner";
 import { UPLOAD_LIMITS, getFileExtension } from "@/lib/upload-limits";
@@ -23,6 +25,12 @@ interface AvatarUploadProps {
   onAvatarUpdated?: (newUrl: string | null) => void;
   className?: string;
 }
+
+// Fixed dimensions for crop geometry (in px)
+const VIEWPORT_SIZE = 280;
+const CROP_DIAMETER = 240;
+const CROP_RADIUS = CROP_DIAMETER / 2;
+const EXPORT_CANVAS_SIZE = 512;
 
 export function AvatarUpload({
   currentAvatarUrl,
@@ -48,12 +56,22 @@ export function AvatarUpload({
   // Cropper Modal State
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [rawImageSrc, setRawImageSrc] = useState<string | null>(null);
+  const [imageMeta, setImageMeta] = useState<{
+    naturalWidth: number;
+    naturalHeight: number;
+    fitScale: number;
+    isSmall: boolean;
+  } | null>(null);
+
+  // Zoom is 1.0 (100% natural fit) up to 3.5 (350%)
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isPanning, setIsPanning] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  const imageRef = useRef<HTMLImageElement>(null);
+  // Touch pinch-to-zoom tracking
+  const pinchRef = useRef<{ initialDist: number; initialZoom: number } | null>(null);
+  const imageElementRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     if (effectiveAvatarUrl !== undefined) {
@@ -73,8 +91,29 @@ export function AvatarUpload({
     ? "AD"
     : "ST";
 
+  // Calculate pan boundaries so the image cannot be dragged completely outside the crop frame
+  const clampPan = useCallback(
+    (newX: number, newY: number, currentZoom: number, meta = imageMeta) => {
+      if (!meta) return { x: 0, y: 0 };
+
+      const renderedW = meta.naturalWidth * meta.fitScale * currentZoom;
+      const renderedH = meta.naturalHeight * meta.fitScale * currentZoom;
+
+      // Allow dragging with a margin so any edge can reach the circle center,
+      // but the image can never disappear from the aperture.
+      const maxPanX = Math.max(0, (renderedW - CROP_DIAMETER) / 2) + CROP_RADIUS * 0.75;
+      const maxPanY = Math.max(0, (renderedH - CROP_DIAMETER) / 2) + CROP_RADIUS * 0.75;
+
+      return {
+        x: Math.max(-maxPanX, Math.min(maxPanX, newX)),
+        y: Math.max(-maxPanY, Math.min(maxPanY, newY)),
+      };
+    },
+    [imageMeta]
+  );
+
   const handleFileSelected = (file: File) => {
-    // 1. Validate file size
+    // 1. Validate file size (max 5 MB)
     if (file.size > UPLOAD_LIMITS.IMAGE.MAX_SIZE_BYTES) {
       toast.error(
         `Selected file exceeds maximum allowed size of ${UPLOAD_LIMITS.IMAGE.MAX_SIZE_LABEL}`
@@ -90,14 +129,33 @@ export function AvatarUpload({
       return;
     }
 
-    // 3. Load image for square cropping modal
+    // 3. Load image & compute initial natural containment scale
     const reader = new FileReader();
     reader.onload = (e) => {
       if (e.target?.result) {
-        setRawImageSrc(e.target.result as string);
-        setZoom(1);
-        setPan({ x: 0, y: 0 });
-        setCropModalOpen(true);
+        const dataUrl = e.target.result as string;
+        const img = new Image();
+        img.onload = () => {
+          const nw = img.naturalWidth;
+          const nh = img.naturalHeight;
+
+          // Natural fit scale: scale so entire image fits completely inside the crop circle
+          const scaleToFitCircle = Math.min(CROP_DIAMETER / nw, CROP_DIAMETER / nh);
+          const isSmall = nw < CROP_DIAMETER && nh < CROP_DIAMETER;
+
+          setImageMeta({
+            naturalWidth: nw,
+            naturalHeight: nh,
+            fitScale: scaleToFitCircle,
+            isSmall,
+          });
+
+          setRawImageSrc(dataUrl);
+          setZoom(1); // 100% of contained fit
+          setPan({ x: 0, y: 0 }); // Centered
+          setCropModalOpen(true);
+        };
+        img.src = dataUrl;
       }
     };
     reader.readAsDataURL(file);
@@ -108,13 +166,12 @@ export function AvatarUpload({
     if (file) {
       handleFileSelected(file);
     }
-    // Reset input value so re-selecting same file triggers onChange
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
-  // Drag and drop handlers
+  // Drag and drop into avatar circle
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -138,70 +195,133 @@ export function AvatarUpload({
     }
   };
 
-  // Panning inside cropper
+  // Mouse pan handlers
   const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
     setIsPanning(true);
     setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isPanning) return;
-    setPan({
-      x: e.clientX - dragStart.x,
-      y: e.clientY - dragStart.y,
-    });
+    const nextPan = clampPan(e.clientX - dragStart.x, e.clientY - dragStart.y, zoom);
+    setPan(nextPan);
   };
 
   const handleMouseUp = () => {
     setIsPanning(false);
   };
 
-  // Perform square crop on canvas and upload
+  // Touch pan & pinch-zoom handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      setIsPanning(true);
+      const touch = e.touches[0];
+      setDragStart({ x: touch.clientX - pan.x, y: touch.clientY - pan.y });
+    } else if (e.touches.length === 2) {
+      setIsPanning(false);
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      pinchRef.current = { initialDist: dist, initialZoom: zoom };
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 1 && isPanning) {
+      const touch = e.touches[0];
+      const nextPan = clampPan(touch.clientX - dragStart.x, touch.clientY - dragStart.y, zoom);
+      setPan(nextPan);
+    } else if (e.touches.length === 2 && pinchRef.current) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const factor = dist / pinchRef.current.initialDist;
+      const newZoom = Math.min(3.5, Math.max(1, pinchRef.current.initialZoom * factor));
+      setZoom(newZoom);
+      setPan((prev) => clampPan(prev.x, prev.y, newZoom));
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsPanning(false);
+    pinchRef.current = null;
+  };
+
+  // Scroll wheel zoom handler
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const zoomDelta = e.deltaY < 0 ? 0.05 : -0.05;
+    setZoom((prevZoom) => {
+      const nextZoom = Math.min(3.5, Math.max(1, Number((prevZoom + zoomDelta).toFixed(2))));
+      setPan((prevPan) => clampPan(prevPan.x, prevPan.y, nextZoom));
+      return nextZoom;
+    });
+  };
+
+  // Zoom button steppers
+  const handleStepZoom = (delta: number) => {
+    setZoom((prev) => {
+      const next = Math.min(3.5, Math.max(1, Number((prev + delta).toFixed(2))));
+      setPan((prevPan) => clampPan(prevPan.x, prevPan.y, next));
+      return next;
+    });
+  };
+
+  // Reset to natural contain fit
+  const handleResetCrop = () => {
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+  };
+
+  // Mathematical WYSIWYG Canvas Export
   const applyCropAndUpload = useCallback(async () => {
-    if (!rawImageSrc || !imageRef.current) return;
+    if (!rawImageSrc || !imageMeta || !imageElementRef.current) return;
 
     try {
       setIsUploading(true);
-      const img = imageRef.current;
+      const img = imageElementRef.current;
 
-      const canvasSize = 512;
       const canvas = document.createElement("canvas");
-      canvas.width = canvasSize;
-      canvas.height = canvasSize;
+      canvas.width = EXPORT_CANVAS_SIZE;
+      canvas.height = EXPORT_CANVAS_SIZE;
       const ctx = canvas.getContext("2d");
 
       if (!ctx) {
         throw new Error("Unable to initialize canvas context");
       }
 
-      // Fill background
+      // Neutral background (white default before WebP encoding)
       ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, canvasSize, canvasSize);
+      ctx.fillRect(0, 0, EXPORT_CANVAS_SIZE, EXPORT_CANVAS_SIZE);
 
-      // The crop preview area in UI is 280x280 px
-      const cropAreaSize = 280;
-      const scaleToCanvas = canvasSize / cropAreaSize;
+      // Multiplier from UI crop diameter to export canvas diameter:
+      // M = 512 / 240
+      const M = EXPORT_CANVAS_SIZE / CROP_DIAMETER;
+
+      // In UI, rendered size is: (naturalWidth * fitScale * zoom)
+      // On canvas, rendered size is: (renderedW * M)
+      const canvasRenderedW = imageMeta.naturalWidth * imageMeta.fitScale * zoom * M;
+      const canvasRenderedH = imageMeta.naturalHeight * imageMeta.fitScale * zoom * M;
+
+      // In UI, the crop circle center is (VIEWPORT_SIZE / 2, VIEWPORT_SIZE / 2)
+      // and the image center is offset by (pan.x, pan.y).
+      // On canvas, the crop center is (EXPORT_CANVAS_SIZE / 2, EXPORT_CANVAS_SIZE / 2).
+      const canvasCenterX = EXPORT_CANVAS_SIZE / 2 + pan.x * M;
+      const canvasCenterY = EXPORT_CANVAS_SIZE / 2 + pan.y * M;
+
+      const drawX = canvasCenterX - canvasRenderedW / 2;
+      const drawY = canvasCenterY - canvasRenderedH / 2;
 
       ctx.save();
-      ctx.translate(canvasSize / 2, canvasSize / 2);
-      ctx.scale(zoom * scaleToCanvas, zoom * scaleToCanvas);
-      ctx.translate(pan.x / zoom, pan.y / zoom);
+      // Anti-aliasing quality settings
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
 
-      // Draw image centered
-      const drawWidth = img.naturalWidth;
-      const drawHeight = img.naturalHeight;
-      const baseScale = Math.max(cropAreaSize / drawWidth, cropAreaSize / drawHeight);
-
-      ctx.drawImage(
-        img,
-        (-drawWidth * baseScale) / 2,
-        (-drawHeight * baseScale) / 2,
-        drawWidth * baseScale,
-        drawHeight * baseScale
-      );
+      ctx.drawImage(img, drawX, drawY, canvasRenderedW, canvasRenderedH);
       ctx.restore();
 
-      // Convert canvas to blob
+      // Convert canvas to blob (WebP format)
       const blob = await new Promise<Blob | null>((resolve) =>
         canvas.toBlob((b) => resolve(b), "image/webp", 0.95)
       );
@@ -229,6 +349,7 @@ export function AvatarUpload({
       setAvatarPreview(newAvatarUrl);
       setCropModalOpen(false);
       setRawImageSrc(null);
+      setImageMeta(null);
 
       // Synchronize with NextAuth session
       await updateSession({ avatar: newAvatarUrl });
@@ -244,7 +365,7 @@ export function AvatarUpload({
     } finally {
       setIsUploading(false);
     }
-  }, [rawImageSrc, zoom, pan, role, updateSession, onAvatarUpdated]);
+  }, [rawImageSrc, imageMeta, zoom, pan, role, updateSession, onAvatarUpdated]);
 
   // Remove avatar handler
   const handleRemoveAvatar = async () => {
@@ -277,6 +398,10 @@ export function AvatarUpload({
       setIsRemoving(false);
     }
   };
+
+  // Rendered dimensions in preview viewport
+  const renderedW = imageMeta ? imageMeta.naturalWidth * imageMeta.fitScale * zoom : 0;
+  const renderedH = imageMeta ? imageMeta.naturalHeight * imageMeta.fitScale * zoom : 0;
 
   return (
     <div className={`space-y-4 ${className}`}>
@@ -323,6 +448,7 @@ export function AvatarUpload({
             disabled={isUploading || isRemoving}
             className="absolute inset-0 bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1 cursor-pointer disabled:pointer-events-none"
             title="Upload or change profile photo"
+            aria-label="Upload or change profile photo"
           >
             <Camera className="w-5 h-5" />
             <span className="text-[10px] font-medium tracking-wide">Change</span>
@@ -371,19 +497,24 @@ export function AvatarUpload({
       </div>
 
       {/* ====================================================================
-          Square Cropping & Positioning Modal
+          Square Cropping & Positioning Modal (Zero-Zoom Contained)
           ==================================================================== */}
-      {cropModalOpen && rawImageSrc && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in-0 duration-200">
+      {cropModalOpen && rawImageSrc && imageMeta && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-in fade-in-0 duration-200"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="crop-modal-title"
+        >
           <div
-            className="w-full max-w-md bg-card border border-border rounded-3xl p-6 shadow-2xl space-y-5"
+            className="w-full max-w-md bg-card border border-border rounded-3xl p-5 sm:p-6 shadow-2xl space-y-4 max-h-[95vh] overflow-y-auto"
             onMouseUp={handleMouseUp}
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-3 border-b border-border">
               <div className="flex items-center gap-2">
                 <ImageIcon className="w-4 h-4 text-primary" />
-                <h3 className="text-sm font-bold text-foreground">
+                <h3 id="crop-modal-title" className="text-sm font-bold text-foreground">
                   Crop & Align Profile Photo
                 </h3>
               </div>
@@ -392,75 +523,176 @@ export function AvatarUpload({
                 onClick={() => {
                   setCropModalOpen(false);
                   setRawImageSrc(null);
+                  setImageMeta(null);
                 }}
                 className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+                aria-label="Close modal"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
+            {/* Instruction Tip */}
+            <p className="text-xs text-muted-foreground text-center">
+              Drag to center your face inside the circle. The whole image is visible at 100%.
+            </p>
+
             {/* Cropping Viewport Container (280x280) */}
             <div className="flex justify-center">
               <div
-                className="relative w-[280px] h-[280px] rounded-2xl overflow-hidden bg-black/90 border border-border flex items-center justify-center cursor-move select-none"
+                className="relative rounded-2xl overflow-hidden bg-muted/60 border border-border flex items-center justify-center cursor-grab active:cursor-grabbing select-none touch-none shadow-inner"
+                style={{
+                  width: `${VIEWPORT_SIZE}px`,
+                  height: `${VIEWPORT_SIZE}px`,
+                }}
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                onWheel={handleWheel}
               >
-                {/* Image Under Test */}
+                {/* Image Element positioned and sized proportionally */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  ref={imageRef}
+                  ref={imageElementRef}
                   src={rawImageSrc}
                   alt="Crop preview"
                   draggable={false}
-                  className="max-w-none transition-transform duration-75 origin-center pointer-events-none"
+                  className="max-w-none pointer-events-none transition-transform duration-75 origin-center select-none"
                   style={{
-                    transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+                    width: `${renderedW}px`,
+                    height: `${renderedH}px`,
+                    transform: `translate(${pan.x}px, ${pan.y}px)`,
                   }}
                 />
 
-                {/* Circular Crop Guide Mask */}
-                <div
-                  className="absolute inset-0 pointer-events-none rounded-full border-2 border-primary/90 shadow-[0_0_0_9999px_rgba(0,0,0,0.65)]"
-                  style={{
-                    width: "240px",
-                    height: "240px",
-                    margin: "auto",
-                  }}
-                />
+                {/* SVG Dimmed Cutout Mask with Crisp Circular Guide Ring */}
+                <svg
+                  className="absolute inset-0 pointer-events-none"
+                  width={VIEWPORT_SIZE}
+                  height={VIEWPORT_SIZE}
+                  viewBox={`0 0 ${VIEWPORT_SIZE} ${VIEWPORT_SIZE}`}
+                >
+                  <defs>
+                    <mask id="itt-circle-cutout">
+                      {/* White reveals the dark mask */}
+                      <rect width="100%" height="100%" fill="white" />
+                      {/* Black punches the transparent hole */}
+                      <circle
+                        cx={VIEWPORT_SIZE / 2}
+                        cy={VIEWPORT_SIZE / 2}
+                        r={CROP_RADIUS}
+                        fill="black"
+                      />
+                    </mask>
+                  </defs>
+
+                  {/* Dimmed background overlay outside circle */}
+                  <rect
+                    width="100%"
+                    height="100%"
+                    fill="black"
+                    fillOpacity="0.65"
+                    mask="url(#itt-circle-cutout)"
+                  />
+
+                  {/* Circular guide border */}
+                  <circle
+                    cx={VIEWPORT_SIZE / 2}
+                    cy={VIEWPORT_SIZE / 2}
+                    r={CROP_RADIUS}
+                    fill="none"
+                    stroke="var(--color-primary, #10b981)"
+                    strokeWidth="2"
+                    strokeDasharray="none"
+                    opacity="0.9"
+                  />
+                </svg>
               </div>
             </div>
 
-            {/* Zoom Slider Control */}
-            <div className="space-y-1.5 px-2">
+            {/* Zoom Controls Bar */}
+            <div className="space-y-2 px-1">
               <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
                 <span className="flex items-center gap-1">
                   <ZoomOut className="w-3.5 h-3.5" />
-                  <span>Zoom</span>
+                  <span>Zoom Scale</span>
                 </span>
-                <span>{Math.round(zoom * 100)}%</span>
+                <span className="font-semibold text-foreground">
+                  {Math.round(zoom * 100)}%
+                </span>
               </div>
-              <div className="flex items-center gap-3">
+
+              <div className="flex items-center gap-2">
+                {/* Step Out Button */}
+                <button
+                  type="button"
+                  onClick={() => handleStepZoom(-0.1)}
+                  disabled={zoom <= 1}
+                  className="w-8 h-8 rounded-lg bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/80 flex items-center justify-center transition-colors disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                  title="Zoom out"
+                  aria-label="Zoom out"
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                </button>
+
+                {/* Smooth Slider */}
                 <input
                   type="range"
                   min="1"
-                  max="3"
-                  step="0.05"
+                  max="3.5"
+                  step="0.02"
                   value={zoom}
-                  onChange={(e) => setZoom(parseFloat(e.target.value))}
-                  className="w-full accent-primary h-1.5 bg-muted rounded-lg appearance-none cursor-pointer"
+                  onChange={(e) => {
+                    const nextZoom = parseFloat(e.target.value);
+                    setZoom(nextZoom);
+                    setPan((prev) => clampPan(prev.x, prev.y, nextZoom));
+                  }}
+                  className="w-full accent-primary h-1.5 bg-muted rounded-lg appearance-none cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+                  aria-label="Zoom scale"
                 />
-                <ZoomIn className="w-4 h-4 text-muted-foreground shrink-0" />
+
+                {/* Step In Button */}
+                <button
+                  type="button"
+                  onClick={() => handleStepZoom(0.1)}
+                  disabled={zoom >= 3.5}
+                  className="w-8 h-8 rounded-lg bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/80 flex items-center justify-center transition-colors disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                  title="Zoom in"
+                  aria-label="Zoom in"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                </button>
+
+                {/* Reset Button */}
+                <button
+                  type="button"
+                  onClick={handleResetCrop}
+                  className="px-2.5 h-8 rounded-lg bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/80 flex items-center gap-1 text-[11px] font-medium transition-colors cursor-pointer shrink-0"
+                  title="Reset to 100% full view"
+                  aria-label="Reset zoom and position"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Reset</span>
+                </button>
               </div>
+
+              {imageMeta.isSmall && (
+                <p className="text-[11px] text-muted-foreground text-center italic pt-0.5">
+                  Notice: Image dimensions are smaller than frame. Zoom in if you wish to enlarge.
+                </p>
+              )}
             </div>
 
             {/* Modal Action Buttons */}
-            <div className="flex items-center justify-end gap-3 pt-2 border-t border-border">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
               <button
                 type="button"
                 onClick={() => {
                   setCropModalOpen(false);
                   setRawImageSrc(null);
+                  setImageMeta(null);
                 }}
                 disabled={isUploading}
                 className="px-4 py-2 rounded-xl bg-muted text-foreground text-xs font-medium hover:bg-muted/80 transition-colors cursor-pointer"

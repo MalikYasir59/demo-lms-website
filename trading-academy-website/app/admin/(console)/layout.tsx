@@ -47,7 +47,7 @@ export default function AdminConsoleLayout({ children }: AdminLayoutProps) {
   const { data: session } = useSession();
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row relative selection:bg-primary/25 selection:text-foreground">
+    <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row relative selection:bg-primary/25 selection:text-foreground">
       {/* Reusable AppSidebar for Admin */}
       <AppSidebar
         role="admin"
@@ -75,9 +75,9 @@ export default function AdminConsoleLayout({ children }: AdminLayoutProps) {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-h-screen min-w-0">
+      <div className="flex-1 flex flex-col min-h-screen min-w-0 transition-all duration-300">
         {/* Desktop Topbar */}
-        <header className="hidden md:flex items-center justify-between px-8 py-3.5 bg-background/80 backdrop-blur-md border-b border-border sticky top-0 z-20">
+        <header className="hidden lg:flex items-center justify-between px-8 py-3.5 bg-background/80 backdrop-blur-md border-b border-border sticky top-0 z-20">
           <div className="flex items-center gap-3">
             <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider font-semibold">
               Admin Terminal
