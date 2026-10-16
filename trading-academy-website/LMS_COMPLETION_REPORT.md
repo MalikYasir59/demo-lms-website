@@ -316,3 +316,11 @@ If unlisted video footage is detected online:
 - **Single-Device Enforcement:** Verified via session identifier (`sid`) validation on every heartbeat and mutation.
 
 **The Institute of Trading Tricks LMS is code-complete, verified, and ready for deployment.**
+
+
+#### Email:       student@tradingtricks.institute
+#### Password:    StudentPassword123!
+
+
+#### Email:       admin@tradingtricks.institute
+#### Password:    AdminPassword123!
