@@ -101,15 +101,29 @@ export const createModuleSchema = z.object({
 
 export const updateModuleSchema = createModuleSchema.partial();
 
+// Lecture Resource Schema
+export const lectureResourceSchema = z.object({
+  _id: z.string().optional(),
+  title: z.string().trim().min(1, "Resource title is required"),
+  fileKey: z.string().trim().min(1, "File key is required"),
+  originalName: z.string().default(""),
+  storedName: z.string().default(""),
+  mime: z.string().default("application/pdf"),
+  size: z.coerce.number().default(0),
+  uploadedAt: z.coerce.date().optional(),
+});
+
 // Lecture Schemas
 export const createLectureSchema = z.object({
   moduleId: objectIdSchema,
   title: z.string().trim().min(2, "Lecture title is required").max(160),
   description: z.string().trim().max(5000).default(""),
+  notesHtml: z.string().default(""),
   order: z.coerce.number().default(0),
   status: z.enum(Object.values(LECTURE_STATUS) as [string, ...string[]]).default("draft"),
   videoUrlOrId: z.string().trim().min(1, "YouTube video link or ID is required"),
   durationSec: z.coerce.number().default(0),
+  resources: z.array(lectureResourceSchema).default([]),
   drip: z
     .object({
       unlockAfterDays: z.coerce.number().nullable().optional(),

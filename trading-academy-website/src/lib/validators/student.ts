@@ -47,8 +47,10 @@ export const createStudentSchema = z.object({
 export type CreateStudentInput = z.infer<typeof createStudentSchema>;
 
 export const updateStudentSchema = z.object({
-  name: z.string().trim().min(2).max(120).optional(),
+  name: z.string().trim().min(2, "Name must be at least 2 characters").max(120).optional(),
+  email: z.string().trim().email("Invalid email address").toLowerCase().optional(),
   phone: phoneSchema,
+  status: z.enum([USER_STATUS.ACTIVE, USER_STATUS.INACTIVE, USER_STATUS.SUSPENDED]).optional(),
   profile: z
     .object({
       dob: z.coerce.date().optional(),

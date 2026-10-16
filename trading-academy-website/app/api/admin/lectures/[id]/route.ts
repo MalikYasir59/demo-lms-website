@@ -1,9 +1,18 @@
 import { withApi } from "@/lib/api";
 import { getIp } from "@/lib/auth";
 import { updateLectureSchema } from "@/lib/validators/course";
-import { updateLecture, deleteLecture } from "@/services/course.service";
+import { getLectureById, updateLecture, deleteLecture } from "@/services/course.service";
 
 export const dynamic = "force-dynamic";
+
+export const GET = withApi(
+  {
+    role: "admin",
+  },
+  async ({ params }) => {
+    return await getLectureById(params.id);
+  }
+);
 
 export const PATCH = withApi(
   {

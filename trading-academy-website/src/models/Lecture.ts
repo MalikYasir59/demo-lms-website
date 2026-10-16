@@ -31,6 +31,10 @@ const LectureSchema = new Schema<ILectureDocument>(
       maxlength: 5000,
       default: "",
     },
+    notesHtml: {
+      type: String,
+      default: "",
+    },
     order: {
       type: Number,
       required: true,
@@ -85,8 +89,11 @@ const LectureSchema = new Schema<ILectureDocument>(
       {
         title: { type: String, required: true },
         fileKey: { type: String, required: true },
+        originalName: { type: String, default: "" },
+        storedName: { type: String, default: "" },
         mime: { type: String, default: "application/pdf" },
         size: { type: Number, default: 0 },
+        uploadedAt: { type: Date, default: Date.now },
       },
     ],
     drip: {

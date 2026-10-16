@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { connectToDatabase } from "@/lib/db";
-import { User, IUserDocument } from "@/models/User";
+import { User } from "@/models/User";
 import { AuthSession } from "@/models/AuthSession";
 import { recordAuditLog } from "./audit.service";
 import { ApiError } from "@/lib/errors";
@@ -253,11 +253,42 @@ export async function updateStudent(
   if (data.phone !== undefined) student.phone = data.phone;
   if (data.adminNotes !== undefined) student.adminNotes = data.adminNotes;
 
+  if (data.email !== undefined) {
+    const newEmail = data.email.trim().toLowerCase();
+    if (newEmail !== student.email) {
+      const existing = await User.findOne({
+        email: newEmail,
+        _id: { $ne: id },
+      });
+      if (existing) {
+        throw ApiError.conflict("An account with this email address already exists.");
+      }
+      student.email = newEmail;
+    }
+  }
+
+  if (data.status !== undefined && data.status !== student.status) {
+    student.status = data.status;
+    if (data.status !== USER_STATUS.ACTIVE) {
+      await AuthSession.updateMany(
+        { userId: id, revokedAt: null },
+        {
+          $set: {
+            revokedAt: new Date(),
+            revokedReason: REVOKED_REASONS.ADMIN,
+          },
+        }
+      );
+    }
+  }
+
   if (data.profile) {
+    const p = data.profile;
     student.profile = {
       ...student.profile,
-      ...data.profile,
-      tags: data.profile.tags || student.profile?.tags || [],
+      ...p,
+      dob: p.dob ? new Date(p.dob) : student.profile?.dob,
+      tags: p.tags || student.profile?.tags || [],
     };
   }
 
@@ -269,12 +300,50 @@ export async function updateStudent(
     entityType: "user",
     entityId: student._id.toString(),
     summary: `Updated profile for student ${student.name} (${student.studentCode})`,
-    before: { name: before.name, phone: before.phone, profile: before.profile },
-    after: { name: student.name, phone: student.phone, profile: student.profile },
+    before: { name: before.name, email: before.email, phone: before.phone, status: before.status, profile: before.profile },
+    after: { name: student.name, email: student.email, phone: student.phone, status: student.status, profile: student.profile },
     ip,
   });
 
   return student.toObject();
+}
+
+export async function unlockStudentSecurity(
+  id: string,
+  actorId: string,
+  ip = "127.0.0.1"
+) {
+  await connectToDatabase();
+
+  const student = await User.findOne({
+    _id: id,
+    role: ROLES.STUDENT,
+    deletedAt: null,
+  });
+
+  if (!student) {
+    throw ApiError.notFound("Student not found");
+  }
+
+  student.security = {
+    failedLogins: 0,
+    strikes: 0,
+    securityLocked: false,
+    lockedUntil: null,
+  };
+
+  await student.save();
+
+  await recordAuditLog({
+    actorId,
+    action: "student.security_unlock",
+    entityType: "user",
+    entityId: student._id.toString(),
+    summary: `Manually reset security lock and cleared strikes for ${student.name} (${student.studentCode})`,
+    ip,
+  });
+
+  return { ok: true, message: "Security lock reset and strikes cleared." };
 }
 
 export async function softDeleteStudent(

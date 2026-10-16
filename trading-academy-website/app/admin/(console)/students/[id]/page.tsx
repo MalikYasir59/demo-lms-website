@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowLeft,
   Key,
@@ -18,15 +20,37 @@ import {
   AlertTriangle,
   Loader2,
   Lock,
-  Edit2,
+  Unlock,
   Save,
   Plus,
   Calendar,
   Clock,
   X,
+  RotateCcw,
+  Tag,
+  AlertOctagon,
+  Search,
+  Filter,
 } from "lucide-react";
 import { toast } from "sonner";
 import { IUser, IAuthSession, ICourse } from "@/types/lms";
+import { updateStudentSchema, UpdateStudentInput } from "@/lib/validators/student";
+import { USER_STATUS } from "@/lib/constants";
+
+interface SecurityEventsResponse {
+  events: any[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  securitySummary: {
+    strikes: number;
+    securityLocked: boolean;
+    failedLogins: number;
+    lockedUntil: string | null;
+  };
+  auditLogs: any[];
+}
 
 export default function StudentDetailPage() {
   const params = useParams();
@@ -37,14 +61,12 @@ export default function StudentDetailPage() {
   const [activeTab, setActiveTab] = useState<"overview" | "enrollments" | "sessions" | "audit">("overview");
   const [copiedCode, setCopiedCode] = useState(false);
   const [isResetOpen, setIsResetOpen] = useState(false);
+  const [isUnlockOpen, setIsUnlockOpen] = useState(false);
   const [temporaryPasswordNotice, setTemporaryPasswordNotice] = useState<string | null>(null);
-
-  // Editable Admin Notes state
-  const [isEditingNotes, setIsEditingNotes] = useState(false);
-  const [adminNotesText, setAdminNotesText] = useState("");
 
   // Enrollment modals state
   const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+  const [courseSearchQuery, setCourseSearchQuery] = useState("");
   const [enrollForm, setEnrollForm] = useState({
     courseId: "",
     startsAt: new Date().toISOString().split("T")[0],
@@ -56,6 +78,12 @@ export default function StudentDetailPage() {
   const [editExpiresAt, setEditExpiresAt] = useState("");
   const [editStatus, setEditStatus] = useState("active");
 
+  // Security tab filters
+  const [securitySeverity, setSecuritySeverity] = useState("all");
+  const [securityPage, setSecurityPage] = useState(1);
+
+  // New tag input state
+  const [newTagInput, setNewTagInput] = useState("");
 
   // Fetch Student Data
   const { data: student, isLoading } = useQuery<IUser>({
@@ -64,10 +92,129 @@ export default function StudentDetailPage() {
       const res = await fetch(`/api/admin/students/${studentId}`);
       if (!res.ok) throw new Error("Failed to load student details");
       const json = await res.json();
-      setAdminNotesText(json.data.adminNotes || "");
       return json.data;
     },
   });
+
+  // Setup React Hook Form
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { errors, isDirty, isSubmitting },
+  } = useForm<UpdateStudentInput>({
+    resolver: zodResolver(updateStudentSchema) as any,
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      status: USER_STATUS.ACTIVE,
+      adminNotes: "",
+      profile: {
+        idNumber: "",
+        gender: "",
+        dob: undefined,
+        education: "",
+        occupation: "",
+        experienceLevel: "beginner",
+        source: "",
+        tags: [],
+        address: {
+          line1: "",
+          line2: "",
+          city: "",
+          state: "",
+          country: "Pakistan",
+          postalCode: "",
+        },
+        emergencyContact: {
+          name: "",
+          phone: "",
+          relation: "",
+        },
+      },
+    },
+  });
+
+  // Reset form with student data when loaded
+  useEffect(() => {
+    if (student) {
+      reset({
+        name: student.name || "",
+        email: student.email || "",
+        phone: student.phone || "",
+        status: (student.status as any) || USER_STATUS.ACTIVE,
+        adminNotes: student.adminNotes || "",
+        profile: {
+          idNumber: student.profile?.idNumber || "",
+          gender: student.profile?.gender || "",
+          dob: student.profile?.dob ? new Date(student.profile.dob) : undefined,
+          education: student.profile?.education || "",
+          occupation: student.profile?.occupation || "",
+          experienceLevel: (student.profile?.experienceLevel as any) || "beginner",
+          source: student.profile?.source || "",
+          tags: student.profile?.tags || [],
+          address: {
+            line1: student.profile?.address?.line1 || "",
+            line2: student.profile?.address?.line2 || "",
+            city: student.profile?.address?.city || "",
+            state: student.profile?.address?.state || "",
+            country: student.profile?.address?.country || "Pakistan",
+            postalCode: student.profile?.address?.postalCode || "",
+          },
+          emergencyContact: {
+            name: student.profile?.emergencyContact?.name || "",
+            phone: student.profile?.emergencyContact?.phone || "",
+            relation: student.profile?.emergencyContact?.relation || "",
+          },
+        },
+      });
+    }
+  }, [student, reset]);
+
+  const currentTags = watch("profile.tags") || [];
+
+  const handleAddTag = () => {
+    const trimmed = newTagInput.trim();
+    if (trimmed && !currentTags.includes(trimmed)) {
+      setValue("profile.tags", [...currentTags, trimmed], { shouldDirty: true });
+      setNewTagInput("");
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setValue(
+      "profile.tags",
+      currentTags.filter((t) => t !== tagToRemove),
+      { shouldDirty: true }
+    );
+  };
+
+  // Student Update Mutation
+  const updateStudentMutation = useMutation({
+    mutationFn: async (data: UpdateStudentInput) => {
+      const res = await fetch(`/api/admin/students/${studentId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error?.message || "Failed to update student profile");
+      return json.data;
+    },
+    onSuccess: (updatedData) => {
+      toast.success("Student profile saved successfully");
+      queryClient.setQueryData(["admin_student_detail", studentId], updatedData);
+      reset(updatedData);
+    },
+    onError: (err: Error) => toast.error(err.message),
+  });
+
+  const onSubmit = (data: UpdateStudentInput) => {
+    updateStudentMutation.mutate(data);
+  };
 
   // Fetch Student Sessions
   const { data: sessions, isLoading: sessionsLoading } = useQuery<IAuthSession[]>({
@@ -93,8 +240,8 @@ export default function StudentDetailPage() {
     enabled: activeTab === "enrollments",
   });
 
-  // Fetch Courses for Enrollment Dropdown
-  const { data: coursesData } = useQuery<{ courses: ICourse[] }>({
+  // Fetch Courses for Enrollment Dropdown (Fixed bug: reading items)
+  const { data: coursesData } = useQuery<{ items: ICourse[]; courses?: ICourse[] }>({
     queryKey: ["admin_courses_select"],
     queryFn: async () => {
       const res = await fetch(`/api/admin/courses?limit=100`);
@@ -103,6 +250,60 @@ export default function StudentDetailPage() {
       return json.data;
     },
     enabled: isEnrollModalOpen,
+  });
+
+  // Normalized courses list
+  const availableCourses = useMemo(() => {
+    const list = coursesData?.items || coursesData?.courses || [];
+    const enrolledCourseIds = new Set(
+      (enrollments || []).map((e: any) =>
+        typeof e.courseId === "object" ? e.courseId?._id?.toString() : e.courseId?.toString()
+      )
+    );
+
+    return list.filter((c: ICourse) => {
+      const id = c._id.toString();
+      const notEnrolled = !enrolledCourseIds.has(id);
+      const matchesSearch = courseSearchQuery
+        ? c.title.toLowerCase().includes(courseSearchQuery.toLowerCase())
+        : true;
+      return notEnrolled && matchesSearch;
+    });
+  }, [coursesData, enrollments, courseSearchQuery]);
+
+  // Fetch Security Events & Audit Logs
+  const {
+    data: securityData,
+    isLoading: securityLoading,
+  } = useQuery<SecurityEventsResponse>({
+    queryKey: ["admin_student_security", studentId, securitySeverity, securityPage],
+    queryFn: async () => {
+      const url = `/api/admin/students/${studentId}/security-events?severity=${securitySeverity}&page=${securityPage}&limit=15`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Failed to load security logs");
+      const json = await res.json();
+      return json.data;
+    },
+    enabled: activeTab === "audit",
+  });
+
+  // Security Unlock Mutation
+  const unlockMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/admin/students/${studentId}/security/unlock`, {
+        method: "POST",
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error?.message || "Failed to unlock account");
+      return json.data;
+    },
+    onSuccess: () => {
+      toast.success("Security lock reset and strikes cleared");
+      setIsUnlockOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["admin_student_detail", studentId] });
+      queryClient.invalidateQueries({ queryKey: ["admin_student_security", studentId] });
+    },
+    onError: (err: Error) => toast.error(err.message),
   });
 
   // Enroll Mutation
@@ -127,6 +328,7 @@ export default function StudentDetailPage() {
         isLifetime: true,
         note: "",
       });
+      setCourseSearchQuery("");
       queryClient.invalidateQueries({ queryKey: ["admin_student_enrollments", studentId] });
       queryClient.invalidateQueries({ queryKey: ["admin_student_detail", studentId] });
     },
@@ -220,26 +422,6 @@ export default function StudentDetailPage() {
     onError: (err: Error) => toast.error(err.message),
   });
 
-  // Update Notes Mutation
-  const updateNotesMutation = useMutation({
-    mutationFn: async () => {
-      const res = await fetch(`/api/admin/students/${studentId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ adminNotes: adminNotesText }),
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error?.message || "Update failed");
-      return json.data;
-    },
-    onSuccess: () => {
-      toast.success("Admin Notes Saved");
-      setIsEditingNotes(false);
-      queryClient.invalidateQueries({ queryKey: ["admin_student_detail", studentId] });
-    },
-    onError: (err: Error) => toast.error(err.message),
-  });
-
   // Revoke Session Mutation
   const revokeSessionMutation = useMutation({
     mutationFn: async (sid?: string) => {
@@ -308,8 +490,10 @@ export default function StudentDetailPage() {
     );
   }
 
+  const isLocked = Boolean(student.security?.securityLocked);
+
   return (
-    <div className="space-y-6 max-w-6xl mx-auto">
+    <div className="space-y-6 max-w-6xl mx-auto pb-12">
       {/* Top Navigation Breadcrumb */}
       <div>
         <Link
@@ -331,12 +515,14 @@ export default function StudentDetailPage() {
             <div className="flex items-center gap-2.5 flex-wrap">
               <h1 className="text-2xl font-bold text-foreground tracking-tight">{student.name}</h1>
               <button
+                type="button"
                 onClick={copyStudentCode}
                 className="px-2.5 py-0.5 rounded-md bg-muted border border-border text-xs font-mono font-semibold text-success flex items-center gap-1 hover:border-success/50 transition-colors cursor-pointer"
               >
                 <span>{student.studentCode || "NO-CODE"}</span>
                 {copiedCode ? <Check className="w-3 h-3 text-success" /> : <Copy className="w-3 h-3 text-muted-foreground" />}
               </button>
+
               <span
                 className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border capitalize ${
                   student.status === "active"
@@ -348,6 +534,13 @@ export default function StudentDetailPage() {
               >
                 {student.status}
               </span>
+
+              {isLocked && (
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-destructive text-destructive-foreground flex items-center gap-1">
+                  <Lock className="w-3 h-3" />
+                  <span>SECURITY LOCKED</span>
+                </span>
+              )}
             </div>
             <div className="text-xs text-muted-foreground mt-1 flex items-center gap-3 flex-wrap">
               <span>{student.email}</span>
@@ -365,7 +558,19 @@ export default function StudentDetailPage() {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+          {isLocked && (
+            <button
+              type="button"
+              onClick={() => setIsUnlockOpen(true)}
+              className="px-3.5 py-2 rounded-xl bg-destructive text-destructive-foreground text-xs font-bold hover:bg-destructive/90 transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer animate-pulse"
+            >
+              <Unlock className="w-3.5 h-3.5" />
+              <span>Unlock Account</span>
+            </button>
+          )}
+
           <button
+            type="button"
             onClick={() => setIsResetOpen(true)}
             className="px-3.5 py-2 rounded-xl bg-card border border-border text-xs font-medium text-warning hover:bg-warning/10 transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
           >
@@ -374,6 +579,7 @@ export default function StudentDetailPage() {
           </button>
 
           <button
+            type="button"
             onClick={() => {
               const target = student.status === "active" ? "suspended" : "active";
               statusMutation.mutate(target);
@@ -385,6 +591,7 @@ export default function StudentDetailPage() {
           </button>
 
           <button
+            type="button"
             onClick={() => {
               if (confirm(`Archive ${student.name}? This will revoke their access.`)) {
                 deleteMutation.mutate();
@@ -398,9 +605,10 @@ export default function StudentDetailPage() {
         </div>
       </div>
 
-      {/* Tabs Bar */}
+      {/* Tabs Navigation Bar */}
       <div className="flex items-center gap-2 border-b border-border pb-1 text-xs font-medium">
         <button
+          type="button"
           onClick={() => setActiveTab("overview")}
           className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 cursor-pointer ${
             activeTab === "overview"
@@ -413,6 +621,7 @@ export default function StudentDetailPage() {
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab("enrollments")}
           className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 cursor-pointer ${
             activeTab === "enrollments"
@@ -425,6 +634,7 @@ export default function StudentDetailPage() {
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab("sessions")}
           className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 cursor-pointer ${
             activeTab === "sessions"
@@ -437,6 +647,7 @@ export default function StudentDetailPage() {
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab("audit")}
           className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 cursor-pointer ${
             activeTab === "audit"
@@ -445,154 +656,377 @@ export default function StudentDetailPage() {
           }`}
         >
           <History className="w-3.5 h-3.5" />
-          <span>Security Audit Log</span>
+          <span>Security & Audit Log</span>
         </button>
       </div>
 
-      {/* TAB CONTENT: Overview */}
+      {/* TAB 1: OVERVIEW & PROFILE FORM */}
       {activeTab === "overview" && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 space-y-6">
-            {/* Personal Details */}
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-xs">
-              <h3 className="text-sm font-bold text-foreground mb-4">Personal & Contact Telemetry</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                <div>
-                  <span className="text-muted-foreground block mb-0.5">Full Name</span>
-                  <span className="text-foreground font-medium">{student.name}</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground block mb-0.5">Email Address</span>
-                  <span className="text-foreground font-mono">{student.email}</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground block mb-0.5">Phone Number</span>
-                  <span className="text-foreground font-mono">{student.phone || "Not provided"}</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground block mb-0.5">Experience Level</span>
-                  <span className="text-success capitalize font-medium">
-                    {student.profile?.experienceLevel || "Beginner"}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground block mb-0.5">CNIC / ID Number</span>
-                  <span className="text-foreground font-mono">{student.profile?.idNumber || "Not recorded"}</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground block mb-0.5">Education / Occupation</span>
-                  <span className="text-foreground">
-                    {[student.profile?.education, student.profile?.occupation].filter(Boolean).join(" • ") || "Not provided"}
-                  </span>
-                </div>
-              </div>
-
-              {student.profile?.address?.city && (
-                <div className="mt-4 pt-4 border-t border-border/60 text-xs">
-                  <span className="text-muted-foreground block mb-0.5">Location</span>
-                  <span className="text-foreground">
-                    {[
-                      student.profile.address.line1,
-                      student.profile.address.city,
-                      student.profile.address.state,
-                      student.profile.address.country,
-                    ]
-                      .filter(Boolean)
-                      .join(", ")}
-                  </span>
-                </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Top Form Actions Header */}
+          <div className="p-4 rounded-2xl bg-card border border-border flex items-center justify-between shadow-xs sticky top-4 z-20 backdrop-blur-md bg-card/95">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-foreground">Edit Student Record</span>
+              {isDirty && (
+                <span className="px-2 py-0.5 rounded-full bg-warning/15 text-warning border border-warning/30 text-[10px] font-bold animate-pulse">
+                  Unsaved Changes
+                </span>
               )}
             </div>
-
-            {/* Admin Notes */}
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-xs">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-bold text-foreground">Administrative Notes</h3>
-                {!isEditingNotes ? (
-                  <button
-                    onClick={() => setIsEditingNotes(true)}
-                    className="text-xs text-primary hover:underline flex items-center gap-1 cursor-pointer"
-                  >
-                    <Edit2 className="w-3 h-3" />
-                    <span>Edit</span>
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => updateNotesMutation.mutate()}
-                    disabled={updateNotesMutation.isPending}
-                    className="px-3 py-1 rounded-lg bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-1 shadow-xs cursor-pointer"
-                  >
-                    <Save className="w-3 h-3" />
-                    <span>Save</span>
-                  </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => reset()}
+                disabled={!isDirty || isSubmitting}
+                className="px-3.5 py-1.5 rounded-xl border border-border text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-40 disabled:pointer-events-none flex items-center gap-1.5 cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Discard</span>
+              </button>
+              <button
+                type="submit"
+                disabled={!isDirty || isSubmitting || updateStudentMutation.isPending}
+                className="px-4 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:pointer-events-none flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                {(isSubmitting || updateStudentMutation.isPending) && (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
                 )}
-              </div>
-
-              {isEditingNotes ? (
-                <textarea
-                  rows={4}
-                  value={adminNotesText}
-                  onChange={(e) => setAdminNotesText(e.target.value)}
-                  className="w-full bg-muted/40 border border-border rounded-xl p-3 text-xs text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
-                  placeholder="Record private administrative notes regarding this student..."
-                />
-              ) : (
-                <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                  {student.adminNotes || "No notes recorded yet."}
-                </p>
-              )}
+                <Save className="w-3.5 h-3.5" />
+                <span>Save Changes</span>
+              </button>
             </div>
           </div>
 
-          {/* Right Column: Security Status Overview */}
-          <div className="space-y-6">
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-xs space-y-4">
-              <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <Shield className="w-4 h-4 text-success" />
-                <span>Security Overview</span>
-              </h3>
-
-              <div className="space-y-3 text-xs">
-                <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/50 border border-border/40">
-                  <span className="text-muted-foreground">Login Count</span>
-                  <span className="text-foreground font-mono font-semibold">{student.loginCount || 0}</span>
-                </div>
-
-                <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/50 border border-border/40">
-                  <span className="text-muted-foreground">Failed Attempts</span>
-                  <span className="text-foreground font-mono font-semibold">
-                    {student.security?.failedLogins || 0} / 5
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/50 border border-border/40">
-                  <span className="text-muted-foreground">Anti-Piracy Strikes</span>
-                  <span className="text-foreground font-mono font-semibold">
-                    {student.security?.strikes || 0} / 3
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/50 border border-border/40">
-                  <span className="text-muted-foreground">Security Lock</span>
-                  <span className={`font-semibold ${student.security?.securityLocked ? "text-destructive" : "text-success"}`}>
-                    {student.security?.securityLocked ? "LOCKED" : "Normal"}
-                  </span>
-                </div>
-
-                <div className="pt-2 text-[11px] text-muted-foreground font-mono space-y-1">
-                  <div>Last IP: {student.lastLoginIp || "Never"}</div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2 space-y-6">
+              {/* Primary Identity & Account Fields */}
+              <div className="p-5 rounded-2xl bg-card border border-border shadow-xs space-y-4">
+                <h3 className="text-sm font-bold text-foreground">Primary Account Information</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                   <div>
-                    Last Login:{" "}
-                    {student.lastLoginAt ? new Date(student.lastLoginAt).toLocaleString() : "Never"}
+                    <label className="block text-foreground font-medium mb-1">Full Name *</label>
+                    <input
+                      type="text"
+                      {...register("name")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+                      placeholder="Student full name"
+                    />
+                    {errors.name && <p className="text-destructive text-[11px] mt-1">{errors.name.message}</p>}
+                  </div>
+
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Email Address *</label>
+                    <input
+                      type="email"
+                      {...register("email")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 font-mono"
+                      placeholder="student@example.com"
+                    />
+                    {errors.email && <p className="text-destructive text-[11px] mt-1">{errors.email.message}</p>}
+                  </div>
+
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Phone Number</label>
+                    <input
+                      type="text"
+                      {...register("phone")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 font-mono"
+                      placeholder="+923001234567"
+                    />
+                    {errors.phone && <p className="text-destructive text-[11px] mt-1">{errors.phone.message}</p>}
+                  </div>
+
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Account Status</label>
+                    <select
+                      {...register("status")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary capitalize"
+                    >
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                      <option value="suspended">Suspended</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">CNIC / National ID</label>
+                    <input
+                      type="text"
+                      {...register("profile.idNumber")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary font-mono"
+                      placeholder="e.g. 42101-1234567-1"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Gender</label>
+                    <select
+                      {...register("profile.gender")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary capitalize"
+                    >
+                      <option value="">-- Not specified --</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Education, Occupation & Experience */}
+              <div className="p-5 rounded-2xl bg-card border border-border shadow-xs space-y-4">
+                <h3 className="text-sm font-bold text-foreground">Background & Profile</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Experience Level</label>
+                    <select
+                      {...register("profile.experienceLevel")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary capitalize"
+                    >
+                      <option value="beginner">Beginner</option>
+                      <option value="intermediate">Intermediate</option>
+                      <option value="advanced">Advanced</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Source / Referral</label>
+                    <input
+                      type="text"
+                      {...register("profile.source")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
+                      placeholder="e.g. YouTube, Instagram, Friend"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Education</label>
+                    <input
+                      type="text"
+                      {...register("profile.education")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
+                      placeholder="e.g. Bachelor in Finance"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Occupation</label>
+                    <input
+                      type="text"
+                      {...register("profile.occupation")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
+                      placeholder="e.g. Business Owner, Trader"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Address Details */}
+              <div className="p-5 rounded-2xl bg-card border border-border shadow-xs space-y-4">
+                <h3 className="text-sm font-bold text-foreground">Address & Location</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div className="sm:col-span-2">
+                    <label className="block text-foreground font-medium mb-1">Address Line 1</label>
+                    <input
+                      type="text"
+                      {...register("profile.address.line1")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
+                      placeholder="House / Flat / Street address"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">City</label>
+                    <input
+                      type="text"
+                      {...register("profile.address.city")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
+                      placeholder="e.g. Lahore, Karachi"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">State / Province</label>
+                    <input
+                      type="text"
+                      {...register("profile.address.state")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
+                      placeholder="e.g. Punjab, Sindh"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Country</label>
+                    <input
+                      type="text"
+                      {...register("profile.address.country")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
+                      placeholder="Pakistan"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Postal Code</label>
+                    <input
+                      type="text"
+                      {...register("profile.address.postalCode")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary font-mono"
+                      placeholder="e.g. 54000"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Emergency Contact */}
+              <div className="p-5 rounded-2xl bg-card border border-border shadow-xs space-y-4">
+                <h3 className="text-sm font-bold text-foreground">Emergency Contact</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Contact Name</label>
+                    <input
+                      type="text"
+                      {...register("profile.emergencyContact.name")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
+                      placeholder="Name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Contact Phone</label>
+                    <input
+                      type="text"
+                      {...register("profile.emergencyContact.phone")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary font-mono"
+                      placeholder="+923000000000"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-foreground font-medium mb-1">Relation</label>
+                    <input
+                      type="text"
+                      {...register("profile.emergencyContact.relation")}
+                      className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2 text-foreground focus:outline-none focus:border-primary"
+                      placeholder="e.g. Father, Brother"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Administrative Notes */}
+              <div className="p-5 rounded-2xl bg-card border border-border shadow-xs space-y-3">
+                <h3 className="text-sm font-bold text-foreground">Administrative Notes (Internal)</h3>
+                <textarea
+                  rows={4}
+                  {...register("adminNotes")}
+                  className="w-full bg-muted/40 border border-border rounded-xl p-3 text-xs text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+                  placeholder="Record confidential notes, batch history, payment verifications..."
+                />
+              </div>
+            </div>
+
+            {/* Sidebar Column: Tags, Read-Only Identifiers & Telemetry */}
+            <div className="space-y-6">
+              {/* Profile Tags */}
+              <div className="p-5 rounded-2xl bg-card border border-border shadow-xs space-y-3">
+                <h3 className="text-sm font-bold text-foreground flex items-center gap-1.5">
+                  <Tag className="w-4 h-4 text-primary" />
+                  <span>Student Tags</span>
+                </h3>
+
+                <div className="flex flex-wrap gap-1.5">
+                  {currentTags.length === 0 ? (
+                    <span className="text-xs text-muted-foreground italic">No tags assigned</span>
+                  ) : (
+                    currentTags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/20 text-primary text-xs font-medium flex items-center gap-1"
+                      >
+                        <span>{tag}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveTag(tag)}
+                          className="hover:text-destructive transition-colors cursor-pointer"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    ))
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2 pt-2 border-t border-border/60">
+                  <input
+                    type="text"
+                    value={newTagInput}
+                    onChange={(e) => setNewTagInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddTag();
+                      }
+                    }}
+                    placeholder="Add a tag..."
+                    className="flex-1 bg-muted/40 border border-border rounded-xl px-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddTag}
+                    className="px-3 py-1.5 rounded-xl bg-muted border border-border text-xs font-semibold text-foreground hover:bg-muted/80 cursor-pointer"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+
+              {/* Security Telemetry Widget */}
+              <div className="p-5 rounded-2xl bg-card border border-border shadow-xs space-y-4">
+                <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-success" />
+                  <span>Security Status</span>
+                </h3>
+
+                <div className="space-y-3 text-xs">
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/50 border border-border/40">
+                    <span className="text-muted-foreground">Account Status</span>
+                    <span className={`font-semibold ${isLocked ? "text-destructive" : "text-success"}`}>
+                      {isLocked ? "LOCKED" : "Normal"}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/50 border border-border/40">
+                    <span className="text-muted-foreground">Failed Attempts</span>
+                    <span className="text-foreground font-mono font-semibold">
+                      {student.security?.failedLogins || 0} / 5
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/50 border border-border/40">
+                    <span className="text-muted-foreground">Anti-Piracy Strikes</span>
+                    <span className={`font-mono font-semibold ${(student.security?.strikes || 0) > 0 ? "text-warning" : "text-foreground"}`}>
+                      {student.security?.strikes || 0} / 3
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/50 border border-border/40">
+                    <span className="text-muted-foreground">Total Logins</span>
+                    <span className="text-foreground font-mono font-semibold">{student.loginCount || 0}</span>
+                  </div>
+
+                  <div className="pt-2 text-[11px] text-muted-foreground font-mono space-y-1">
+                    <div>Last IP: {student.lastLoginIp || "Never"}</div>
+                    <div>
+                      Last Login:{" "}
+                      {student.lastLoginAt ? new Date(student.lastLoginAt).toLocaleString() : "Never"}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </form>
       )}
 
-      {/* TAB CONTENT: Enrollments */}
+      {/* TAB 2: ENROLLMENTS */}
       {activeTab === "enrollments" && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -603,7 +1037,11 @@ export default function StudentDetailPage() {
               </p>
             </div>
             <button
-              onClick={() => setIsEnrollModalOpen(true)}
+              type="button"
+              onClick={() => {
+                setCourseSearchQuery("");
+                setIsEnrollModalOpen(true);
+              }}
               className="px-3.5 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 flex items-center gap-1.5 transition-colors shadow-xs cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
@@ -694,6 +1132,7 @@ export default function StudentDetailPage() {
                           </td>
                           <td className="p-3.5 text-right space-x-2">
                             <button
+                              type="button"
                               onClick={() => {
                                 setEditingEnrollment(en);
                                 setEditExpiresAt(
@@ -707,6 +1146,7 @@ export default function StudentDetailPage() {
                             </button>
                             {en.status !== "revoked" && (
                               <button
+                                type="button"
                                 onClick={() => {
                                   const reason = prompt("Enter revocation reason (shown in audit log):", "Admin discretion");
                                   if (reason) {
@@ -730,13 +1170,23 @@ export default function StudentDetailPage() {
         </div>
       )}
 
-      {/* TAB CONTENT: Sessions & Devices */}
+      {/* TAB 3: SESSIONS & DEVICES */}
       {activeTab === "sessions" && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-foreground">Active & Recent Device Sessions</h3>
+            <div>
+              <h3 className="text-sm font-bold text-foreground">Active & Recent Device Sessions</h3>
+              <p className="text-xs text-muted-foreground">
+                Enforcing strict single-device playback policy. Only 1 session can be active at a time.
+              </p>
+            </div>
             <button
-              onClick={() => revokeSessionMutation.mutate(undefined)}
+              type="button"
+              onClick={() => {
+                if (confirm(`Terminate all active sessions for ${student.name}?`)) {
+                  revokeSessionMutation.mutate(undefined);
+                }
+              }}
               disabled={revokeSessionMutation.isPending}
               className="px-3.5 py-1.5 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-xs font-semibold hover:bg-destructive/20 transition-colors cursor-pointer"
             >
@@ -797,6 +1247,7 @@ export default function StudentDetailPage() {
                           <td className="p-3.5 text-right">
                             {isActive && (
                               <button
+                                type="button"
                                 onClick={() => revokeSessionMutation.mutate(sess.sid)}
                                 className="px-2.5 py-1 rounded-lg bg-destructive/10 text-destructive hover:bg-destructive/20 text-xs font-medium cursor-pointer"
                               >
@@ -815,30 +1266,235 @@ export default function StudentDetailPage() {
         </div>
       )}
 
-      {/* TAB CONTENT: Audit & Security */}
+      {/* TAB 4: SECURITY & AUDIT LOG */}
       {activeTab === "audit" && (
-        <div className="p-6 rounded-2xl bg-card border border-border space-y-4 shadow-xs">
-          <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-            <Lock className="w-4 h-4 text-warning" />
-            <span>Forensic Watermark & Security Profile</span>
-          </h3>
+        <div className="space-y-6">
+          {/* Forensic Watermark & Telemetry Card */}
+          <div className="p-6 rounded-2xl bg-card border border-border space-y-4 shadow-xs">
+            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+              <Lock className="w-4 h-4 text-warning" />
+              <span>Forensic Watermark Profile</span>
+            </h3>
 
-          <div className="p-4 rounded-xl bg-muted/40 border border-border text-xs font-mono text-foreground space-y-2">
-            <div>
-              <span className="text-muted-foreground">Watermark Forensic ID: </span>
-              <span className="text-success font-semibold">{student.studentCode}</span>
+            <div className="p-4 rounded-xl bg-muted/40 border border-border text-xs font-mono text-foreground space-y-2">
+              <div>
+                <span className="text-muted-foreground">Watermark Forensic ID: </span>
+                <span className="text-success font-semibold">{student.studentCode}</span>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Watermark Text: </span>
+                <span className="text-foreground">
+                  {student.name} • {student.email} • {student.phone || "ITT"}
+                </span>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Terms Accepted: </span>
+                <span className="text-foreground">
+                  {student.acceptedTermsAt ? new Date(student.acceptedTermsAt).toISOString() : "Pending First Login"}
+                </span>
+              </div>
             </div>
-            <div>
-              <span className="text-muted-foreground">Watermark Text: </span>
-              <span className="text-foreground">
-                {student.name} • {student.email} • {student.phone || "ITT"}
-              </span>
+          </div>
+
+          {/* Security Events Section */}
+          <div className="p-6 rounded-2xl bg-card border border-border space-y-4 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                  <AlertOctagon className="w-4 h-4 text-destructive" />
+                  <span>Security & Anti-Piracy Incidents</span>
+                </h3>
+                <p className="text-xs text-muted-foreground">
+                  Logged screen captures, devtools detections, token anomalies, and automated locks
+                </p>
+              </div>
+
+              {/* Severity Filter */}
+              <div className="flex items-center gap-2">
+                <Filter className="w-3.5 h-3.5 text-muted-foreground" />
+                <select
+                  value={securitySeverity}
+                  onChange={(e) => {
+                    setSecuritySeverity(e.target.value);
+                    setSecurityPage(1);
+                  }}
+                  className="bg-muted/40 border border-border rounded-xl px-2.5 py-1 text-xs text-foreground focus:outline-none focus:border-primary capitalize"
+                >
+                  <option value="all">All Severities</option>
+                  <option value="critical">Critical</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                  <option value="info">Info</option>
+                </select>
+              </div>
             </div>
+
+            <div className="rounded-xl border border-border overflow-hidden">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-border bg-muted/40 text-muted-foreground font-mono">
+                    <th className="p-3">Time</th>
+                    <th className="p-3">Event Type</th>
+                    <th className="p-3">Severity</th>
+                    <th className="p-3">IP Address</th>
+                    <th className="p-3">Metadata</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/60 font-mono">
+                  {securityLoading ? (
+                    <tr>
+                      <td colSpan={5} className="p-6 text-center text-muted-foreground">
+                        <Loader2 className="w-4 h-4 animate-spin mx-auto text-primary" />
+                      </td>
+                    </tr>
+                  ) : !securityData?.events || securityData.events.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="p-6 text-center text-muted-foreground font-sans text-xs">
+                        No security incidents recorded for this student.
+                      </td>
+                    </tr>
+                  ) : (
+                    securityData.events.map((ev: any) => {
+                      const sevBadge =
+                        ev.severity === "critical"
+                          ? "bg-destructive text-destructive-foreground font-bold"
+                          : ev.severity === "high"
+                          ? "bg-destructive/20 text-destructive border border-destructive/40"
+                          : ev.severity === "medium"
+                          ? "bg-warning/20 text-warning border border-warning/40"
+                          : "bg-muted text-muted-foreground";
+
+                      return (
+                        <tr key={ev._id} className="hover:bg-muted/30">
+                          <td className="p-3 text-muted-foreground whitespace-nowrap">
+                            {new Date(ev.createdAt).toLocaleString()}
+                          </td>
+                          <td className="p-3 font-semibold text-foreground">{ev.type}</td>
+                          <td className="p-3">
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase ${sevBadge}`}>
+                              {ev.severity}
+                            </span>
+                          </td>
+                          <td className="p-3 text-muted-foreground">{ev.ip || "127.0.0.1"}</td>
+                          <td className="p-3 text-muted-foreground max-w-xs truncate" title={JSON.stringify(ev.meta)}>
+                            {JSON.stringify(ev.meta) !== "{}" ? JSON.stringify(ev.meta) : "—"}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination Controls */}
+            {securityData && securityData.totalPages > 1 && (
+              <div className="flex items-center justify-between text-xs pt-2">
+                <span className="text-muted-foreground">
+                  Page {securityData.page} of {securityData.totalPages} ({securityData.total} incidents)
+                </span>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    disabled={securityPage <= 1}
+                    onClick={() => setSecurityPage((p) => Math.max(1, p - 1))}
+                    className="px-2.5 py-1 rounded-lg border border-border text-foreground disabled:opacity-30 cursor-pointer"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    type="button"
+                    disabled={securityPage >= securityData.totalPages}
+                    onClick={() => setSecurityPage((p) => p + 1)}
+                    className="px-2.5 py-1 rounded-lg border border-border text-foreground disabled:opacity-30 cursor-pointer"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Admin Audit History Section */}
+          <div className="p-6 rounded-2xl bg-card border border-border space-y-4 shadow-xs">
             <div>
-              <span className="text-muted-foreground">Accepted Terms: </span>
-              <span className="text-foreground">
-                {student.acceptedTermsAt ? new Date(student.acceptedTermsAt).toISOString() : "Pending First Login"}
-              </span>
+              <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                <History className="w-4 h-4 text-primary" />
+                <span>Administrative Actions Log</span>
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                History of changes made to this account by administrative personnel
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-border overflow-hidden">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-border bg-muted/40 text-muted-foreground font-mono">
+                    <th className="p-3">Time</th>
+                    <th className="p-3">Admin</th>
+                    <th className="p-3">Action</th>
+                    <th className="p-3">Summary</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/60">
+                  {!securityData?.auditLogs || securityData.auditLogs.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="p-6 text-center text-muted-foreground">
+                        No admin audit entries found for this student.
+                      </td>
+                    </tr>
+                  ) : (
+                    securityData.auditLogs.map((log: any) => (
+                      <tr key={log._id} className="hover:bg-muted/30">
+                        <td className="p-3 text-muted-foreground font-mono whitespace-nowrap">
+                          {new Date(log.createdAt).toLocaleString()}
+                        </td>
+                        <td className="p-3 font-medium text-foreground">
+                          {typeof log.actorId === "object" ? log.actorId?.name || "Admin" : "Admin"}
+                        </td>
+                        <td className="p-3 font-mono text-[11px] text-primary">{log.action}</td>
+                        <td className="p-3 text-muted-foreground">{log.summary}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* UNLOCK ACCOUNT CONFIRMATION MODAL */}
+      {isUnlockOpen && (
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-card border border-destructive/40 rounded-2xl p-6 shadow-2xl relative">
+            <div className="flex items-center gap-3 mb-4 text-destructive">
+              <Unlock className="w-6 h-6" />
+              <h2 className="text-lg font-bold text-foreground">Unlock Student Account</h2>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+              This will remove the security lock on {student.name}&apos;s account, reset all accumulated anti-piracy strikes
+              to 0, and clear failed login attempt counters.
+            </p>
+            <div className="flex items-center justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setIsUnlockOpen(false)}
+                className="px-4 py-2 rounded-xl text-xs text-muted-foreground hover:bg-muted transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => unlockMutation.mutate()}
+                disabled={unlockMutation.isPending}
+                className="px-4 py-2 rounded-xl bg-destructive text-destructive-foreground text-xs font-semibold flex items-center gap-2 shadow-xs cursor-pointer"
+              >
+                {unlockMutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                <span>Confirm Unlock</span>
+              </button>
             </div>
           </div>
         </div>
@@ -857,12 +1513,14 @@ export default function StudentDetailPage() {
             </p>
             <div className="flex items-center justify-end gap-2.5">
               <button
+                type="button"
                 onClick={() => setIsResetOpen(false)}
                 className="px-4 py-2 rounded-xl text-xs text-muted-foreground hover:bg-muted transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
+                type="button"
                 onClick={() => resetPasswordMutation.mutate()}
                 disabled={resetPasswordMutation.isPending}
                 className="px-4 py-2 rounded-xl bg-warning text-warning-foreground text-xs font-semibold flex items-center gap-2 shadow-xs cursor-pointer"
@@ -897,6 +1555,7 @@ export default function StudentDetailPage() {
             </div>
             <div className="flex justify-end">
               <button
+                type="button"
                 onClick={() => setTemporaryPasswordNotice(null)}
                 className="px-4 py-2 rounded-xl bg-success text-success-foreground text-xs font-semibold shadow-xs cursor-pointer"
               >
@@ -907,11 +1566,12 @@ export default function StudentDetailPage() {
         </div>
       )}
 
-      {/* ENROLL IN COURSE MODAL */}
+      {/* ENROLL IN COURSE MODAL (Fixed dropdown + Search + Filter already-enrolled) */}
       {isEnrollModalOpen && (
         <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-card border border-border rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
             <button
+              type="button"
               onClick={() => setIsEnrollModalOpen(false)}
               className="absolute top-5 right-5 text-muted-foreground hover:text-foreground cursor-pointer"
             >
@@ -922,9 +1582,21 @@ export default function StudentDetailPage() {
               <BookOpen className="w-5 h-5" />
               <h2 className="text-lg font-bold text-foreground">Enroll Student In Course</h2>
             </div>
-            <p className="text-xs text-muted-foreground mb-5">
+            <p className="text-xs text-muted-foreground mb-4">
               Grant course access license to {student.name} ({student.studentCode})
             </p>
+
+            {/* Quick search input */}
+            <div className="relative mb-3">
+              <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-muted-foreground" />
+              <input
+                type="text"
+                value={courseSearchQuery}
+                onChange={(e) => setCourseSearchQuery(e.target.value)}
+                placeholder="Search available courses..."
+                className="w-full bg-muted/40 border border-border rounded-xl pl-8 pr-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary"
+              />
+            </div>
 
             <form
               onSubmit={(e) => {
@@ -950,13 +1622,18 @@ export default function StudentDetailPage() {
                   onChange={(e) => setEnrollForm({ ...enrollForm, courseId: e.target.value })}
                   className="w-full bg-muted/40 border border-border rounded-xl px-3 py-2.5 text-foreground focus:outline-none focus:border-primary"
                 >
-                  <option value="">-- Choose Course --</option>
-                  {coursesData?.courses?.map((c) => (
+                  <option value="">-- Choose Course ({availableCourses.length} available) --</option>
+                  {availableCourses.map((c: ICourse) => (
                     <option key={c._id.toString()} value={c._id.toString()}>
                       {c.title} ({c.stats?.lectureCount || 0} lectures &bull; {c.status})
                     </option>
                   ))}
                 </select>
+                {availableCourses.length === 0 && (
+                  <p className="text-[11px] text-muted-foreground mt-1 italic">
+                    {courseSearchQuery ? "No matching available courses found." : "Student is already enrolled in all available courses."}
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -1016,7 +1693,7 @@ export default function StudentDetailPage() {
                 </button>
                 <button
                   type="submit"
-                  disabled={enrollMutation.isPending}
+                  disabled={enrollMutation.isPending || !enrollForm.courseId}
                   className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-2 hover:bg-primary/90 disabled:opacity-40 shadow-xs cursor-pointer"
                 >
                   {enrollMutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
@@ -1033,6 +1710,7 @@ export default function StudentDetailPage() {
         <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-card border border-border rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-150">
             <button
+              type="button"
               onClick={() => setEditingEnrollment(null)}
               className="absolute top-5 right-5 text-muted-foreground hover:text-foreground cursor-pointer"
             >

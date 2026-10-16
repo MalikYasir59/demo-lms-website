@@ -462,6 +462,7 @@ export async function createLecture(courseId: string, moduleId: string, data: an
     moduleId,
     title: data.title.trim(),
     description: data.description || "",
+    notesHtml: data.notesHtml || "",
     order: data.order !== undefined ? data.order : nextOrder,
     status: data.status || LECTURE_STATUS.DRAFT,
     video: {
@@ -502,6 +503,7 @@ export async function updateLecture(id: string, data: any, actorId: string, ip =
 
   if (data.title !== undefined) lecture.title = data.title;
   if (data.description !== undefined) lecture.description = data.description;
+  if (data.notesHtml !== undefined) lecture.notesHtml = data.notesHtml;
   if (data.status !== undefined) lecture.status = data.status;
   if (data.drip !== undefined) lecture.drip = data.drip;
   if (data.resources !== undefined) lecture.resources = data.resources;
@@ -583,4 +585,11 @@ export async function reorderLectures(moduleId: string, items: Array<{ id: strin
     ip,
   });
   return { ok: true };
+}
+
+export async function getLectureById(id: string) {
+  await connectToDatabase();
+  const lecture = await Lecture.findOne({ _id: id, deletedAt: null }).lean();
+  if (!lecture) throw ApiError.notFound("Lecture not found");
+  return lecture;
 }

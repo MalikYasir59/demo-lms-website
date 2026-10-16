@@ -193,8 +193,11 @@ export interface ILectureResource {
   _id?: Types.ObjectId | string;
   title: string;
   fileKey: string;
+  originalName?: string;
+  storedName?: string;
   mime: string;
   size: number;
+  uploadedAt?: Date;
 }
 
 export interface ILecture {
@@ -203,6 +206,7 @@ export interface ILecture {
   moduleId: Types.ObjectId | string;
   title: string;
   description?: string;
+  notesHtml?: string;
   order: number;
   type: "video";
   status: LectureStatus;
