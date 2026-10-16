@@ -36,6 +36,17 @@ export const metadata: Metadata = {
       "Learn institutional order flow, algorithmic market structure, and disciplined risk management.",
     type: "website",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/icon.png", type: "image/png", sizes: "192x192" },
+      { url: "/images/Logoitt.jpg", type: "image/jpeg" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 import Providers from "@/components/shared/Providers";

@@ -5,6 +5,7 @@
  * Usage: npx tsx scripts/seed-admin.ts
  */
 
+import "./load-env";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import { User } from "../src/models/User";

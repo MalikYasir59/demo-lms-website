@@ -5,6 +5,7 @@
  * Usage: npx tsx scripts/create-indexes.ts
  */
 
+import "./load-env";
 import mongoose from "mongoose";
 import { connectToDatabase, ALLOWED_DB_NAME } from "../src/lib/db";
 

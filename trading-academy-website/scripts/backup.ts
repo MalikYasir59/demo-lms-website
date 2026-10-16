@@ -6,6 +6,7 @@
  * Usage: npx tsx scripts/backup.ts
  */
 
+import "./load-env";
 import mongoose from "mongoose";
 import * as fs from "fs";
 import * as path from "path";
