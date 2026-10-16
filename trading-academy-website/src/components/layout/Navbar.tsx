@@ -87,7 +87,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {/* Desktop Action Buttons (Hidden on mobile/tablet) */}
             <Link
-              href="/#lms-portal"
+              href="/login"
               className="hidden lg:inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-[#7bb7ff]/60 bg-transparent text-white text-xs font-semibold shadow-[0_0_18px_rgba(13,109,253,0.18)] transition-all group hover:bg-[#0d6dfd]/10"
             >
               <span className="w-2 h-2 rounded-full bg-[#60a5fa] animate-ping" />
@@ -95,7 +95,7 @@ export default function Navbar() {
               <span>Student LMS</span>
             </Link>
             <Link
-              href="/#pricing"
+              href="/contact"
               className="hidden lg:inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-[#0d6dfd] text-white text-xs font-bold shadow-[0_0_20px_rgba(13,109,253,0.38)] border border-[#7bb7ff]/60 transition-all hover:brightness-110"
             >
               <span>Enroll Now — $499</span>
@@ -176,7 +176,7 @@ export default function Navbar() {
           <div className="flex flex-col gap-2.5 pt-3 border-t border-white/[0.08]">
             {/* Student LMS Portal */}
             <Link
-              href="/#lms-portal"
+              href="/login"
               onClick={() => setIsOpen(false)}
               className="flex items-center justify-center gap-2.5 text-center text-xs sm:text-sm font-semibold text-white py-3 px-4 rounded-xl bg-[#0f172a] hover:bg-[#1e293b] border border-[#7bb7ff]/50 shadow-[0_0_15px_rgba(13,109,253,0.18)] transition-all"
             >
@@ -187,7 +187,7 @@ export default function Navbar() {
 
             {/* Enroll Now — $499 */}
             <Link
-              href="/#pricing"
+              href="/contact"
               onClick={() => setIsOpen(false)}
               className="flex items-center justify-center gap-2 text-center text-xs sm:text-sm font-bold bg-[#0d6dfd] hover:bg-[#1b76ff] text-white py-3.5 px-4 rounded-xl border border-[#7bb7ff]/70 shadow-[0_0_25px_rgba(13,109,253,0.45)] transition-all"
             >

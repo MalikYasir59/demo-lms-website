@@ -1,7 +1,176 @@
 @import "tailwindcss";
 
+/* ============================================================================
+   Tailwind v4: Bind the dark variant to the class strategy
+   (next-themes adds class="dark" to <html>)
+   ============================================================================ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================================
+   SEMANTIC DESIGN TOKENS
+   Light theme = :root, Dark theme = .dark
+   ============================================================================ */
+@layer base {
+  :root {
+    /* Core surfaces */
+    --background: 0 0% 98%;           /* #fafafa */
+    --foreground: 222 47% 11%;        /* #0f172a */
+
+    /* Cards / elevated surfaces */
+    --card: 0 0% 100%;                /* #ffffff */
+    --card-foreground: 222 47% 11%;   /* #0f172a */
+
+    /* Popovers, dropdowns */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Muted / subdued surfaces */
+    --muted: 210 40% 96%;             /* #f1f5f9 */
+    --muted-foreground: 215 16% 47%;  /* #64748b */
+
+    /* Borders & inputs */
+    --border: 214 32% 91%;            /* #e2e8f0 */
+    --input: 214 32% 91%;
+    --ring: 234 89% 74%;              /* #818cf8 - focus ring */
+
+    /* Primary: Indigo (CTAs, active states) */
+    --primary: 239 84% 67%;           /* #6366f1 */
+    --primary-foreground: 0 0% 100%;  /* white */
+
+    /* Secondary: Slate (secondary buttons) */
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Accent: Gold (from logo) */
+    --accent: 43 74% 49%;             /* #d4a543 */
+    --accent-foreground: 222 47% 11%;
+
+    /* Status colors */
+    --destructive: 0 84% 60%;         /* #ef4444 */
+    --destructive-foreground: 0 0% 100%;
+    --success: 160 84% 39%;           /* #10b981 */
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;            /* #f59e0b */
+    --warning-foreground: 222 47% 11%;
+    --info: 199 89% 48%;              /* #0ea5e9 */
+    --info-foreground: 0 0% 100%;
+
+    /* Sidebar (admin & student) */
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-primary: 239 84% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-muted: 215 16% 47%;
+
+    /* Chart palette */
+    --chart-1: 239 84% 67%;           /* indigo */
+    --chart-2: 160 84% 39%;           /* emerald */
+    --chart-3: 43 74% 49%;            /* gold */
+    --chart-4: 280 68% 60%;           /* purple */
+    --chart-5: 199 89% 48%;           /* sky */
+
+    /* Radius scale */
+    --radius: 0.625rem;               /* 10px */
+
+    color-scheme: light;
+  }
+
+  .dark {
+    /* Core surfaces */
+    --background: 222 47% 7%;         /* #0f1729 */
+    --foreground: 213 31% 91%;        /* #e2e8f0 */
+
+    /* Cards / elevated surfaces */
+    --card: 220 36% 11%;              /* #141c2b */
+    --card-foreground: 213 31% 91%;
+
+    /* Popovers */
+    --popover: 220 36% 11%;
+    --popover-foreground: 213 31% 91%;
+
+    /* Muted / subdued */
+    --muted: 217 33% 14%;             /* #1a2332 */
+    --muted-foreground: 215 16% 47%;  /* #64748b */
+
+    /* Borders & inputs */
+    --border: 217 24% 18%;            /* #1e293b */
+    --input: 217 24% 18%;
+    --ring: 234 89% 74%;
+
+    /* Primary stays the same */
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary */
+    --secondary: 217 33% 17%;         /* #1e293b */
+    --secondary-foreground: 213 31% 91%;
+
+    /* Accent: Gold */
+    --accent: 43 74% 49%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Status colors (same hues, slightly adjusted for dark bg) */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 11%;
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+
+    /* Sidebar */
+    --sidebar: 222 40% 8%;            /* #0b1120 */
+    --sidebar-foreground: 213 31% 91%;
+    --sidebar-border: 217 24% 18%;
+    --sidebar-accent: 217 33% 14%;
+    --sidebar-accent-foreground: 213 31% 91%;
+    --sidebar-primary: 239 84% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-muted: 215 16% 47%;
+
+    /* Chart palette */
+    --chart-1: 239 84% 67%;
+    --chart-2: 160 84% 39%;
+    --chart-3: 43 74% 49%;
+    --chart-4: 280 68% 60%;
+    --chart-5: 199 89% 48%;
+
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+}
+
+/* ============================================================================
+   THEME-SPECIFIC UTILITIES (Tailwind v4 @theme does NOT support hsl vars, so
+   we provide these as utilities that can be used like: bg-background, text-foreground, etc.)
+   ============================================================================ */
 @theme {
-  /* Obsidian Apex Core Palette */
+  /* Obsidian Apex Core Palette (kept for backward compat with public site) */
   --color-obsidian-canvas: #080b11;
   --color-obsidian-surface: #0b0f17;
   --color-obsidian-container-low: #121824;
@@ -9,7 +178,7 @@
   --color-obsidian-container-high: #182234;
   --color-obsidian-container-highest: #272a31;
 
-  /* Backward compatible brand aliasing pointing to Obsidian Apex */
+  /* Backward compatible brand aliasing for public site */
   --color-brand-navy: #080b11;
   --color-brand-navy-light: #0b0f17;
   --color-brand-navy-surface: #121824;
@@ -17,7 +186,7 @@
   --color-brand-surface: #080b11;
   --color-brand-mist: #0b0f17;
 
-  /* Functional Accents */
+  /* Functional Accents (public site) */
   --color-execution: #6366f1;
   --color-execution-hover: #4f46e5;
   --color-execution-glow: rgba(99, 102, 241, 0.25);
@@ -35,7 +204,7 @@
   --color-sovereign-gold: #ffb95f;
   --color-tertiary: #f59e0b;
 
-  /* Typography Colors */
+  /* Typography Colors (public site) */
   --color-text-primary: #ffffff;
   --color-text-secondary: #e2e8f0;
   --color-text-body: #94a3b8;
@@ -51,43 +220,68 @@
   --font-weight-black: 700;
 }
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
-    color-scheme: dark;
-  }
-  
-  body {
-    background-color: #080b11;
-    color: #e0e2eb;
-    font-family: var(--font-sans);
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
+/* ============================================================================
+   UTILITY: Semantic color classes using CSS variables
+   These complement Tailwind's built-in classes
+   ============================================================================ */
+@layer utilities {
+  /* Background utilities */
+  .bg-background { background-color: hsl(var(--background)); }
+  .bg-foreground { background-color: hsl(var(--foreground)); }
+  .bg-card { background-color: hsl(var(--card)); }
+  .bg-popover { background-color: hsl(var(--popover)); }
+  .bg-muted { background-color: hsl(var(--muted)); }
+  .bg-primary { background-color: hsl(var(--primary)); }
+  .bg-secondary { background-color: hsl(var(--secondary)); }
+  .bg-accent { background-color: hsl(var(--accent)); }
+  .bg-destructive { background-color: hsl(var(--destructive)); }
+  .bg-success { background-color: hsl(var(--success)); }
+  .bg-warning { background-color: hsl(var(--warning)); }
+  .bg-info { background-color: hsl(var(--info)); }
+  .bg-sidebar { background-color: hsl(var(--sidebar)); }
+  .bg-sidebar-accent { background-color: hsl(var(--sidebar-accent)); }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    line-height: 1.2;
-    text-wrap: pretty;
-  }
+  /* Text utilities */
+  .text-foreground { color: hsl(var(--foreground)); }
+  .text-card-foreground { color: hsl(var(--card-foreground)); }
+  .text-popover-foreground { color: hsl(var(--popover-foreground)); }
+  .text-muted-foreground { color: hsl(var(--muted-foreground)); }
+  .text-primary { color: hsl(var(--primary)); }
+  .text-primary-foreground { color: hsl(var(--primary-foreground)); }
+  .text-secondary-foreground { color: hsl(var(--secondary-foreground)); }
+  .text-accent { color: hsl(var(--accent)); }
+  .text-accent-foreground { color: hsl(var(--accent-foreground)); }
+  .text-destructive { color: hsl(var(--destructive)); }
+  .text-success { color: hsl(var(--success)); }
+  .text-warning { color: hsl(var(--warning)); }
+  .text-info { color: hsl(var(--info)); }
+  .text-sidebar-foreground { color: hsl(var(--sidebar-foreground)); }
+  .text-sidebar-muted { color: hsl(var(--sidebar-muted)); }
+  .text-sidebar-primary { color: hsl(var(--sidebar-primary)); }
 
-  ::selection {
-    background-color: #6366f1;
-    color: #ffffff;
-  }
+  /* Border utilities */
+  .border-border { border-color: hsl(var(--border)); }
+  .border-input { border-color: hsl(var(--input)); }
+  .border-primary { border-color: hsl(var(--primary)); }
+  .border-destructive { border-color: hsl(var(--destructive)); }
+  .border-success { border-color: hsl(var(--success)); }
+  .border-sidebar-border { border-color: hsl(var(--sidebar-border)); }
+
+  /* Ring utilities */
+  .ring-ring { --tw-ring-color: hsl(var(--ring)); }
+
+  /* Divide utilities */
+  .divide-border > :not(:last-child) { border-color: hsl(var(--border)); }
 }
 
-/* Tabular figures for numbers & telemetry to prevent layout jitter */
+/* ============================================================================
+   TYPOGRAPHY: Tabular figures for numbers
+   ============================================================================ */
 .tabular-nums, .font-numeric {
   font-feature-settings: "tnum" on, "cv05" on, "zero" on;
   font-variant-numeric: tabular-nums;
 }
 
-/* Obsidian Apex Telemetry Eyebrow */
 .label-telemetry {
   font-size: 11px;
   font-weight: 600;
@@ -96,6 +290,9 @@
   text-transform: uppercase;
 }
 
+/* ============================================================================
+   PUBLIC SITE STYLES (preserved — out of scope for LMS redesign)
+   ============================================================================ */
 .form-field-label {
   display: block;
   color: #cbd5e1;
@@ -126,14 +323,14 @@
   opacity: 1;
 }
 
-/* Floor 0 Atmospheric Ambient Lighting */
+/* Floor 0 Atmospheric Ambient Lighting (public site) */
 .bg-ambient-glow {
   background-image:
     radial-gradient(ellipse at 80% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 65%),
     radial-gradient(circle at 10% 100%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
 }
 
-/* Subtle Technical Terminal Grid */
+/* Subtle Technical Terminal Grid (public site) */
 .terminal-grid {
   background-size: 32px 32px;
   background-image: 
@@ -148,7 +345,7 @@
     linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
 
-/* Glassmorphism Floors */
+/* Glassmorphism Floors (public site) */
 .glass-floor1 {
   background: rgba(11, 15, 23, 0.85);
   backdrop-filter: blur(16px);
@@ -168,7 +365,7 @@
   border: 1px solid rgba(99, 102, 241, 0.25);
 }
 
-/* Obsidian Apex Button Styles */
+/* Obsidian Apex Button Styles (public site) */
 .btn-apex-primary {
   background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
   color: #ffffff;
@@ -196,7 +393,7 @@
   color: #ffffff;
 }
 
-/* Luminous Glows */
+/* Luminous Glows (public site) */
 .candlestick-glow {
   filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.4));
 }
@@ -223,4 +420,16 @@
 .marquee-right {
   animation: marquee-right 120s linear infinite;
   will-change: transform;
+}
+
+/* ============================================================================
+   TRANSITIONS: Respect prefers-reduced-motion
+   ============================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

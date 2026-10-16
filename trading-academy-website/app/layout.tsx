@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import FloatingSupportButton from "@/components/layout/FloatingSupportButton";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -39,7 +36,20 @@ export const metadata: Metadata = {
       "Learn institutional order flow, algorithmic market structure, and disciplined risk management.",
     type: "website",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/icon.png", type: "image/png", sizes: "192x192" },
+      { url: "/images/Logoitt.jpg", type: "image/jpeg" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
+
+import Providers from "@/components/shared/Providers";
 
 export default function RootLayout({
   children,
@@ -47,7 +57,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${jakarta.variable} ${jetbrains.variable} dark`}>
+    <html
+      lang="en"
+      className={`${jakarta.variable} ${jetbrains.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -56,15 +70,8 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#080b11] font-sans text-[#e0e2eb] antialiased selection:bg-[#10b981] selection:text-black flex flex-col min-h-screen relative">
-        {/* Global Ambient Floor 0 Lighting */}
-        <div className="fixed inset-0 pointer-events-none z-0 bg-ambient-glow opacity-70" />
-        <div className="relative z-10 flex flex-col min-h-screen">
-          <Navbar />
-          <main className="flex-1 flex flex-col">{children}</main>
-          <Footer />
-          <FloatingSupportButton />
-        </div>
+      <body className="bg-background font-sans text-foreground antialiased flex flex-col min-h-screen relative">
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

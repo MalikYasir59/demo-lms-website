@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "dark" | "alpha";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "dark" | "alpha" | "destructive";
   size?: "sm" | "md" | "lg";
   children: React.ReactNode;
   className?: string;
@@ -12,9 +12,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ href, variant = "primary", size = "md", children, className, ...props }, ref) => {
-    // 4px corner radius per Obsidian Apex specification: rounded (0.25rem / 4px)
     const baseStyles =
-      "inline-flex items-center justify-center font-bold tracking-tight transition-all rounded focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:ring-offset-2 focus:ring-offset-[#080B11] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer";
+      "inline-flex items-center justify-center font-bold tracking-tight transition-all rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer";
 
     const sizeStyles = {
       sm: "px-3.5 py-1.5 text-xs",
@@ -23,24 +22,20 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }[size];
 
     const variantStyles = {
-      // Primary Execution Button: Gradient fill #6366F1 to #4F46E5, white text, 1px border rgba(255,255,255,0.20), luminous aura
       primary:
-        "bg-gradient-to-r from-[#6366F1] to-[#4F46E5] text-white border border-white/20 shadow-[0_0_16px_rgba(99,102,241,0.40)] hover:shadow-[0_0_24px_rgba(99,102,241,0.65)] hover:-translate-y-0.5",
-      // Secondary / Panel Button: Background #182234, text #E2E8F0, border 1px solid rgba(255,255,255,0.08), hover border rgba(99,102,241,0.40)
+        "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md",
       secondary:
-        "bg-[#182234] hover:bg-[#1f2c42] text-[#E2E8F0] hover:text-white border border-white/[0.08] hover:border-[#6366F1]/40",
-      // Outline: Subtle glass border against Container Low #121824
+        "bg-secondary text-secondary-foreground border border-border hover:bg-muted",
       outline:
-        "bg-[#121824]/60 hover:bg-[#121824] text-[#E2E8F0] hover:text-white border border-white/[0.12] hover:border-[#6366F1]/40",
-      // Ghost Action: Background transparent, text #94A3B8, hover introduces background #121824 and text #FFFFFF
+        "bg-transparent text-foreground border border-border hover:bg-muted",
       ghost:
-        "text-[#94A3B8] hover:text-white hover:bg-[#121824]",
-      // Dark / Container Hull
+        "text-muted-foreground hover:text-foreground hover:bg-muted",
       dark:
-        "bg-[#0B0F17] border border-white/[0.08] text-[#E0E2EB] hover:border-white/20 hover:bg-[#121824]",
-      // Alpha / Blue verification CTA
+        "bg-card border border-border text-foreground hover:bg-muted",
       alpha:
-        "bg-gradient-to-r from-[#2563EB] via-[#3B82F6] to-[#1D4ED8] text-white border border-blue-300/30 shadow-[0_0_16px_rgba(59,130,246,0.30)] hover:shadow-[0_0_20px_rgba(59,130,246,0.50)] hover:-translate-y-0.5",
+        "bg-gradient-to-r from-[#2563EB] via-[#3B82F6] to-[#1D4ED8] text-white border border-blue-300/30 shadow-md hover:shadow-lg hover:-translate-y-0.5",
+      destructive:
+        "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-md",
     }[variant];
 
     const combinedClassName = cn(baseStyles, sizeStyles, variantStyles, className);
