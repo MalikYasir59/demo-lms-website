@@ -17,6 +17,7 @@
     "compress:images": "node scripts/compress-images.js public/images public/images-compressed --target-kb 220 --quality 82 --max-width 1800 --max-height 1800"
   },
   "dependencies": {
+    "@emailjs/browser": "^5.0.3",
     "@hookform/resolvers": "^5.9.1",
     "@tanstack/react-query": "^5.104.2",
     "@tiptap/extension-image": "^3.32.0",

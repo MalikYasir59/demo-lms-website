@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import emailjs from "@emailjs/browser";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { PUBLIC_ASSETS } from "@/data/public-assets";
 
@@ -27,7 +28,38 @@ export default function ContactPage() {
     setLoading(true);
     setStatusMessage(null);
 
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+
     try {
+      let emailJsSuccess = false;
+
+      // 1. Dispatch directly via EmailJS Cloud if configured
+      if (serviceId && templateId && publicKey) {
+        try {
+          await emailjs.send(
+            serviceId,
+            templateId,
+            {
+              to_email: "instituteoftradingtricks@gmail.com",
+              from_name: formData.fullName,
+              from_email: formData.email || "not-provided@itt.com.pk",
+              phone: formData.phoneWhatsapp,
+              course: formData.course,
+              message: formData.message || "No message provided",
+              time_stamp: new Date().toLocaleString("en-PK", { timeZone: "Asia/Karachi" }),
+              reply_to: formData.email || "instituteoftradingtricks@gmail.com",
+            },
+            publicKey
+          );
+          emailJsSuccess = true;
+        } catch (emailErr) {
+          console.warn("[EmailJS] Transmission note:", emailErr);
+        }
+      }
+
+      // 2. Transmit to server route as backup & database record
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -40,11 +72,12 @@ export default function ContactPage() {
         }),
       });
 
-      const data = await res.json();
-      if (res.ok && data.success) {
+      const data = await res.json().catch(() => ({ success: false }));
+
+      if (emailJsSuccess || (res.ok && data.success)) {
         setStatusMessage({
           type: "success",
-          text: "Thank you! Your seat reservation request has been received. Our team will contact you shortly during opening hours.",
+          text: "Thank you! Your seat reservation request has been dispatched to instituteoftradingtricks@gmail.com. Our admissions desk will contact you shortly.",
         });
         setFormData({
           fullName: "",
@@ -62,7 +95,7 @@ export default function ContactPage() {
     } catch {
       setStatusMessage({
         type: "error",
-        text: "An error occurred while submitting your request. Please contact us on WhatsApp at 0307 7330777.",
+        text: "An error occurred while submitting your request. Please contact us on WhatsApp at 0307 7330777 or email instituteoftradingtricks@gmail.com directly.",
       });
     } finally {
       setLoading(false);
