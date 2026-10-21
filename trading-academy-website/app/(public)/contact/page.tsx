@@ -175,9 +175,14 @@ export default function ContactPage() {
                 <div className="w-9 h-9 rounded bg-[#0A1026] border border-white/10 flex items-center justify-center shrink-0 text-[#D4C385] group-hover:border-[#D4C385]/50 group-hover:text-[#E5D7A3] transition mt-0.5">
                   <MapPin className="w-4 h-4" />
                 </div>
-                <span className="text-xs sm:text-sm leading-relaxed text-slate-300">
+                <a
+                  href="https://maps.app.goo.gl/ztYwG3giUmitAwKs9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs sm:text-sm leading-relaxed text-slate-300 hover:text-[#E5D7A3] transition"
+                >
                   3rd Floor, Gul Arcade Plaza, Opposite London Bakery, Main PWD Road, PWD Housing Society, Islamabad 44000
-                </span>
+                </a>
               </div>
             </div>
 
@@ -356,10 +361,13 @@ export default function ContactPage() {
 
             {/* Map Card */}
             <div className="border border-white/10 bg-[#040714] overflow-hidden">
-              <div className="p-3 pb-4 flex items-center justify-between">
-                <span className="text-xs text-slate-300 font-medium">Islamabad Campus</span>
+              <div className="p-3 pb-3 flex items-center justify-between border-b border-white/5">
+                <div>
+                  <span className="text-xs text-slate-300 font-medium block">Islamabad Campus</span>
+                  <span className="text-[10px] text-slate-400">Gul Arcade Plaza, Main PWD Road</span>
+                </div>
                 <a
-                  href="https://www.google.com/maps/search/Gul+Arcade+Plaza+PWD+Road+Islamabad"
+                  href="https://maps.app.goo.gl/ztYwG3giUmitAwKs9"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 bg-white text-[#1D4ED8] text-[10px] font-medium px-2.5 py-1 rounded-sm shadow hover:bg-slate-100 transition"
@@ -368,12 +376,15 @@ export default function ContactPage() {
                   <span>↗</span>
                 </a>
               </div>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={PUBLIC_ASSETS.contactMap}
-                alt="PWD Housing Society Islamabad Map"
-                className="w-full h-32 object-cover"
-              />
+              <div className="w-full h-48 sm:h-52 relative bg-[#090F24]">
+                <iframe
+                  title="Institute of Trading Tricks - Islamabad Campus Map"
+                  src="https://maps.google.com/maps?q=Institute+of+Trading+Tricks+Islamabad&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                  className="w-full h-full border-0"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
             </div>
           </div>
         </div>
