@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PUBLIC_ASSETS } from "@/data/public-assets";
 import HomeFaqAccordion from "@/components/sections/public/HomeFaqAccordion";
+import LiveMarketsTicker from "@/components/sections/public/LiveMarketsTicker";
 
 export const metadata: Metadata = {
   title: "Institute of Trading Tricks — Practical Forex Education in Islamabad",
@@ -23,9 +24,11 @@ export default function HomePage() {
           <img
             src={PUBLIC_ASSETS.heroBg}
             alt="Trading Floor Background"
-            className="w-full h-full object-cover opacity-55"
+            className="w-full h-full object-cover opacity-85 object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#040714] via-[#050919]/90 to-[#050919]/65" />
+          {/* Light overlay on top to showcase the physical campus trading floor */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#040714]/85 via-[#050919]/60 to-[#040714]/35" />
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#040714] to-transparent pointer-events-none" />
           {/* Crisp SVG Candlestick/Line Chart Overlay on Right */}
           <svg
             className="absolute right-0 top-0 h-full w-2/3 opacity-25 pointer-events-none"
@@ -95,48 +98,9 @@ export default function HomePage() {
       </section>
 
       {/* =================================================================== */}
-      {/* 2. LIVE MARKETS TICKER STRIP                                        */}
+      {/* 2. LIVE MARKETS TICKER STRIP WITH REAL API DATA & SLIDER            */}
       {/* =================================================================== */}
-      <div className="bg-[#040714] border-b border-white/10 py-2.5 overflow-x-auto">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6 text-[10px] tracking-wider whitespace-nowrap">
-          <div className="flex items-center gap-2 text-slate-400 uppercase tracking-[0.18em]">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>MARKETS</span>
-          </div>
-          <div className="flex items-center gap-6">
-            <div>
-              <span className="text-slate-400">EUR/USD</span>
-              <span className="text-white font-medium ml-1">1.0842</span>
-              <span className="text-rose-400 ml-1">-0.14%</span>
-            </div>
-            <div>
-              <span className="text-slate-400">GBP/USD</span>
-              <span className="text-white font-medium ml-1">1.2965</span>
-              <span className="text-rose-400 ml-1">-0.09%</span>
-            </div>
-            <div>
-              <span className="text-slate-400">USD/JPY</span>
-              <span className="text-white font-medium ml-1">152.34</span>
-              <span className="text-emerald-400 ml-1">+0.21%</span>
-            </div>
-            <div>
-              <span className="text-slate-400">XAU/USD</span>
-              <span className="text-white font-medium ml-1">2,742.80</span>
-              <span className="text-emerald-400 ml-1">+0.64%</span>
-            </div>
-            <div>
-              <span className="text-slate-400">BTC/USD</span>
-              <span className="text-white font-medium ml-1">67,890</span>
-              <span className="text-emerald-400 ml-1">+1.32%</span>
-            </div>
-            <div>
-              <span className="text-slate-400">GBP/JPY</span>
-              <span className="text-white font-medium ml-1">197.50</span>
-              <span className="text-rose-400 ml-1">-0.18%</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <LiveMarketsTicker />
 
       {/* =================================================================== */}
       {/* 3. 4-COLUMN STATS ROW                                               */}

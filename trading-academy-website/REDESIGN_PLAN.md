@@ -105,17 +105,17 @@ To ensure 0% CSS leakage into LMS:
 - Fully accessible mobile drawer with hamburger toggle.
 
 ### 2. Home Page (`app/(public)/page.tsx`)
-- **Hero Section:** "Training for *better* trading." subtitle, "RESERVE YOUR SEAT" and "VIEW COURSES →" CTAs, background chart svg overlay, 4.8 Google rating glass badge.
-- **Live Markets Ticker Strip:** Real-time visual rates (EUR/USD, GBP/USD, USD/JPY, XAU/USD, BTC/USD, GBP/JPY).
+- **Hero Section:** Real physical campus background image (`/images/Mainbg1.JPG`) with a light, crisp overlay (`bg-gradient-to-r from-[#040714]/85 via-[#050919]/60 to-[#040714]/35`) so the iMac workstations and ITT physical branding are clearly visible, "Training for *better* trading.", subtitle, CTAs, chart SVG overlay, 4.8 Google rating glass badge.
+- **Live Markets Ticker Strip:** Real live market pricing fetched from free public APIs (Binance 24hr API & Open Exchange Rates) showing EUR/USD, GBP/USD, USD/JPY, XAU/USD (Gold), BTC/USD, ETH/USD, USD/CAD, AUD/USD, USD/CHF with exact pricing and 24h % change badges. Configured as an infinite horizontal sliding marquee (`.ticker-slider-track`) with pause-on-hover.
 - **4-Column Stats Row:** 10+ yrs mentor experience, 4.8 ★ 222 Google reviews, 03 Trading levels, PKR 495k Prize pool.
 - **"A classroom, not a chatroom":** 3 institutional pillars (Live floor desks, Founders teach, Real risk rules).
 - **"Three levels. One path":** 01 Basic (Beginner), 02 Advance (Intermediate), 03 Pro Trading Course cards.
 - **Curriculum Flow (4 Steps):** 01 Read the chart, 02 Control your risk, 03 Build a strategy, 04 Compete.
-- **The Mentors Spotlight:** Adnan Rana (Head of Institute) & Talha Hanif (Managing Director) cards with credentials.
-- **The Campus Spotlight:** Dedicated iMac workstations photo, Gul Arcade Plaza address, "BOOK A VISIT →".
+- **The Mentors Spotlight:** Adnan Rana (Head of Institute) & Talha Hanif (Managing Director) cards with preserved leadership profile pictures.
+- **The Campus Spotlight:** Real high-resolution physical campus photo (`/images/Mainbg3.JPG`), Gul Arcade Plaza address, "BOOK A VISIT →".
 - **Joining Takes Four Steps:** 01 Get in touch, 02 Free counselling, 03 Confirm your seat, 04 Start learning.
 - **Google Reviews Highlights:** 3 verified testimonials with ratings and dates.
-- **From The Channel (Videos Preview):** 3 featured video cards with play buttons.
+- **From The Channel (Videos Preview):** 3 featured video cards with real thumbnails from `/images/Final (...).JPG`.
 - **FAQ Accordion:** Interactive 5-item accordion covering prerequisites, schedule, campus visits, competition.
 - **Bottom Glow CTA:** "Learn. Trade. Grow" with gold and outline action buttons.
 
@@ -126,18 +126,26 @@ To ensure 0% CSS leakage into LMS:
 - Trading Competition breakdown: 1st prize PKR 285k, 2nd prize PKR 140k, 3rd prize PKR 70k.
 - Full Course Brochure card: Download button with brochure download/enquiry trigger.
 
-### 4. Videos Page (`app/(public)/videos/page.tsx`) - *NEW*
+### 4. Videos Page (`app/(public)/videos/page.tsx`)
 - Hero header: "Videos — Lessons, live sessions and student stories... 125 videos and counting."
-- Interactive Featured Video player with YouTube & Instagram external links.
-- "Latest Uploads" interactive sidebar: 7 videos selectable to change featured video.
-- "125 videos on the channel" channel milestone card.
+- Working HTML5 Video Player: Directly plays videos from `public/videos/` (`1 Mints Short.mp4`, `2 (1).mp4`, `6 (1).mp4`, and `ITT Reviews for ITT Delivery 1-8.mp4`).
+- "Latest Uploads" interactive sidebar: 11 videos selectable with instant player switching and real thumbnails from `/images/Final (...).JPG`.
+- Direct links to YouTube channel and Instagram.
 - Gold banner CTA: "See a class before you join one" -> "TALK TO US".
 
-### 5. About Page (`app/(public)/about-us/page.tsx` & `/about`)
+### 5. Reviews Page (`app/(public)/reviews/page.tsx`)
+- Hero header: "What students say — 222 Google reviews with 4.8 out of 5 stars."
+- 4.8 Rating Summary Strip with Google Maps link.
+- **Student Video Testimonials Section (`VideoReviewsSection.tsx`):** Interactive video player showcasing real student video reviews (`public/videos/ITT Reviews for ITT Delivery 1-8.mp4`) paired with real institute photos.
+- 7 Verified Google Review Cards with quotes and dates.
+- Gold Banner CTA: "Trained with us? Add your review".
+
+### 6. About Page (`app/(public)/about-us/page.tsx` & `/about`)
 - Hero header: "Built by traders, for the traders of tomorrow."
 - 2-column institutional mission & philosophy story.
-- Wide mentors banner photograph.
-- "Meet your mentors": Adnan Rana & Talha Hanif executive profile cards.
+- Wide mentors banner photo: Founders Adnan Rana and Talha Hanif at Institute of Trading Tricks (`/images/Final (88).JPG`).
+- "Meet your mentors": Adnan Rana (`/profile-adnan.jpg`) & Talha Hanif (`/profile-talha.jpg`) executive profile cards.
+- The campus showcase with real high-res campus trading floor photo (`/images/Mainbg3.JPG`).
 - Campus photo & location details (3rd Floor, Gul Arcade Plaza, Opposite London Bakery, Main PWD Road, Islamabad).
 - Opening hours table (Mon-Sat timings, Sunday closed) & "BOOK A VISIT" CTA.
 

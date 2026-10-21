@@ -1,6 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import VideoReviewsSection from "@/components/sections/public/VideoReviewsSection";
 
 export const metadata: Metadata = {
   title: "Student Reviews | Institute of Trading Tricks",
@@ -90,7 +91,12 @@ export default function ReviewsPage() {
       </section>
 
       {/* =================================================================== */}
-      {/* 3. 7 VERIFIED GOOGLE REVIEW CARDS + GOLD BANNER CTA                 */}
+      {/* 3. STUDENT VIDEO TESTIMONIALS (REAL MP4 REVIEWS)                   */}
+      {/* =================================================================== */}
+      <VideoReviewsSection />
+
+      {/* =================================================================== */}
+      {/* 4. 7 VERIFIED GOOGLE REVIEW CARDS + GOLD BANNER CTA                 */}
       {/* =================================================================== */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-14">

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import { PUBLIC_ASSETS } from "@/data/public-assets";
 
 export default function ContactPage() {
@@ -89,7 +90,108 @@ export default function ContactPage() {
       </section>
 
       {/* =================================================================== */}
-      {/* 2. CONTACT FORM & INFO COLUMNS                                      */}
+      {/* 2. LETS CONNECT SECTION                                             */}
+      {/* =================================================================== */}
+      <section className="border-b border-white/10 bg-[#050919]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+          <h2 className="font-display text-3xl sm:text-4xl text-white mb-6">
+            Lets Connect
+          </h2>
+
+          <div className="w-full card-surface p-6 sm:p-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+              {/* Row 1, Col 1: Phone Line 1 */}
+              <div className="p-4 rounded bg-[#040714]/60 border border-white/5 hover:border-[#D4C385]/30 transition group flex items-center gap-3.5">
+                <div className="w-9 h-9 rounded bg-[#0A1026] border border-white/10 flex items-center justify-center shrink-0 text-[#D4C385] group-hover:border-[#D4C385]/50 group-hover:text-[#E5D7A3] transition">
+                  <Phone className="w-4 h-4" />
+                </div>
+                <a
+                  href="tel:+923340505473"
+                  className="text-xs sm:text-sm text-slate-200 hover:text-[#E5D7A3] transition font-medium tracking-wide"
+                >
+                  +92 334 0505473
+                </a>
+              </div>
+
+              {/* Row 1, Col 2: Phone Line 2 */}
+              <div className="p-4 rounded bg-[#040714]/60 border border-white/5 hover:border-[#D4C385]/30 transition group flex items-center gap-3.5">
+                <div className="w-9 h-9 rounded bg-[#0A1026] border border-white/10 flex items-center justify-center shrink-0 text-[#D4C385] group-hover:border-[#D4C385]/50 group-hover:text-[#E5D7A3] transition">
+                  <Phone className="w-4 h-4" />
+                </div>
+                <a
+                  href="tel:+923340505474"
+                  className="text-xs sm:text-sm text-slate-200 hover:text-[#E5D7A3] transition font-medium tracking-wide"
+                >
+                  +92 334 0505474
+                </a>
+              </div>
+
+              {/* Row 2, Col 1: Mobile Line */}
+              <div className="p-4 rounded bg-[#040714]/60 border border-white/5 hover:border-[#D4C385]/30 transition group flex items-center gap-3.5">
+                <div className="w-9 h-9 rounded bg-[#0A1026] border border-white/10 flex items-center justify-center shrink-0 text-[#D4C385] group-hover:border-[#D4C385]/50 group-hover:text-[#E5D7A3] transition">
+                  <Phone className="w-4 h-4" />
+                </div>
+                <a
+                  href="tel:+923077330777"
+                  className="text-xs sm:text-sm text-slate-200 hover:text-[#E5D7A3] transition font-medium tracking-wide"
+                >
+                  +92 307 7330777
+                </a>
+              </div>
+
+              {/* Row 2, Col 2: WhatsApp Chat */}
+              <div className="p-4 rounded bg-[#040714]/60 border border-white/5 hover:border-[#25D366]/40 transition group flex items-center gap-3.5">
+                <div className="w-9 h-9 rounded bg-[#0A1026] border border-white/10 flex items-center justify-center shrink-0 text-[#25D366] group-hover:border-[#25D366]/50 transition">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.24.68-1.41 1.3-1.95 1.38-.5.08-1.13.11-1.83-.11-.42-.13-.97-.31-1.67-.61-2.94-1.27-4.86-4.25-5.01-4.45-.15-.2-1.2-1.59-1.2-3.04 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.82 2.01.89 2.16.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.45.52-.15.15-.3.31-.13.6.17.3.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.36 1.45.3.15.47.12.65-.07.17-.2.74-.86.94-1.16.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.08.12.08.72-.16 1.4z" />
+                  </svg>
+                </div>
+                <a
+                  href="https://wa.me/923077330777"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs sm:text-sm text-[#D4C385] hover:text-[#E5D7A3] transition font-medium flex items-center gap-1.5"
+                >
+                  <span>Chat on WhatsApp</span>
+                  <span className="text-[11px] text-slate-400 group-hover:translate-x-0.5 transition-transform">↗</span>
+                </a>
+              </div>
+
+              {/* Row 3, Col 1: Email */}
+              <div className="p-4 rounded bg-[#040714]/60 border border-white/5 hover:border-[#D4C385]/30 transition group flex items-center gap-3.5">
+                <div className="w-9 h-9 rounded bg-[#0A1026] border border-white/10 flex items-center justify-center shrink-0 text-[#D4C385] group-hover:border-[#D4C385]/50 group-hover:text-[#E5D7A3] transition">
+                  <Mail className="w-4 h-4" />
+                </div>
+                <a
+                  href="mailto:instituteoftradingtricks@gmail.com"
+                  className="text-xs sm:text-sm text-slate-200 hover:text-[#E5D7A3] transition font-medium break-all"
+                >
+                  instituteoftradingtricks@gmail.com
+                </a>
+              </div>
+
+              {/* Row 3, Col 2: Campus Address */}
+              <div className="p-4 rounded bg-[#040714]/60 border border-white/5 hover:border-[#D4C385]/30 transition group flex items-start gap-3.5">
+                <div className="w-9 h-9 rounded bg-[#0A1026] border border-white/10 flex items-center justify-center shrink-0 text-[#D4C385] group-hover:border-[#D4C385]/50 group-hover:text-[#E5D7A3] transition mt-0.5">
+                  <MapPin className="w-4 h-4" />
+                </div>
+                <span className="text-xs sm:text-sm leading-relaxed text-slate-300">
+                  3rd Floor, Gul Arcade Plaza, Opposite London Bakery, Main PWD Road, PWD Housing Society, Islamabad 44000
+                </span>
+              </div>
+            </div>
+
+            {/* Wah Cantt & Attock branch note */}
+            <div className="mt-6 pt-5 border-t border-white/10 flex items-center gap-2.5 text-xs text-slate-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D4C385] shrink-0" />
+              <span>Classes also run in Wah Cantt and Attock · ask us for the next dates there.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =================================================================== */}
+      {/* 3. CONTACT FORM & INFO COLUMNS                                      */}
       {/* =================================================================== */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
@@ -203,58 +305,8 @@ export default function ContactPage() {
             </form>
           </div>
 
-          {/* Right Column: Direct Contact Details, Hours, Brochure & Map */}
+          {/* Right Column: Opening Hours, Brochure & Map */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="space-y-3 text-xs text-slate-200">
-              <div className="flex items-center gap-3">
-                <span className="text-[#D4C385]">📞</span>
-                <a href="tel:+923340505473" className="hover:text-[#E5D7A3] transition">
-                  +92 334 0505473
-                </a>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-[#D4C385]">📞</span>
-                <a href="tel:+923340505474" className="hover:text-[#E5D7A3] transition">
-                  +92 334 0505474
-                </a>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-[#D4C385]">📞</span>
-                <a href="tel:+923077330777" className="hover:text-[#E5D7A3] transition">
-                  +92 307 7330777
-                </a>
-              </div>
-              <div className="flex items-center gap-3 pt-1">
-                <span className="text-[#D4C385]">💬</span>
-                <a
-                  href="https://wa.me/923077330777"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-[#E5D7A3] transition text-[#D4C385]"
-                >
-                  Chat on WhatsApp
-                </a>
-              </div>
-              <div className="flex items-center gap-3 pt-1">
-                <span className="text-[#D4C385]">✉</span>
-                <a
-                  href="mailto:instituteoftradingtricks@gmail.com"
-                  className="hover:text-[#E5D7A3] transition"
-                >
-                  instituteoftradingtricks@gmail.com
-                </a>
-              </div>
-              <div className="flex items-start gap-3 pt-1">
-                <span className="text-[#D4C385] mt-0.5">📍</span>
-                <span className="leading-relaxed text-slate-300">
-                  3rd Floor, Gul Arcade Plaza, Opposite London Bakery, Main PWD Road, PWD Housing Society, Islamabad 44000
-                </span>
-              </div>
-            </div>
-
-            <p className="text-[11px] text-slate-400">
-              Classes also run in Wah Cantt and Attock · ask us for the next dates there.
-            </p>
 
             {/* Opening Hours Box */}
             <div className="card-surface p-5">

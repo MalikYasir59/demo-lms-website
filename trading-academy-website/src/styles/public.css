@@ -83,3 +83,24 @@
 .public-theme .bg-brandBlue-500 { background-color: #2563EB; }
 .public-theme .text-brandBlue-600 { color: #1D4ED8; }
 .public-theme .text-brandBlue-500 { color: #2563EB; }
+
+/* Continuous ticker slider marquee */
+@keyframes public-ticker-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.public-theme .ticker-slider-track {
+  display: flex;
+  width: max-content;
+  animation: public-ticker-marquee 38s linear infinite;
+  will-change: transform;
+}
+
+.public-theme .ticker-slider-track:hover {
+  animation-play-state: paused;
+}

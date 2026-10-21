@@ -10,69 +10,132 @@ interface VideoItem {
   date: string;
   publishedDate: string;
   thumbnail: string;
+  videoSrc: string;
+  duration?: string;
+  category: "Class" | "Review" | "Strategy";
 }
 
 const UPLOADS_LIST: VideoItem[] = [
   {
-    id: "main",
-    title: "Fundamental class happening live right now",
+    id: "short-breakdown",
+    title: "1-Minute Practical Market Analysis & Trade Breakdown",
     date: "10 Apr 2026",
     publishedDate: "Published 10 Apr 2026",
     thumbnail: PUBLIC_ASSETS.videoMain,
+    videoSrc: PUBLIC_ASSETS.videos.shortBreakdown,
+    duration: "1:00",
+    category: "Strategy",
   },
   {
-    id: "dawn-expo",
-    title: "Dawn Expo & student achievement highlights",
-    date: "22 Nov 2025",
-    publishedDate: "Published 22 Nov 2025",
-    thumbnail: PUBLIC_ASSETS.thumbDawnExpo,
-  },
-  {
-    id: "support-resistance",
-    title: "Master Support & Resistance with Sir Talha",
-    date: "13 Nov 2025",
-    publishedDate: "Published 13 Nov 2025",
+    id: "mentorship-session",
+    title: "Live Trading Floor Session & Interactive Mentorship",
+    date: "28 Mar 2026",
+    publishedDate: "Published 28 Mar 2026",
     thumbnail: PUBLIC_ASSETS.thumbSupport,
+    videoSrc: PUBLIC_ASSETS.videos.mentorshipFloor,
+    duration: "1:30",
+    category: "Class",
   },
   {
-    id: "volume",
-    title: "Volume trading in live market sessions",
-    date: "10 Nov 2025",
-    publishedDate: "Published 10 Nov 2025",
+    id: "market-psychology",
+    title: "Advanced Forex Market Strategy & Risk Psychology",
+    date: "14 Mar 2026",
+    publishedDate: "Published 14 Mar 2026",
     thumbnail: PUBLIC_ASSETS.thumbVolume,
+    videoSrc: PUBLIC_ASSETS.videos.psychologySession,
+    duration: "2:15",
+    category: "Strategy",
   },
   {
-    id: "itt-tour",
-    title: "Institute of Trading Tricks campus & desk overview",
-    date: "9 Nov 2025",
-    publishedDate: "Published 9 Nov 2025",
+    id: "delivery-review-1",
+    title: "Student Review & Feedback — ITT Practical Batch 1",
+    date: "22 Feb 2026",
+    publishedDate: "Published 22 Feb 2026",
+    thumbnail: PUBLIC_ASSETS.thumbDawnExpo,
+    videoSrc: PUBLIC_ASSETS.videos.deliveryReview1,
+    duration: "1:15",
+    category: "Review",
+  },
+  {
+    id: "delivery-review-2",
+    title: "Student Review & Feedback — ITT Practical Batch 2",
+    date: "15 Feb 2026",
+    publishedDate: "Published 15 Feb 2026",
+    thumbnail: PUBLIC_ASSETS.videoCert,
+    videoSrc: PUBLIC_ASSETS.videos.deliveryReview2,
+    duration: "0:55",
+    category: "Review",
+  },
+  {
+    id: "delivery-review-3",
+    title: "Student Review & Feedback — ITT Practical Batch 3",
+    date: "04 Feb 2026",
+    publishedDate: "Published 04 Feb 2026",
+    thumbnail: PUBLIC_ASSETS.videoClass,
+    videoSrc: PUBLIC_ASSETS.videos.deliveryReview3,
+    duration: "1:40",
+    category: "Review",
+  },
+  {
+    id: "delivery-review-4",
+    title: "Student Review & Feedback — ITT Practical Batch 4",
+    date: "20 Jan 2026",
+    publishedDate: "Published 20 Jan 2026",
     thumbnail: PUBLIC_ASSETS.thumbItt,
+    videoSrc: PUBLIC_ASSETS.videos.deliveryReview4,
+    duration: "1:10",
+    category: "Review",
   },
   {
-    id: "pro-course",
-    title: "Pro level course SMC & ICT framework preview",
-    date: "8 Nov 2025",
-    publishedDate: "Published 8 Nov 2025",
+    id: "delivery-review-5",
+    title: "Student Review & Feedback — ITT Practical Batch 5",
+    date: "11 Jan 2026",
+    publishedDate: "Published 11 Jan 2026",
     thumbnail: PUBLIC_ASSETS.thumbPro,
+    videoSrc: PUBLIC_ASSETS.videos.deliveryReview5,
+    duration: "2:20",
+    category: "Review",
   },
   {
-    id: "advance-course",
-    title: "Advance level course fundamentals & psychology",
-    date: "7 Nov 2025",
-    publishedDate: "Published 7 Nov 2025",
+    id: "delivery-review-6",
+    title: "Student Review & Feedback — ITT Practical Batch 6",
+    date: "28 Dec 2025",
+    publishedDate: "Published 28 Dec 2025",
     thumbnail: PUBLIC_ASSETS.thumbAdvance,
+    videoSrc: PUBLIC_ASSETS.videos.deliveryReview6,
+    duration: "1:55",
+    category: "Review",
   },
   {
-    id: "inside-itt",
-    title: "Inside the Institute of Trading Tricks live floor",
-    date: "5 Nov 2025",
-    publishedDate: "Published 5 Nov 2025",
+    id: "delivery-review-7",
+    title: "Student Review & Feedback — ITT Practical Batch 7",
+    date: "18 Dec 2025",
+    publishedDate: "Published 18 Dec 2025",
     thumbnail: PUBLIC_ASSETS.thumbInside,
+    videoSrc: PUBLIC_ASSETS.videos.deliveryReview7,
+    duration: "3:30",
+    category: "Review",
+  },
+  {
+    id: "delivery-review-8",
+    title: "Student Review & Feedback — ITT Practical Batch 8",
+    date: "05 Dec 2025",
+    publishedDate: "Published 05 Dec 2025",
+    thumbnail: "/images/Final (74).JPG",
+    videoSrc: PUBLIC_ASSETS.videos.deliveryReview8,
+    duration: "1:35",
+    category: "Review",
   },
 ];
 
 export default function VideosPage() {
   const [selectedVideo, setSelectedVideo] = useState<VideoItem>(UPLOADS_LIST[0]);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handleSelectVideo = (video: VideoItem) => {
+    setSelectedVideo(video);
+    setIsPlaying(true);
+  };
 
   return (
     <div className="w-full">
@@ -83,50 +146,52 @@ export default function VideosPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16">
           <div className="flex items-center gap-3 text-[10px] tracking-[0.22em] uppercase text-[#D4C385] mb-4">
             <span className="w-5 h-px bg-[#D4C385]" />
-            <span>WATCH</span>
+            <span>WATCH VIDEOS</span>
           </div>
           <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">Videos</h1>
           <p className="text-xs sm:text-sm text-slate-400 max-w-lg leading-relaxed">
-            Lessons, live sessions and student stories from the Institute of Trading Tricks YouTube channel — 125 videos and counting.
+            Lessons, live floor trading sessions, and authentic student reviews from the Institute of Trading Tricks Islamabad campus.
           </p>
         </div>
       </section>
 
       {/* =================================================================== */}
-      {/* 2. FEATURED VIDEO + LATEST UPLOADS SIDEBAR                          */}
+      {/* 2. FEATURED VIDEO PLAYER + LATEST UPLOADS SIDEBAR                   */}
       {/* =================================================================== */}
       <section className="border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Left: Featured Video Player Area */}
             <div className="lg:col-span-7">
-              <a
-                href="https://www.youtube.com/results?search_query=Institute+of+Trading+Tricks+Islamabad"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative aspect-video bg-[#0A1026] border border-white/10 overflow-hidden mb-5 group cursor-pointer block"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={selectedVideo.thumbnail}
-                  alt={selectedVideo.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+              <div className="relative aspect-video bg-[#040714] border border-white/10 overflow-hidden mb-5 rounded-sm shadow-2xl">
+                <video
+                  key={selectedVideo.videoSrc}
+                  src={selectedVideo.videoSrc}
+                  poster={selectedVideo.thumbnail}
+                  controls
+                  playsInline
+                  autoPlay={isPlaying}
+                  className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                  <div className="w-14 h-14 rounded-full bg-[#D4C385] text-[#040714] flex items-center justify-center shadow-lg group-hover:scale-110 transition">
-                    <svg className="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M6.5 5.5v9l7-4.5-7-4.5z" />
-                    </svg>
-                  </div>
-                </div>
-              </a>
+              </div>
 
-              <h2 className="font-display text-2xl sm:text-3xl text-white mb-1">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-[9px] uppercase tracking-wider px-2 py-0.5 rounded bg-[#D4C385]/15 text-[#D4C385] font-medium">
+                  {selectedVideo.category}
+                </span>
+                <span className="text-[11px] text-slate-400 font-mono">
+                  {selectedVideo.publishedDate}
+                </span>
+                {selectedVideo.duration && (
+                  <span className="text-[11px] text-slate-500 font-mono">
+                    · {selectedVideo.duration}
+                  </span>
+                )}
+              </div>
+
+              <h2 className="font-display text-2xl sm:text-3xl text-white mb-4">
                 {selectedVideo.title}
               </h2>
-              <div className="text-[11px] text-slate-400 mb-5">
-                {selectedVideo.publishedDate}
-              </div>
 
               <div className="flex flex-wrap items-center gap-3">
                 <a
@@ -160,28 +225,38 @@ export default function VideosPage() {
 
             {/* Right: Latest Uploads Scrollable List */}
             <div className="lg:col-span-5 card-surface p-4">
-              <div className="text-[10px] tracking-[0.2em] uppercase text-slate-400 px-2 pb-3 border-b border-white/10">
-                LATEST UPLOADS
+              <div className="flex items-center justify-between text-[10px] tracking-[0.2em] uppercase text-slate-400 px-2 pb-3 border-b border-white/10">
+                <span>SELECT VIDEO TO PLAY</span>
+                <span className="text-slate-500 font-mono">{UPLOADS_LIST.length} VIDEOS</span>
               </div>
-              <div className="uploads-scroll max-h-[380px] overflow-y-auto divide-y divide-white/5 pr-1 mt-1">
+              <div className="uploads-scroll max-h-[460px] overflow-y-auto divide-y divide-white/5 pr-1 mt-1">
                 {UPLOADS_LIST.map((video) => {
                   const isSelected = selectedVideo.id === video.id;
                   return (
                     <button
                       key={video.id}
                       type="button"
-                      onClick={() => setSelectedVideo(video)}
+                      onClick={() => handleSelectVideo(video)}
                       className={`video-item w-full flex items-center gap-3.5 p-2.5 hover:bg-white/5 text-left transition ${
                         isSelected ? "bg-white/[0.08]" : ""
                       }`}
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={video.thumbnail}
-                        alt={video.title}
-                        className="w-16 h-11 object-cover shrink-0 border border-white/10"
-                      />
-                      <div>
+                      <div className="relative w-20 h-14 shrink-0 overflow-hidden border border-white/10 bg-black">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={video.thumbnail}
+                          alt={video.title}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/35 flex items-center justify-center">
+                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] pl-0.5 ${
+                            isSelected ? "bg-[#D4C385] text-[#040714]" : "bg-white/70 text-[#040714]"
+                          }`}>
+                            ▶
+                          </span>
+                        </div>
+                      </div>
+                      <div className="min-w-0 flex-1">
                         <div
                           className={`text-xs font-medium line-clamp-2 transition ${
                             isSelected ? "text-[#D4C385]" : "text-white"
@@ -189,8 +264,10 @@ export default function VideosPage() {
                         >
                           {video.title}
                         </div>
-                        <div className="text-[10px] text-slate-500 mt-0.5 font-mono">
-                          {video.date}
+                        <div className="flex items-center gap-2 text-[10px] text-slate-500 mt-1 font-mono">
+                          <span>{video.date}</span>
+                          <span>·</span>
+                          <span className="text-[#D4C385]/80">{video.category}</span>
                         </div>
                       </div>
                     </button>
@@ -211,13 +288,13 @@ export default function VideosPage() {
             ▶
           </div>
           <h2 className="font-display text-3xl sm:text-4xl text-white mb-3">
-            125 videos on the channel
+            Practical Videos On Demand
           </h2>
           <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed mb-3">
-            We provide online and offline courses of Forex Trading, Digital Marketing, E-Commerce, Amazon Virtual Assistant and Graphic Designing.
+            We provide physical and live mentorship in Forex Trading, Smart Money Concepts (SMC), Price Action, Risk Management and Trading Psychology.
           </p>
           <div className="text-[11px] text-slate-500 mb-6 font-mono">
-            185 subscribers · 125 videos
+            Islamabad Campus · PWD Sector
           </div>
           <a
             href="https://www.youtube.com/results?search_query=Institute+of+Trading+Tricks+Islamabad"
@@ -240,7 +317,7 @@ export default function VideosPage() {
             See a class before you join one
           </h2>
           <p className="text-xs text-[#040714]/80 max-w-md mx-auto leading-relaxed mb-6">
-            Ask us which batch fits you — we will tell you honestly whether to start at Basic.
+            Ask us which batch fits you — we will tell you honestly whether to start at Basic or Advanced.
           </p>
           <Link
             href="/contact"

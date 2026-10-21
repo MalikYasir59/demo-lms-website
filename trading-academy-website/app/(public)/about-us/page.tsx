@@ -51,7 +51,7 @@ export default function AboutUsPage() {
             <img
               src={PUBLIC_ASSETS.mentorsBanner}
               alt="Adnan Rana and Talha Hanif at Institute of Trading Tricks"
-              className="w-full h-auto object-cover"
+              className="w-full max-h-[620px] object-cover object-center"
             />
           </div>
 
