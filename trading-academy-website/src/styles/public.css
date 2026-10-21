@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ============================================================================
+   PUBLIC-FACING WEBSITE SCOPED STYLES
+   Ensures 0% style leakage into the LMS
+   ============================================================================ */
+
+.public-theme {
+  --navy-950: #040714;
+  --navy-900: #050919;
+  --navy-800: #0A1026;
+  --navy-700: #121B3A;
+  --navy-600: #1B2752;
+
+  --gold-300: #E5D7A3;
+  --gold-400: #D4C385;
+  --gold-500: #C4B06B;
+
+  --brand-blue-600: #1D4ED8;
+  --brand-blue-500: #2563EB;
+
+  background-color: var(--navy-900);
+  color: #F8FAFC;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.public-theme .font-display {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+.public-theme .hero-glow {
+  background: radial-gradient(circle at 82% 24%, rgba(29, 78, 216, 0.28) 0%, rgba(5, 9, 25, 0) 58%);
+}
+
+.public-theme .center-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(29, 78, 216, 0.30) 0%, rgba(5, 9, 25, 0) 65%);
+}
+
+.public-theme .card-surface {
+  background-color: #090F24;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.public-theme .gold-banner-shadow {
+  box-shadow: 0 25px 60px -15px rgba(212, 195, 133, 0.18);
+}
+
+/* Custom scrollbar for Latest Uploads */
+.public-theme .uploads-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.public-theme .uploads-scroll::-webkit-scrollbar-track {
+  background: #050919;
+}
+.public-theme .uploads-scroll::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 3px;
+}
+
+/* Palette utility classes scoped to .public-theme */
+.public-theme .bg-navy-950 { background-color: #040714; }
+.public-theme .bg-navy-900 { background-color: #050919; }
+.public-theme .bg-navy-800 { background-color: #0A1026; }
+.public-theme .bg-navy-700 { background-color: #121B3A; }
+.public-theme .bg-navy-600 { background-color: #1B2752; }
+
+.public-theme .text-navy-950 { color: #040714; }
+.public-theme .text-navy-900 { color: #050919; }
+
+.public-theme .text-gold-300 { color: #E5D7A3; }
+.public-theme .text-gold-400 { color: #D4C385; }
+.public-theme .text-gold-500 { color: #C4B06B; }
+
+.public-theme .bg-gold-300 { background-color: #E5D7A3; }
+.public-theme .bg-gold-400 { background-color: #D4C385; }
+.public-theme .bg-gold-500 { background-color: #C4B06B; }
+
+.public-theme .border-gold-400 { border-color: #D4C385; }
+.public-theme .border-gold-300 { border-color: #E5D7A3; }
+
+.public-theme .bg-brandBlue-600 { background-color: #1D4ED8; }
+.public-theme .bg-brandBlue-500 { background-color: #2563EB; }
+.public-theme .text-brandBlue-600 { color: #1D4ED8; }
+.public-theme .text-brandBlue-500 { color: #2563EB; }
