@@ -193,6 +193,7 @@ export interface ILectureResource {
   _id?: Types.ObjectId | string;
   title: string;
   fileKey: string;
+  url?: string;
   originalName?: string;
   storedName?: string;
   mime: string;

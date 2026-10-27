@@ -98,6 +98,7 @@ export function ResourceUploader({
           originalName: json.data.originalName || file.name,
           storedName: json.data.storedName,
           fileKey: json.data.fileKey,
+          url: json.data.url || "",
           mime: json.data.mime || file.type || "application/octet-stream",
           size: json.data.size || file.size,
           uploadedAt: new Date(),
@@ -222,7 +223,7 @@ export function ResourceUploader({
               {/* Action Buttons */}
               <div className="flex items-center gap-1 shrink-0">
                 <a
-                  href={`/api/files/resources/${encodeURIComponent(res.fileKey)}`}
+                  href={res.url || `/api/files/resources/${encodeURIComponent(res.fileKey)}`}
                   target="_blank"
                   rel="noreferrer"
                   className="p-1.5 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
