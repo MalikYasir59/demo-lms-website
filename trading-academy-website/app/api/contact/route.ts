@@ -12,12 +12,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // In production, integrate Resend, Sendgrid, or CRM webhook here
-    console.log("[Institutional Desk Inquiry Received]:", body);
+    // Log inquiry received for instituteoftradingtricks@gmail.com
+    console.log("[Inquiry for instituteoftradingtricks@gmail.com]:", body);
 
     return NextResponse.json({
       success: true,
-      message: "Inquiry successfully transmitted to the Institutional Desk. An analyst will respond within 15 minutes during live market hours.",
+      message: "Inquiry successfully recorded for instituteoftradingtricks@gmail.com. Our admissions desk will contact you shortly.",
     });
   } catch {
     return NextResponse.json(

@@ -4,31 +4,16 @@ import React from "react";
 
 export default function FloatingSupportButton() {
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <a
-        href="https://wa.me/923077330777"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Chat with Trading Desk on WhatsApp"
-        className="relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#128C7E] to-[#25D366] text-white shadow-[0_0_24px_rgba(37,211,102,0.55)] border border-emerald-300/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group"
-      >
-        {/* Subtle glow ring */}
-        <span className="absolute -inset-1 rounded-full bg-[#25D366]/30 blur-sm group-hover:bg-[#25D366]/50 transition-all pointer-events-none" />
-
-        {/* Official WhatsApp SVG Icon */}
-        <svg
-          className="w-7 h-7 text-white relative z-10 transition-transform duration-300 group-hover:rotate-6"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-        >
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-        </svg>
-
-        {/* Hover Tooltip */}
-        <span className="absolute right-16 bg-[#0b0f17]/95 text-white text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#25D366]/40 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap hidden sm:block backdrop-blur-md">
-          Chat on WhatsApp
-        </span>
-      </a>
-    </div>
+    <a
+      href="https://wa.me/923077330777"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat with Institute of Trading Tricks on WhatsApp"
+      className="fixed bottom-5 right-5 z-40 w-12 h-12 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white flex items-center justify-center shadow-2xl transition transform hover:scale-105 active:scale-95"
+    >
+      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.24.68-1.41 1.3-1.95 1.38-.5.08-1.13.11-1.83-.11-.42-.13-.97-.31-1.67-.61-2.94-1.27-4.86-4.25-5.01-4.45-.15-.2-1.2-1.59-1.2-3.04 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.82 2.01.89 2.16.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.45.52-.15.15-.3.31-.13.6.17.3.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.36 1.45.3.15.47.12.65-.07.17-.2.74-.86.94-1.16.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.08.12.08.72-.16 1.4z" />
+      </svg>
+    </a>
   );
 }

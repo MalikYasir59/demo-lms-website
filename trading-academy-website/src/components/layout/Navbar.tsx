@@ -1,202 +1,160 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ArrowRight, Terminal, ChevronRight, Phone } from "lucide-react";
-import { MAIN_NAV_LINKS } from "@/data/nav-links";
-import { cn } from "@/lib/utils";
+import { PUBLIC_ASSETS } from "@/data/public-assets";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Close mobile menu whenever pathname changes
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
+  const navLinks = [
+    { name: "HOME", href: "/" },
+    { name: "COURSES", href: "/courses" },
+    { name: "VIDEOS", href: "/videos" },
+    { name: "ABOUT", href: "/about-us" },
+    { name: "REVIEWS", href: "/reviews" },
+    { name: "CONTACT", href: "/contact" },
+  ];
 
-  // Close mobile menu on ESC key press
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setIsOpen(false);
-      }
-    };
-    if (isOpen) {
-      window.addEventListener("keydown", handleKeyDown);
-    }
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen]);
-
-  const isLinkActive = (href: string) => {
-    if (href === "/") {
-      return pathname === "/";
-    }
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    if (href === "/about-us") return pathname === "/about-us" || pathname === "/about";
+    if (href === "/reviews") return pathname === "/reviews" || pathname === "/testimonials";
     return pathname.startsWith(href);
   };
 
   return (
-    <header className="fixed top-4 sm:top-7 left-0 right-0 z-50 px-3 sm:px-6">
-      <div className="mx-auto max-w-[1500px] rounded-2xl sm:rounded-[28px] border border-[#68b7ff]/50 bg-[#080b11]/85 px-3.5 sm:px-5 py-2.5 sm:py-3 shadow-[0_0_20px_rgba(38,96,255,0.16)] backdrop-blur-md">
-        <div className="flex items-center justify-between gap-3 sm:gap-4">
-          {/* Brand Logo */}
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 sm:gap-3 group focus:outline-none min-w-0"
-            onClick={() => setIsOpen(false)}
-          >
-            <div className="relative p-0.5 sm:p-1 rounded-full bg-gradient-to-br from-[#60a5fa] via-[#2563eb] to-[#1e3a8a] shadow-[0_0_18px_rgba(37,99,235,0.35)] shrink-0">
-              <img
-                alt="Institute of Trading Tricks Logo"
-                className="h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover bg-[#080b11]"
-                src="/images/Logoitt.jpg"
-              />
-            </div>
-            <div className="flex flex-col leading-tight min-w-0">
-              <span className="text-sm sm:text-base lg:text-lg font-extrabold tracking-tight text-white group-hover:text-[#93c5fd] transition-colors truncate">
-                Institute of Trading Tricks
-              </span>
-              <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.16em] sm:tracking-[0.2em] text-slate-400">
-                Institutional Floor &amp; LMS
-              </span>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 gap-2 xl:gap-4 px-2 xl:px-4">
-            {MAIN_NAV_LINKS.map((link) => {
-              const active = isLinkActive(link.href);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "relative inline-flex items-center justify-center whitespace-nowrap px-2.5 py-2 text-sm xl:text-[0.95rem] font-medium tracking-tight leading-none min-w-fit transition-all duration-200 text-slate-300 hover:text-white rounded-lg hover:bg-white/[0.04]",
-                    active && "text-white font-semibold",
-                    active && "after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1 after:h-[2px] after:w-[68%] after:rounded-full after:bg-[#4ea8ff] after:shadow-[0_0_12px_rgba(78,168,255,0.8)]"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Actions & Mobile Burger Toggle */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Desktop Action Buttons (Hidden on mobile/tablet) */}
-            <Link
-              href="/login"
-              className="hidden lg:inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-[#7bb7ff]/60 bg-transparent text-white text-xs font-semibold shadow-[0_0_18px_rgba(13,109,253,0.18)] transition-all group hover:bg-[#0d6dfd]/10"
+    <header className="sticky top-0 z-40 w-full flex flex-col">
+      {/* ===================================================================== */}
+      {/* TOP UTILITY BAR                                                       */}
+      {/* ===================================================================== */}
+      <div className="bg-[#040714] border-b border-white/5 text-[10px] tracking-[0.18em] uppercase text-slate-400">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-8 flex items-center justify-between">
+          <div className="truncate">ISLAMABAD · WAH CANTT · ATTOCK</div>
+          <div className="flex items-center gap-4 sm:gap-6 shrink-0">
+            <span className="hidden sm:inline text-slate-400">OPEN MON–SAT · SUNDAY CLOSED</span>
+            <a
+              href="tel:+923077330777"
+              className="text-[#D4C385] hover:text-[#E5D7A3] font-medium tracking-[0.14em] transition"
             >
-              <span className="w-2 h-2 rounded-full bg-[#60a5fa] animate-ping" />
-              <Terminal className="w-3.5 h-3.5 text-[#93c5fd]" />
-              <span>Student LMS</span>
-            </Link>
-            <Link
-              href="/contact"
-              className="hidden lg:inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-[#0d6dfd] text-white text-xs font-bold shadow-[0_0_20px_rgba(13,109,253,0.38)] border border-[#7bb7ff]/60 transition-all hover:brightness-110"
-            >
-              <span>Enroll Now — $499</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-
-            {/* Mobile/Tablet Burger Menu Button */}
-            <button
-              type="button"
-              onClick={() => setIsOpen(!isOpen)}
-              className="flex items-center justify-center p-2 sm:p-2.5 rounded-xl border border-[#68b7ff]/40 bg-[#0d1424] text-slate-200 hover:text-white hover:bg-[#142036] hover:border-[#68b7ff]/70 transition-all lg:hidden shadow-[0_0_15px_rgba(38,96,255,0.15)] focus:outline-none"
-              aria-label="Toggle navigation menu"
-              aria-expanded={isOpen}
-            >
-              {isOpen ? <X className="w-5 h-5 text-[#93c5fd]" /> : <Menu className="w-5 h-5 text-white" />}
-            </button>
+              0307 7330777
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Mobile Backdrop Overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[-1] lg:hidden animate-in fade-in duration-200"
-          onClick={() => setIsOpen(false)}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Mobile Burger Menu Dropdown */}
-      {isOpen && (
-        <div className="lg:hidden mt-3 max-h-[calc(100vh-100px)] overflow-y-auto rounded-2xl border border-[#68b7ff]/40 bg-[#080b11]/95 px-4 sm:px-6 py-5 flex flex-col gap-5 shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(38,96,255,0.2)] backdrop-blur-xl animate-in slide-in-from-top-3 duration-200">
-          {/* Header Status Bar inside Drawer */}
-          <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse" />
-              <span className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold">
-                Trading Desk Navigation
-              </span>
+      {/* ===================================================================== */}
+      {/* MAIN NAVIGATION HEADER                                                */}
+      {/* ===================================================================== */}
+      <div className="bg-[#040714]/95 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+          {/* Brand Logo */}
+          <Link href="/" className="flex items-center gap-3 text-left group focus:outline-none">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={PUBLIC_ASSETS.logo}
+              alt="Institute of Trading Tricks Logo"
+              className="w-9 h-9 rounded-full object-cover border border-[#D4C385]/40 shrink-0"
+            />
+            <div>
+              <div className="font-display text-lg sm:text-xl leading-none text-white group-hover:text-[#E5D7A3] transition">
+                Institute of Trading Tricks
+              </div>
+              <div className="text-[8px] tracking-[0.24em] uppercase text-[#D4C385] mt-1">
+                EST. ISLAMABAD
+              </div>
             </div>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#101b2e] border border-blue-500/30 text-blue-400 font-bold">
-              Batch 12 Open
-            </span>
-          </div>
+          </Link>
 
-          {/* Navigation Links */}
-          <nav className="flex flex-col gap-1.5">
-            {MAIN_NAV_LINKS.map((link) => {
-              const active = isLinkActive(link.href);
+          {/* Center Nav Links (Desktop) */}
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-[10px] tracking-[0.2em] uppercase">
+            {navLinks.map((link) => {
+              const active = isActive(link.href);
               return (
                 <Link
-                  key={link.href}
+                  key={link.name}
                   href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className={cn(
-                    "flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium transition-all group",
+                  className={`nav-link py-1 transition ${
                     active
-                      ? "bg-[#10243e] text-white font-semibold border border-[#3b82f6]/40 shadow-[0_0_15px_rgba(37,99,235,0.25)]"
-                      : "text-slate-300 hover:text-white hover:bg-[#121929] border border-transparent"
-                  )}
+                      ? "text-[#D4C385] font-semibold"
+                      : "text-slate-300 hover:text-[#E5D7A3]"
+                  }`}
                 >
-                  <span className="flex items-center gap-2.5">
-                    {active && <span className="w-1.5 h-1.5 rounded-full bg-[#60a5fa] shrink-0" />}
-                    <span>{link.label}</span>
-                  </span>
-                  <ChevronRight
-                    className={cn(
-                      "w-4 h-4 transition-transform group-hover:translate-x-0.5",
-                      active ? "text-[#60a5fa]" : "text-slate-500 group-hover:text-slate-300"
-                    )}
-                  />
+                  {link.name}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Action Buttons in Mobile Menu */}
-          <div className="flex flex-col gap-2.5 pt-3 border-t border-white/[0.08]">
-            {/* Student LMS Portal */}
+          {/* Right Actions */}
+          <div className="flex items-center gap-3 sm:gap-5">
             <Link
               href="/login"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center justify-center gap-2.5 text-center text-xs sm:text-sm font-semibold text-white py-3 px-4 rounded-xl bg-[#0f172a] hover:bg-[#1e293b] border border-[#7bb7ff]/50 shadow-[0_0_15px_rgba(13,109,253,0.18)] transition-all"
+              className="text-[10px] tracking-[0.2em] uppercase text-slate-300 hover:text-[#D4C385] transition"
             >
-              <span className="w-2 h-2 rounded-full bg-[#60a5fa] animate-ping" />
-              <Terminal className="w-4 h-4 text-[#93c5fd]" />
-              <span>Student LMS Portal</span>
+              LOGIN
             </Link>
-
-            {/* Enroll Now — $499 */}
             <Link
               href="/contact"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center justify-center gap-2 text-center text-xs sm:text-sm font-bold bg-[#0d6dfd] hover:bg-[#1b76ff] text-white py-3.5 px-4 rounded-xl border border-[#7bb7ff]/70 shadow-[0_0_25px_rgba(13,109,253,0.45)] transition-all"
+              className="bg-[#D4C385] hover:bg-[#E5D7A3] text-[#040714] font-semibold text-[10px] tracking-[0.18em] uppercase px-3.5 sm:px-4 py-2.5 transition shadow-sm"
             >
-              <span>Enroll Now — $499</span>
-              <ArrowRight className="w-4 h-4" />
+              BOOK A SEAT
             </Link>
+
+            {/* Mobile Menu Toggle */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden text-slate-300 hover:text-white p-1"
+              aria-label="Toggle Menu"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
           </div>
         </div>
-      )}
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-[#040714] border-t border-white/10 px-4 py-4 space-y-3 text-[11px] tracking-[0.2em] uppercase">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block w-full text-left py-1.5 transition ${
+                  isActive(link.href) ? "text-[#D4C385] font-bold" : "text-slate-300"
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-slate-300 hover:text-[#D4C385] text-[10px] tracking-[0.2em] uppercase"
+              >
+                LOGIN (STUDENT LMS)
+              </Link>
+              <Link
+                href="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="bg-[#D4C385] text-[#040714] font-semibold text-[10px] tracking-[0.18em] uppercase px-3 py-1.5"
+              >
+                BOOK A SEAT
+              </Link>
+            </div>
+          </div>
+        )}
+      </div>
     </header>
   );
 }
