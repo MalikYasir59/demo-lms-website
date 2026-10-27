@@ -44,7 +44,14 @@ export default function SecureLectureViewerPage() {
       title: string;
       description?: string;
       durationSec: number;
-      resources: { title: string; fileKey: string; size: number }[];
+      resources: {
+        _id?: string;
+        title: string;
+        fileKey: string;
+        url?: string;
+        size: number;
+        originalName?: string;
+      }[];
     };
     navigation: {
       prev: { id: string; title: string } | null;
@@ -290,25 +297,37 @@ export default function SecureLectureViewerPage() {
             </div>
           ) : (
             <div className="space-y-2">
-              {lecture.resources.map((res, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 rounded-xl bg-muted/50 border border-border flex items-center justify-between gap-3 text-xs"
-                >
-                  <div className="truncate">
-                    <div className="font-semibold text-foreground truncate">{res.title}</div>
-                    <div className="text-[10px] text-muted-foreground font-mono">
-                      {(res.size / 1024 / 1024).toFixed(2)} MB
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => toast.info("Resource download initiated")}
-                    className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer"
+              {lecture.resources.map((res, idx) => {
+                const resourceLink =
+                  res.url ||
+                  `/api/files/resources/${res._id || encodeURIComponent(res.fileKey)}`;
+
+                return (
+                  <div
+                    key={res._id || idx}
+                    className="p-3 rounded-xl bg-muted/50 border border-border flex items-center justify-between gap-3 text-xs"
                   >
-                    <Download className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
+                    <div className="truncate">
+                      <div className="font-semibold text-foreground truncate">{res.title}</div>
+                      <div className="text-[10px] text-muted-foreground font-mono">
+                        {(res.size / 1024 / 1024).toFixed(2)} MB
+                        {res.originalName && res.originalName !== res.title
+                          ? ` • ${res.originalName}`
+                          : ""}
+                      </div>
+                    </div>
+                    <a
+                      href={resourceLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer shrink-0"
+                      title="Preview or Download Resource"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

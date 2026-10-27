@@ -89,6 +89,7 @@ const LectureSchema = new Schema<ILectureDocument>(
       {
         title: { type: String, required: true },
         fileKey: { type: String, required: true },
+        url: { type: String, default: "" },
         originalName: { type: String, default: "" },
         storedName: { type: String, default: "" },
         mime: { type: String, default: "application/pdf" },

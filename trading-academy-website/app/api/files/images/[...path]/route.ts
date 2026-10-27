@@ -23,8 +23,16 @@ export async function GET(
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    // Reconstruct the fileKey: e.g. "images/course-thumbnails/abc.webp"
-    const fileKey = ["images", ...pathSegments].join("/");
+    const rawPath = pathSegments.join("/");
+    const fileKey = rawPath.startsWith("lms/") ? rawPath : ["images", ...pathSegments].join("/");
+
+    // If the storage provider is Cloudinary or has a direct URL, redirect to CDN URL
+    const publicUrl = storage.getPublicUrl(fileKey);
+    if (publicUrl.startsWith("http://") || publicUrl.startsWith("https://")) {
+      return NextResponse.redirect(publicUrl, { status: 302 });
+    }
+
+    // Legacy local file serving
     const result = await storage.getFileBuffer(fileKey);
 
     if (!result) {
@@ -49,3 +57,4 @@ export async function GET(
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
+
