@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { PUBLIC_ASSETS } from "@/data/public-assets";
+import { SOCIAL_LINKS } from "@/data/nav-links";
 
 interface VideoItem {
   id: string;
@@ -195,7 +196,7 @@ export default function VideosPage() {
 
               <div className="flex flex-wrap items-center gap-3">
                 <a
-                  href="https://www.youtube.com/results?search_query=Institute+of+Trading+Tricks+Islamabad"
+                  href={SOCIAL_LINKS.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-[#D4C385] hover:bg-[#E5D7A3] text-[#040714] font-semibold text-[10px] tracking-[0.18em] uppercase px-4 py-2.5 inline-flex items-center gap-2 transition"
@@ -204,7 +205,7 @@ export default function VideosPage() {
                   <span>→</span>
                 </a>
                 <a
-                  href="https://www.youtube.com/results?search_query=Institute+of+Trading+Tricks+Islamabad"
+                  href={SOCIAL_LINKS.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="border border-white/20 hover:border-[#D4C385] text-white text-[10px] tracking-[0.18em] uppercase px-4 py-2.5 transition"
@@ -212,13 +213,31 @@ export default function VideosPage() {
                   SUBSCRIBE
                 </a>
                 <a
-                  href="https://www.instagram.com/"
+                  href={SOCIAL_LINKS.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[10px] tracking-[0.18em] uppercase text-slate-300 hover:text-[#D4C385] px-2 py-2 inline-flex items-center gap-1.5 transition"
                 >
                   <span>◎</span>
                   <span>@INSTITUTEOFTRADINGTRICKS</span>
+                </a>
+                <a
+                  href={SOCIAL_LINKS.tiktok}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] tracking-[0.18em] uppercase text-slate-300 hover:text-[#D4C385] px-2 py-2 inline-flex items-center gap-1.5 transition"
+                >
+                  <span>♪</span>
+                  <span>@ITT.OFFICIAL</span>
+                </a>
+                <a
+                  href={SOCIAL_LINKS.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] tracking-[0.18em] uppercase text-slate-300 hover:text-[#D4C385] px-2 py-2 inline-flex items-center gap-1.5 transition"
+                >
+                  <span>f</span>
+                  <span>FACEBOOK</span>
                 </a>
               </div>
             </div>
@@ -237,9 +256,8 @@ export default function VideosPage() {
                       key={video.id}
                       type="button"
                       onClick={() => handleSelectVideo(video)}
-                      className={`video-item w-full flex items-center gap-3.5 p-2.5 hover:bg-white/5 text-left transition ${
-                        isSelected ? "bg-white/[0.08]" : ""
-                      }`}
+                      className={`video-item w-full flex items-center gap-3.5 p-2.5 hover:bg-white/5 text-left transition ${isSelected ? "bg-white/[0.08]" : ""
+                        }`}
                     >
                       <div className="relative w-20 h-14 shrink-0 overflow-hidden border border-white/10 bg-black">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -249,18 +267,16 @@ export default function VideosPage() {
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-black/35 flex items-center justify-center">
-                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] pl-0.5 ${
-                            isSelected ? "bg-[#D4C385] text-[#040714]" : "bg-white/70 text-[#040714]"
-                          }`}>
+                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] pl-0.5 ${isSelected ? "bg-[#D4C385] text-[#040714]" : "bg-white/70 text-[#040714]"
+                            }`}>
                             ▶
                           </span>
                         </div>
                       </div>
                       <div className="min-w-0 flex-1">
                         <div
-                          className={`text-xs font-medium line-clamp-2 transition ${
-                            isSelected ? "text-[#D4C385]" : "text-white"
-                          }`}
+                          className={`text-xs font-medium line-clamp-2 transition ${isSelected ? "text-[#D4C385]" : "text-white"
+                            }`}
                         >
                           {video.title}
                         </div>
@@ -297,7 +313,7 @@ export default function VideosPage() {
             Islamabad Campus · PWD Sector
           </div>
           <a
-            href="https://www.youtube.com/results?search_query=Institute+of+Trading+Tricks+Islamabad"
+            href={SOCIAL_LINKS.youtube}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-[#D4C385] hover:bg-[#E5D7A3] text-[#040714] font-semibold text-[10px] tracking-[0.2em] uppercase px-6 py-3 inline-flex items-center gap-2 transition"
