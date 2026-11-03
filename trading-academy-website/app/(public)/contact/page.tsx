@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { PUBLIC_ASSETS } from "@/data/public-assets";
+import { SOCIAL_LINKS } from "@/data/nav-links";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -378,6 +379,49 @@ export default function ContactPage() {
                   <span className="text-slate-400">Sunday</span>
                   <span className="text-rose-400 font-medium">Closed</span>
                 </div>
+              </div>
+            </div>
+
+            {/* Official Social Channels */}
+            <div className="card-surface p-5">
+              <div className="text-xs font-medium text-white mb-3">Official Social Channels</div>
+              <div className="grid grid-cols-2 gap-2 text-[11px]">
+                <a
+                  href={SOCIAL_LINKS.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded bg-white/5 border border-white/5 hover:border-[#D4C385]/40 hover:text-[#D4C385] hover:bg-white/10 transition flex items-center gap-2 group"
+                >
+                  <span className="text-rose-500 font-bold group-hover:scale-110 transition-transform">▶</span>
+                  <span className="truncate">YouTube</span>
+                </a>
+                <a
+                  href={SOCIAL_LINKS.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded bg-white/5 border border-white/5 hover:border-[#D4C385]/40 hover:text-[#D4C385] hover:bg-white/10 transition flex items-center gap-2 group"
+                >
+                  <span className="text-pink-400 font-bold group-hover:scale-110 transition-transform">◎</span>
+                  <span className="truncate">Instagram</span>
+                </a>
+                <a
+                  href={SOCIAL_LINKS.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded bg-white/5 border border-white/5 hover:border-[#D4C385]/40 hover:text-[#D4C385] hover:bg-white/10 transition flex items-center gap-2 group"
+                >
+                  <span className="text-blue-400 font-bold group-hover:scale-110 transition-transform">f</span>
+                  <span className="truncate">Facebook</span>
+                </a>
+                <a
+                  href={SOCIAL_LINKS.tiktok}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded bg-white/5 border border-white/5 hover:border-[#D4C385]/40 hover:text-[#D4C385] hover:bg-white/10 transition flex items-center gap-2 group"
+                >
+                  <span className="text-cyan-300 font-bold group-hover:scale-110 transition-transform">♪</span>
+                  <span className="truncate">TikTok</span>
+                </a>
               </div>
             </div>
 

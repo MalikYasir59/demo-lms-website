@@ -97,7 +97,7 @@
 .public-theme .ticker-slider-track {
   display: flex;
   width: max-content;
-  animation: public-ticker-marquee 38s linear infinite;
+  animation: public-ticker-marquee 45s linear infinite;
   will-change: transform;
 }
 

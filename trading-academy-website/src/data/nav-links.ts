@@ -45,3 +45,10 @@ export const DESK_CONTACT_INFO = {
   whatsappHref: "https://wa.me/923077330777",
 };
 
+export const SOCIAL_LINKS = {
+  instagram: "https://www.instagram.com/instituteoftradingtricks/?hl=en",
+  tiktok: "https://www.tiktok.com/@itt.official",
+  facebook: "https://www.facebook.com/instituteoftradingtrickspk/",
+  youtube: "https://www.youtube.com/@Instituteoftradingtricks1",
+  whatsapp: "https://wa.me/923077330777",
+};
